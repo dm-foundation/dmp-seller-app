@@ -1,19 +1,19 @@
 import { Flex } from '@mantine/core'
-import Navbar from './navbar'
+import Navbar from './navbar/index'
 
 export default function Layout({ children }: any) {
     return (
         <>
             <Flex
-                gap="sm"
+                gap="xs"
                 justify="center"
                 align="center"
                 direction="column"
                 wrap="nowrap"
             >
-                <main>{children}</main>
-                <Navbar />
+                <main style={{ width: '100%' }}>{children}</main>
             </Flex>
+            <Navbar />
         </>
     )
 }

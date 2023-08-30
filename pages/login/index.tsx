@@ -11,9 +11,8 @@ export default function Login() {
         justify="center"
         align="center"
         direction="column"
-        wrap="wrap"
       >
-        <Title className={classes.title} size="xl" mb="sm" mt="xl">
+        <Title className={classes.title} size="xl" mb="sm" mt="md">
           Mass Market
         </Title>
         <Text className={classes.subtitle} color="dimmed" size="md" sx={{ maxWidth: 580 }} mx="auto" mb="lg">

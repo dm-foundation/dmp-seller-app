@@ -10,11 +10,14 @@ export default class _Document extends Document {
     return (
       <Html>
         <Head />
-        <body>
+        <body style={{
+          margin: '0px',
+          width: '100%'
+        }}>
           <Main />
           <NextScript />
         </body>
-      </Html>
+      </Html >
     );
   }
 }

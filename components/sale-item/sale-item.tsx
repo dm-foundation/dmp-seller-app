@@ -1,5 +1,4 @@
 import { Avatar, Text, Group, Flex } from '@mantine/core';
-import { IconPhoneCall, IconAt } from '@tabler/icons-react';
 import useStyles from './sale-item.styles';
 
 interface SaleItemProps {
@@ -14,36 +13,35 @@ export default function SaleItem({ thumbnail, name, stock, price_usd, price_ethe
     const { classes } = useStyles();
     return (
         <div>
-            <Group spacing="sm" mb={30}>
-                <Avatar src={thumbnail} size={64} radius="sm" />
+            <Group position='apart' spacing="xl" mb={15}>
+                <Avatar src={thumbnail} size={64} />
                 <Group>
                     <Flex
-                        mih={50}
-                        align="left"
+                        justify="flex-start"
+                        align="flex-start"
                         direction="column"
                         wrap="wrap"
                     >
-                        <Text>
-                            {name}
-                        </Text>
+                        <Text className={classes.itemTitle}>{name}</Text>
                         <Text className={classes.stock}>
                             {stock} in stock
                         </Text>
                     </Flex>
                     <Flex
-                        mih={50}
-                        align="left"
+                        justify="flex-start"
+                        align="flex-end"
                         direction="column"
-                        justify="center"
+                        gap={2}
                         wrap="wrap"
                     >
-                        <Text>
-                            $ {price_usd}
+                        <Text className={classes.itemTitle}>{price_usd.toLocaleString('en-US', {
+                            style: 'currency',
+                            currency: 'USD',
+                        })}
                         </Text>
-                        <Text fz="xs" c="dimmed" pt={-5}
-                        >
-                            {price_ethereum} ETH
+                        <Text fz="xs" c="dimmed">{price_ethereum} ETH
                         </Text>
+
                     </Flex>
                 </Group>
             </Group>
