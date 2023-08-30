@@ -1,5 +1,5 @@
 import { Title, Text, Button, Flex } from '@mantine/core';
-import useStyles from './index.styles';
+import useStyles from './login.styles';
 export default function Login() {
   const { classes } = useStyles();
 
@@ -16,7 +16,7 @@ export default function Login() {
         <Title className={classes.title} size="xl" mb="sm" mt="xl">
           Mass Market
         </Title>
-        <Text color="dimmed" size="md" sx={{ maxWidth: 580 }} mx="auto" mb="lg">
+        <Text className={classes.subtitle} color="dimmed" size="md" sx={{ maxWidth: 580 }} mx="auto" mb="lg">
           Sign in with an Ethereum address to set up your store
         </Text>
         <Button className={classes.loginbutton}>Sign in</Button>

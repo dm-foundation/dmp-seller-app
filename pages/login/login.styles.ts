@@ -2,10 +2,12 @@ import { createStyles } from '@mantine/core';
 
 export default createStyles((theme) => ({
   title: {
-    color: theme.colorScheme === 'dark' ? theme.white : theme.black,
-    fontSize: 42,
+    fontSize: 62,
     fontWeight: 900,
     letterSpacing: -2,
+  },
+  subtitle: {
+    fontSize: 18,
   },
   loginbox: {
     marginBottom: 40,
