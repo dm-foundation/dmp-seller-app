@@ -1,6 +1,6 @@
 # DMP Seller App (Frontend)
 
-Created with Next.js (and Mantine) using this [template](https://github.com/mantinedev/mantine-next-template/generate).
+Created with Next.js (and Mantine) using this [template](https://github.com/mantinedev/mantine-next-template).
 
 ## Scripts
 
