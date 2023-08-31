@@ -7,4 +7,9 @@ export default createStyles((theme) => ({
     fontWeight: 900,
     letterSpacing: -1,
   },
+  link: {
+    textDecoration: 'none',
+    textDecorationColor: '#fff',
+    color: '#fff'
+  }
 }));

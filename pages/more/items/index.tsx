@@ -1,9 +1,9 @@
-import { Title, Text, Button, Flex, Divider } from '@mantine/core';
-import useStyles from './newsale.styles';
-import Layout from '../../components/layout';
-import SaleItem from '../../components/sale-item/sale-item';
-import Link from 'next/link';
-export default function NewSale() {
+import { Title, Flex, Button, Divider } from '@mantine/core';
+import useStyles from '../more.styles';
+import Layout from '../../../components/layout';
+import { IconBuildingStore, IconSettings, IconZoomMoney } from '@tabler/icons-react';
+import SaleItem from '../../../components/sale-item/sale-item';
+export default function Transactions() {
   const { classes } = useStyles();
 
   let mockData = {
@@ -11,14 +11,14 @@ export default function NewSale() {
     "name": "Poster name",
     "stock": 12,
     "price_usd": 30.00,
-    "include_price_ethereum": true
+    "include_price_ethereum": false
   }
 
   return (
     <>
       <Layout>
         <Title className={classes.title} size="sm" align='center' mb="xl" mt="xl">
-          New Sale
+          Store Items
         </Title>
         <Divider orientation="horizontal" w={"100%"} mb="xl" mt="xl" />
         <Flex
@@ -32,11 +32,7 @@ export default function NewSale() {
           <SaleItem {...mockData} />
           <SaleItem {...mockData} />
 
-          <Button>
-            <Link className={classes.link} href={'/newsale/checkout'}>
-              Proceed to checkout
-            </Link>
-          </Button>
+          <Button>Add new item</Button>
         </Flex>
       </Layout >
     </>

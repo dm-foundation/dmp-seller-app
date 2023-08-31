@@ -3,7 +3,7 @@ import { IconMenuOrder, IconShoppingCart, IconTransform } from '@tabler/icons-re
 import useStyles from './navbar.styles';
 import Link from 'next/link';
 
-const data = [
+const mockData = [
     { link: '/newsale', label: 'Checkout', icon: IconShoppingCart },
     { link: '/transactions', label: 'Transactions', icon: IconTransform },
     { link: '/more', label: 'More', icon: IconMenuOrder },
@@ -12,10 +12,8 @@ const data = [
 export default function SellerNavbar() {
     const { classes } = useStyles();
 
-    const links = data.map((item) => (
-        <Link
-            href={item.link}
-            align="center">
+    const links = mockData.map((item) => (
+        <Link href={item.link} className={classes.link}>
             <item.icon /><br />
             <span>{item.label}</span>
         </Link >
@@ -26,9 +24,9 @@ export default function SellerNavbar() {
             justify="space-evenly"
             direction={'row'}
             bg={'#eee'}
-            style={{ width: '100%', height: '10%', position: 'fixed', bottom: '0px', zIndex: 1000 }}
+            className={classes.navbar}
         >
-            <Group>
+            <Group spacing="xl" className={classes.navbar_links}>
                 {links}
             </Group>
         </Flex>

@@ -6,10 +6,14 @@ interface SaleItemProps {
     name: string;
     stock: number;
     price_usd: number;
-    price_ethereum: number;
+    include_price_ethereum: boolean;
 }
 
-export default function SaleItem({ thumbnail, name, stock, price_usd, price_ethereum }: SaleItemProps) {
+function usdToEthConversionString(price_usd: number) {
+    return `${0.0005} ETH`;
+}
+
+export default function SaleItem({ thumbnail, name, stock, price_usd, include_price_ethereum }: SaleItemProps) {
     const { classes } = useStyles();
     return (
         <div>
@@ -34,17 +38,15 @@ export default function SaleItem({ thumbnail, name, stock, price_usd, price_ethe
                         gap={2}
                         wrap="wrap"
                     >
-                        <Text className={classes.itemTitle}>{price_usd.toLocaleString('en-US', {
+                        <Text className={classes.itemTitle} mt={include_price_ethereum ? 0 : -20}>{price_usd.toLocaleString('en-US', {
                             style: 'currency',
                             currency: 'USD',
                         })}
                         </Text>
-                        <Text fz="xs" c="dimmed">{price_ethereum} ETH
-                        </Text>
-
+                        {include_price_ethereum && <Text fz="xs" c="dimmed" >{usdToEthConversionString(price_usd)}</Text>}
                     </Flex>
                 </Group>
             </Group>
-        </div>
+        </div >
     );
 }

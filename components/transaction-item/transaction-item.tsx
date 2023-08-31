@@ -42,7 +42,7 @@ export default function TransactionItem({ seller_name, price_usd, transaction_ti
                         </Text>
                     </Stack>
                     <ActionIcon>
-                        <IconChevronRight style={{ width: '36px', height: '36px', marginTop: '-10px' }} />
+                        <IconChevronRight style={{ width: '36px', height: '36px', marginTop: '-16px' }} />
                     </ActionIcon>
                 </Group>
             </Group>

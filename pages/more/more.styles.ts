@@ -21,6 +21,5 @@ export default createStyles((theme) => ({
   button: {
     fontSize: 24,
     opacity: 0.8,
-
-  }
+  },
 }));

@@ -2,6 +2,7 @@ import { Title, Flex, Button, Divider } from '@mantine/core';
 import useStyles from './more.styles';
 import Layout from '../../components/layout';
 import { IconBuildingStore, IconSettings, IconZoomMoney } from '@tabler/icons-react';
+import Link from 'next/link';
 export default function Transactions() {
   const { classes } = useStyles();
 
@@ -24,7 +25,9 @@ export default function Transactions() {
           wrap="wrap"
         >
           <Button className={classes.button} leftIcon={<IconBuildingStore style={{ width: '28px', height: '28px' }} />} variant="black" color="gray">
-            Items
+            <Link href={'/more/items'}>
+              Items
+            </Link>
           </Button>
           <Button className={classes.button} leftIcon={<IconZoomMoney style={{ width: '28px', height: '28px' }} />} variant="black" color="gray">
             Earnings

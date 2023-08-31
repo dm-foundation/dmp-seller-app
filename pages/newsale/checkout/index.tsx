@@ -1,8 +1,7 @@
 import { Title, Text, Button, Flex, Divider } from '@mantine/core';
-import useStyles from './newsale.styles';
-import Layout from '../../components/layout';
-import SaleItem from '../../components/sale-item/sale-item';
-import Link from 'next/link';
+import useStyles from '../newsale.styles';
+import Layout from '../../../components/layout';
+import SaleItem from '../../../components/sale-item/sale-item';
 export default function NewSale() {
   const { classes } = useStyles();
 
@@ -18,7 +17,7 @@ export default function NewSale() {
     <>
       <Layout>
         <Title className={classes.title} size="sm" align='center' mb="xl" mt="xl">
-          New Sale
+          Review Sale
         </Title>
         <Divider orientation="horizontal" w={"100%"} mb="xl" mt="xl" />
         <Flex
@@ -29,14 +28,8 @@ export default function NewSale() {
         >
           <SaleItem {...mockData} />
           <SaleItem {...mockData} />
-          <SaleItem {...mockData} />
-          <SaleItem {...mockData} />
 
-          <Button>
-            <Link className={classes.link} href={'/newsale/checkout'}>
-              Proceed to checkout
-            </Link>
-          </Button>
+          <Button>Scan to Charge $60.00</Button>
         </Flex>
       </Layout >
     </>
