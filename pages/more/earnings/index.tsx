@@ -1,7 +1,41 @@
-import { Title, Image, Flex, Divider, Box, Text } from '@mantine/core';
-import useStyles from '../more.styles';
+import { Title, Image, Flex, Divider, Box, Text, createStyles } from '@mantine/core';
 import Layout from '../../../components/layout';
 import EarningsItem from '../../../components/earnings-item/earnings-item';
+
+const useStyles = createStyles((theme) => ({
+  title: {
+    color: theme.colorScheme === 'dark' ? theme.white : theme.black,
+    fontSize: 28,
+    fontWeight: 900,
+    letterSpacing: -1,
+    textAlign: 'center'
+  },
+  subtitle: {
+    color: theme.colorScheme === 'dark' ? theme.white : theme.black,
+    opacity: 0.65,
+    fontSize: 24,
+    fontWeight: 800,
+    letterSpacing: -1,
+    textAlign: 'left',
+    marginLeft: '15px',
+    marginBottom: '15px'
+  },
+  button: {
+    fontSize: 24,
+    opacity: 0.8,
+  },
+  link: {
+    textDecoration: 'none',
+    textDecorationColor: '#fff',
+    color: '#666',
+  },
+  totalEarnings: {
+    fontSize: 44,
+    fontWeight: 800,
+  }
+}));
+
+
 export default function Transactions() {
   const { classes } = useStyles();
 

@@ -1,8 +1,22 @@
 import { Title, Text, Button, Flex, Divider } from '@mantine/core';
-import useStyles from './newsale.styles';
+import { createStyles } from '@mantine/core';
 import Layout from '../../components/layout';
 import SaleItem from '../../components/sale-item/sale-item';
 import Link from 'next/link';
+
+const useStyles = createStyles((theme) => ({
+  title: {
+    fontSize: 28,
+    fontWeight: 900,
+    letterSpacing: - 1,
+  },
+  link: {
+    textDecoration: 'none',
+    textDecorationColor: '#fff',
+    color: '#fff'
+  }
+}));
+
 export default function NewSale() {
   const { classes } = useStyles();
 
