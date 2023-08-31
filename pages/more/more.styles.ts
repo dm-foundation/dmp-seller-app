@@ -10,7 +10,7 @@ export default createStyles((theme) => ({
   },
   subtitle: {
     color: theme.colorScheme === 'dark' ? theme.white : theme.black,
-    opacity: 0.5,
+    opacity: 0.65,
     fontSize: 24,
     fontWeight: 800,
     letterSpacing: -1,
@@ -22,4 +22,13 @@ export default createStyles((theme) => ({
     fontSize: 24,
     opacity: 0.8,
   },
+  link: {
+    textDecoration: 'none',
+    textDecorationColor: '#fff',
+    color: '#666',
+  },
+  totalEarnings: {
+    fontSize: 44,
+    fontWeight: 800,
+  }
 }));

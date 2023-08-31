@@ -32,7 +32,7 @@ export default function Transactions() {
           <SaleItem {...mockData} />
           <SaleItem {...mockData} />
 
-          <Button>Add new item</Button>
+          <Button size="md" w={"90%"}>Add new item</Button>
         </Flex>
       </Layout >
     </>

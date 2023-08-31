@@ -30,9 +30,8 @@ export default function NewSale() {
           <SaleItem {...mockData} />
           <SaleItem {...mockData} />
           <SaleItem {...mockData} />
-          <SaleItem {...mockData} />
 
-          <Button>
+          <Button size="md" w={"90%"}>
             <Link className={classes.link} href={'/newsale/checkout'}>
               Proceed to checkout
             </Link>

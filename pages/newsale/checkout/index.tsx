@@ -29,7 +29,7 @@ export default function NewSale() {
           <SaleItem {...mockData} />
           <SaleItem {...mockData} />
 
-          <Button>Scan to Charge $60.00</Button>
+          <Button size="md" w={"90%"}>Scan to Charge $60.00</Button>
         </Flex>
       </Layout >
     </>

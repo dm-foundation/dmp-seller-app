@@ -25,15 +25,19 @@ export default function Transactions() {
           wrap="wrap"
         >
           <Button className={classes.button} leftIcon={<IconBuildingStore style={{ width: '28px', height: '28px' }} />} variant="black" color="gray">
-            <Link href={'/more/items'}>
+            <Link className={classes.link} href={'/more/items'}>
               Items
             </Link>
           </Button>
           <Button className={classes.button} leftIcon={<IconZoomMoney style={{ width: '28px', height: '28px' }} />} variant="black" color="gray">
-            Earnings
+            <Link className={classes.link} href={'/more/earnings'}>
+              Earnings
+            </Link>
           </Button>
           <Button className={classes.button} leftIcon={<IconSettings style={{ width: '28px', height: '28px' }} />} variant="black" color="gray">
-            Settings
+            <Link className={classes.link} href={'/more/settings'}>
+              Settings
+            </Link>
           </Button>
         </Flex>
       </Layout >
