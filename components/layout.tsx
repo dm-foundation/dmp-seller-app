@@ -5,6 +5,7 @@ const useStyles = createStyles((theme) => ({
     title: {
         fontSize: 28,
         textTransform: 'uppercase',
+        color: '#fff',
         fontWeight: 800,
         letterSpacing: - 1,
     }
@@ -16,10 +17,10 @@ export default function Layout({ title, children }: any) {
 
     return (
         <>
-            <Title className={classes.title} size="sm" align='center' mb="md" mt="md" ml={'md'}>
+            <Title className={classes.title} ta='center' p={10} bg="#000">
                 {title}
-            </Title>
-            <Divider orientation="horizontal" w={"100%"} mb="xl" mt="md" />
+            </Title >
+            <Divider orientation="horizontal" w={"100%"} mb="xl" />
             <Container w={"98%"}>
                 <Flex
                     gap="xs"
