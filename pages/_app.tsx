@@ -1,6 +1,17 @@
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { MantineProvider } from '@mantine/core';
+import { WagmiConfig, createConfig } from "wagmi";
+import { ConnectKitProvider, getDefaultConfig } from "connectkit";
+
+const config = createConfig(
+  getDefaultConfig({
+    alchemyId: process.env.ALCHEMY_ID,
+    walletConnectProjectId: process.env.WALLETCONNECT_PROJECT_ID as string,
+    appName: "DMP Seller App",
+  }),
+);
+
 
 export default function App(props: AppProps) {
   const { Component, pageProps } = props;
@@ -19,8 +30,15 @@ export default function App(props: AppProps) {
           colorScheme: 'light',
         }}
       >
-        <Component {...pageProps} />
-      </MantineProvider>
+
+        <WagmiConfig config={config}>
+          <ConnectKitProvider>
+            <Component {...pageProps} />
+          </ConnectKitProvider>
+        </WagmiConfig>
+      </MantineProvider >
     </>
   );
 }
+
+

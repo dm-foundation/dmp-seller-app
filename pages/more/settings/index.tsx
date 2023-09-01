@@ -1,6 +1,7 @@
 import { Title, TextInput, Flex, Button, Divider, Input, Box, createStyles } from '@mantine/core';
 import Layout from '../../../components/layout';
 import { IconAt, } from '@tabler/icons-react';
+import { useAccount, useDisconnect } from "wagmi";
 
 const useStyles = createStyles((theme) => ({
   title: {
@@ -32,7 +33,8 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export default function Transactions() {
-  const { classes } = useStyles();
+  const { address } = useAccount();
+  const { disconnect } = useDisconnect()
 
   return (
     <Layout title="Settings">
@@ -63,7 +65,11 @@ export default function Transactions() {
           description="Payments will be sent here"
           placeholder="0x..."
           disabled
+          value={address}
         />
+        <Button color="dark" w={"100%"} size="lg" onClick={() => disconnect()}>
+          Disconnect from wallet
+        </Button>
         <Button color="dark" w={"100%"} size="lg">
           Save
         </Button>
