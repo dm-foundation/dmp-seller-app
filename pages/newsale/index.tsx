@@ -1,4 +1,4 @@
-import { Title, Text, Button, Flex, Divider } from '@mantine/core';
+import { Title, Text, Button, Flex, Divider, Container } from '@mantine/core';
 import { createStyles } from '@mantine/core';
 import Layout from '../../components/layout';
 import SaleItem from '../../components/sale-item/sale-item';
@@ -29,29 +29,24 @@ export default function NewSale() {
   }
 
   return (
-    <>
-      <Layout>
-        <Title className={classes.title} size="sm" align='center' mb="xl" mt="xl">
-          New Sale
-        </Title>
-        <Divider orientation="horizontal" w={"100%"} mb="xl" mt="xl" />
-        <Flex
-          direction="column"
-          justify="center"
-          align="center"
-          mb={100}
-        >
-          <SaleItem {...mockData} />
-          <SaleItem {...mockData} />
-          <SaleItem {...mockData} />
+    <Layout title="New Sale">
+      <Flex
+        direction="column"
+        justify="stretch"
+        align="center"
+        mb={100}
+      >
 
-          <Button size="md" w={"90%"}>
-            <Link className={classes.link} href={'/newsale/checkout'}>
-              Proceed to checkout
-            </Link>
-          </Button>
-        </Flex>
-      </Layout >
-    </>
+        <SaleItem {...mockData} />
+        <SaleItem {...mockData} />
+        <SaleItem {...mockData} />
+
+        <Button color="dark" w={"100%"} size="lg">
+          <Link className={classes.link} href={'/newsale/checkout'}>
+            Proceed to checkout
+          </Link>
+        </Button>
+      </Flex>
+    </Layout >
   );
 }

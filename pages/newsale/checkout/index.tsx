@@ -1,6 +1,7 @@
 import { Title, Text, Button, Flex, Divider, createStyles } from '@mantine/core';
 import Layout from '../../../components/layout';
 import SaleItem from '../../../components/sale-item/sale-item';
+import Link from 'next/link';
 
 const useStyles = createStyles((theme) => ({
   title: {
@@ -29,11 +30,7 @@ export default function NewSale() {
 
   return (
     <>
-      <Layout>
-        <Title className={classes.title} size="sm" align='center' mb="xl" mt="xl">
-          Review Sale
-        </Title>
-        <Divider orientation="horizontal" w={"100%"} mb="xl" mt="xl" />
+      <Layout title="Review Sale">
         <Flex
           direction="column"
           justify="center"
@@ -43,7 +40,11 @@ export default function NewSale() {
           <SaleItem {...mockData} />
           <SaleItem {...mockData} />
 
-          <Button size="md" w={"90%"}>Scan to Charge $60.00</Button>
+          <Button color="dark" w={"100%"} size="lg">
+            <Link className={classes.link} href={'/newsale/payment-scan'}>
+              Scan to Charge $60.00
+            </Link>
+          </Button>
         </Flex>
       </Layout >
     </>

@@ -29,54 +29,45 @@ const useStyles = createStyles((theme) => ({
     textDecorationColor: '#fff',
     color: '#666',
   },
-  totalEarnings: {
-    fontSize: 44,
-    fontWeight: 800,
-  }
 }));
 
 export default function Transactions() {
   const { classes } = useStyles();
 
   return (
-    <>
-      <Layout>
-        <Title className={classes.title} size="sm" align='center' mb="xl" mt="xl">
-          Settings
-        </Title>
-        <Divider orientation="horizontal" w={"100%"} mb="xl" mt="xl" />
-        <Flex
-          direction="column"
-          justify="center"
-          gap={10}
-          mb={100}
-          ml={20}
-          mr={20}
-          ta='left'
-        >
-          <TextInput w={"95%"}
-            label="Email"
-            size="md"
-            icon={<IconAt />}
-            withAsterisk
-            placeholder="Your email"
-          />
-          <TextInput w={"95%"}
-            label="Store Name"
-            size="md"
-            withAsterisk
-            placeholder="Your store name"
-          />
-          <TextInput w={"95%"}
-            label="ETH Address"
-            size="md"
-            withAsterisk
-            description="Payments will be sent here"
-            placeholder="0x..."
-          />
-          <Button size="md" mt={20} w={"95%"}>Save</Button>
-        </Flex>
-      </Layout >
-    </>
+    <Layout title="Settings">
+      <Flex
+        direction="column"
+        justify="center"
+        gap={10}
+        mb={100}
+        ta='left'
+      >
+        <TextInput w={"95%"}
+          label="Email"
+          size="md"
+          icon={<IconAt />}
+          withAsterisk
+          placeholder="Your email"
+        />
+        <TextInput w={"95%"}
+          label="Store Name"
+          size="md"
+          withAsterisk
+          placeholder="Your store name"
+        />
+        <TextInput w={"95%"}
+          label="ETH Address"
+          size="md"
+          withAsterisk
+          description="Payments will be sent here"
+          placeholder="0x..."
+          disabled
+        />
+        <Button color="dark" w={"100%"} size="lg">
+          Save
+        </Button>
+      </Flex>
+    </Layout>
   );
 }

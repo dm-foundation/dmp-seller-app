@@ -28,10 +28,6 @@ const useStyles = createStyles((theme) => ({
     textDecoration: 'none',
     textDecorationColor: '#fff',
     color: '#666',
-  },
-  totalEarnings: {
-    fontSize: 44,
-    fontWeight: 800,
   }
 }));
 
@@ -47,26 +43,20 @@ export default function Transactions() {
   }
 
   return (
-    <>
-      <Layout>
-        <Title className={classes.title} size="sm" align='center' mb="xl" mt="xl">
-          Store Items
-        </Title>
-        <Divider orientation="horizontal" w={"100%"} mb="xl" mt="xl" />
-        <Flex
-          direction="column"
-          justify="center"
-          align="center"
-          mb={100}
-        >
-          <SaleItem {...mockData} />
-          <SaleItem {...mockData} />
-          <SaleItem {...mockData} />
-          <SaleItem {...mockData} />
+    <Layout title="Store Items">
+      <Flex
+        direction="column"
+        justify="center"
+        align="center"
+        mb={100}
+      >
+        <SaleItem {...mockData} />
+        <SaleItem {...mockData} />
+        <SaleItem {...mockData} />
+        <SaleItem {...mockData} />
 
-          <Button size="md" w={"90%"}>Add new item</Button>
-        </Flex>
-      </Layout >
-    </>
+        <Button color="dark" w={"100%"} size="lg">Add new item</Button>
+      </Flex>
+    </Layout >
   );
 }

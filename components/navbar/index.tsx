@@ -13,7 +13,7 @@ export default function SellerNavbar() {
     const { classes } = useStyles();
 
     const links = mockData.map((item) => (
-        <Link href={item.link} className={classes.link}>
+        <Link key={item.label} href={item.link} className={classes.link}>
             <item.icon /><br />
             <span>{item.label}</span>
         </Link >

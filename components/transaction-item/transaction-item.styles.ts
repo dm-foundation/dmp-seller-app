@@ -8,10 +8,6 @@ export default createStyles((theme) => ({
   name: {
     fontFamily: `Greycliff CF, ${theme.fontFamily}`,
   },
-  stock: {
-    color: theme.colors.orange[5],
-    fontSize: theme.fontSizes.sm,
-  },
   itemTitle: {
     fontSize: theme.fontSizes.lg,
 

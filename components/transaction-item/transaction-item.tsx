@@ -1,4 +1,4 @@
-import { Box, Text, Group, Flex, Stack, ActionIcon } from '@mantine/core';
+import { Box, Text, Group, Flex, Stack, ActionIcon, Container } from '@mantine/core';
 import { IconReceipt2, IconChevronRight } from '@tabler/icons-react';
 import useStyles from './transaction-item.styles';
 
@@ -11,19 +11,18 @@ interface TransactionItemProps {
 export default function TransactionItem({ seller_name, price_usd, transaction_timestamp }: TransactionItemProps) {
     const { classes } = useStyles();
     return (
-        <div>
-            <Group spacing="sm" mb={15}>
-                <Box>
-                    <IconReceipt2 style={{ width: '32', height: '32', marginTop: '-10px' }} />
-                </Box>
-                <Group spacing="xl">
+        <Container w={"100%"} pl={0} pr={0}>
+            <Group position="apart" mb={15}>
+                <Group position='left'>
+                    <IconReceipt2 style={{ width: '40', height: '40', marginTop: '5px' }} />
                     <Flex
                         justify="flex-start"
                         align="flex-start"
                         direction="column"
                         wrap="wrap"
+                        gap={0.5}
                     >
-                        <Text className={classes.itemTitle}>
+                        <Text className={classes.itemTitle} mb={-5}>
                             {price_usd.toLocaleString('en-US', {
                                 style: 'currency',
                                 currency: 'USD',
@@ -33,8 +32,10 @@ export default function TransactionItem({ seller_name, price_usd, transaction_ti
                             {seller_name}
                         </Text>
                     </Flex>
+                </Group>
+                <Group spacing={'xs'}>
                     <Stack>
-                        <Text className={classes.itemTitle} fz="md" mt={-20}>
+                        <Text className={classes.itemTitle} fz="md" mt={-18}>
                             {transaction_timestamp.toLocaleTimeString('en-US', {
                                 hour: '2-digit',
                                 minute: '2-digit'
@@ -46,6 +47,6 @@ export default function TransactionItem({ seller_name, price_usd, transaction_ti
                     </ActionIcon>
                 </Group>
             </Group>
-        </div >
+        </Container >
     );
 }

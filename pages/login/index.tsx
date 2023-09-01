@@ -17,9 +17,6 @@ const useStyles = createStyles((theme) => ({
     fontSize: 30,
 
   },
-  loginbutton: {
-    fontSize: 16,
-  }
 }));
 
 
@@ -41,7 +38,7 @@ export default function Login() {
         <Text className={classes.subtitle} color="dimmed" size="md" sx={{ maxWidth: 580 }} mx="auto" mb="lg">
           Sign in with an Ethereum address to set up your store
         </Text>
-        <Button className={classes.loginbutton}>Sign in</Button>
+        <Button color="dark" w={"100%"} size="lg">Sign in with Ethereum</Button>
       </Flex >
     </>
   );

@@ -1,4 +1,4 @@
-import { Box, Text, Group, Flex, Stack, ActionIcon, Divider } from '@mantine/core';
+import { Box, Text, Group, Flex, Stack, ActionIcon, Divider, Container } from '@mantine/core';
 import { IconReceipt2, IconChevronRight } from '@tabler/icons-react';
 import useStyles from './earnings-item.styles';
 
@@ -12,15 +12,16 @@ interface EarningsItemProps {
 export default function EarningsItem({ date, item_name, item_count, item_total_price }: EarningsItemProps) {
     const { classes } = useStyles();
     return (
-        <div>
-            <Group spacing="sm" mb={15}>
+        <Container w={"100%"} pl={0} pr={0}>
+            <Divider orientation="horizontal" w={"100%"} />
+            <Group position="apart" mb={15} mt={15}>
                 <Group spacing="xl">
-                    <Divider orientation="horizontal" w={"100%"} />
                     <Flex
                         justify="flex-start"
                         align="flex-start"
                         direction="column"
                         wrap="wrap"
+                        gap={0}
                     >
                         <Text className={classes.itemTitle}>
                             {date.toLocaleString('en-US', {
@@ -33,16 +34,17 @@ export default function EarningsItem({ date, item_name, item_count, item_total_p
                             {item_count} {item_name}(s) sold
                         </Text>
                     </Flex>
-                    <Stack>
-                        <Text className={classes.profit} fz="md" mt={-20}>
-                            +{item_total_price.toLocaleString('en-US', {
-                                style: 'currency',
-                                currency: 'USD',
-                            })}
-                        </Text>
-                    </Stack>
                 </Group>
+                <Stack>
+                    <Text className={classes.profit} fz="md" mt={-20}>
+                        +{item_total_price.toLocaleString('en-US', {
+                            style: 'currency',
+                            currency: 'USD',
+                        })}
+                    </Text>
+                </Stack>
+
             </Group>
-        </div >
+        </Container >
     );
 }

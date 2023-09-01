@@ -23,7 +23,8 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "components/navbar/NavElements.js"
+    "pages/newsale/newsale.styles.js",
+    "pages/login/login.styles.js"
   ],
   "exclude": [
     "node_modules"

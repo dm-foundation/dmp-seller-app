@@ -21,22 +21,16 @@ export default function Transactions() {
   }
 
   return (
-    <>
-      <Layout>
-        <Title className={classes.title} size="sm" align='center' mb="xl" mt="xl">
-          Transactions
-        </Title>
-        <Divider orientation="horizontal" w={"100%"} mb="xl" mt="xl" />
-        <Flex
-          direction="column"
-          justify="center"
-          align="center"
-          mb={100}
-        >
-          <TransactionItem {...mockData} />
-          <TransactionItem {...mockData} />
-        </Flex>
-      </Layout >
-    </>
+    <Layout title="Transactions">
+      <Flex
+        direction="column"
+        justify="center"
+        align="center"
+        mb={100}
+      >
+        <TransactionItem {...mockData} />
+        <TransactionItem {...mockData} />
+      </Flex>
+    </Layout >
   );
 }
