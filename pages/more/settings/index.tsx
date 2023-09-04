@@ -2,6 +2,7 @@ import { Title, TextInput, Flex, Button, Divider, Input, Box, createStyles } fro
 import Layout from '../../../components/layout';
 import { IconAt, } from '@tabler/icons-react';
 import { useAccount, useDisconnect } from "wagmi";
+import { useEffect, useState } from 'react';
 
 const useStyles = createStyles((theme) => ({
   title: {
@@ -33,8 +34,14 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export default function Transactions() {
-  const { address } = useAccount();
+  const { address, isConnected } = useAccount();
   const { disconnect } = useDisconnect()
+  const [dummy, reload] = useState(false);
+
+  const [isUserConnected, setIsUserConnected] = useState(false)
+  useEffect(() => {
+    setIsUserConnected(isConnected)
+  }, []);
 
   return (
     <Layout title="Settings">
@@ -43,22 +50,23 @@ export default function Transactions() {
         justify="center"
         gap={10}
         mb={100}
+        w={"95%"}
         ta='left'
       >
-        <TextInput w={"95%"}
+        <TextInput
           label="Email"
           size="md"
           icon={<IconAt />}
           withAsterisk
           placeholder="Your email"
         />
-        <TextInput w={"95%"}
+        <TextInput
           label="Store Name"
           size="md"
           withAsterisk
           placeholder="Your store name"
         />
-        <TextInput w={"95%"}
+        <TextInput
           label="ETH Address"
           size="md"
           withAsterisk
@@ -67,10 +75,10 @@ export default function Transactions() {
           disabled
           value={address}
         />
-        <Button color="dark" w={"100%"} size="lg" onClick={() => disconnect()}>
+        <Button color="dark" size="lg" disabled={!isUserConnected} onClick={() => { disconnect(); window.location.href = '/' }}>
           Disconnect from wallet
         </Button>
-        <Button color="dark" w={"100%"} size="lg">
+        <Button color="dark" size="lg">
           Save
         </Button>
       </Flex>

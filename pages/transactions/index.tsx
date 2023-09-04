@@ -1,4 +1,4 @@
-import { Title, Text, Button, Flex, Divider, createStyles } from '@mantine/core';
+import { Flex, createStyles } from '@mantine/core';
 import Layout from '../../components/layout';
 import TransactionItem from '../../components/transaction-item/transaction-item';
 

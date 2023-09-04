@@ -1,5 +1,4 @@
-import { Box, Text, Group, Flex, Stack, ActionIcon, Divider, Container } from '@mantine/core';
-import { IconReceipt2, IconChevronRight } from '@tabler/icons-react';
+import { Text, Group, Flex, Stack, Divider, Container } from '@mantine/core';
 import useStyles from './earnings-item.styles';
 
 interface EarningsItemProps {

@@ -1,7 +1,7 @@
 import { Container, Divider, Flex, Title, createStyles } from '@mantine/core'
 import Navbar from './navbar'
 import { useAccount } from 'wagmi';
-import { useState, useEffect, JSXElementConstructor, ReactElement, ReactFragment, ReactPortal } from 'react';
+import { useState, useEffect } from 'react';
 import Login from '../pages/login';
 
 const useStyles = createStyles((theme) => ({

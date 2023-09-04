@@ -41,11 +41,11 @@ export default function NewSale() {
         <SaleItem {...mockData} />
         <SaleItem {...mockData} />
 
-        <Button color="dark" w={"100%"} size="lg">
-          <Link className={classes.link} href={'/newsale/checkout'}>
+        <Link className={classes.link} href={'/newsale/checkout'} style={{ display: 'contents' }}>
+          <Button color="dark" w={"100%"} size="lg">
             Proceed to checkout
-          </Link>
-        </Button>
+          </Button>
+        </Link>
       </Flex>
     </Layout >
   );

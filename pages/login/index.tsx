@@ -1,7 +1,10 @@
 import { Title, Text, Button, Flex, createStyles } from '@mantine/core';
-import { ConnectKitButton } from 'connectkit';
-import { useAccount, useDisconnect } from 'wagmi'
-
+import { useAccount, useConnect, useDisconnect } from 'wagmi'
+import { InjectedConnector } from 'wagmi/connectors/injected'
+import { Connect } from '../../components/connection/Connect';
+import { Connected } from '../../components/connection/Connected';
+import NewSale from '../newsale';
+import { useState, useEffect } from 'react';
 
 const useStyles = createStyles((theme) => ({
   title: {
@@ -26,20 +29,28 @@ const useStyles = createStyles((theme) => ({
   }
 }));
 
-import styled from "styled-components";
-const StyledButton = styled.button`
-  padding: 14px 24px;
-  color: #ffffff;
-  background: #000;
-  font-size: 16px;
-  font-weight: 500;
-`;
-
 export default function Login() {
   const { classes } = useStyles();
-  const { disconnect } = useDisconnect()
   const { isConnected } = useAccount()
+  const { connect } = useConnect({
+    connector: new InjectedConnector(),
+  })
+  const [dummy, reload] = useState(false);
+  const [isUserConnected, setIsUserConnected] = useState(false)
 
+  useEffect(() => {
+    if (isConnected)
+      setIsUserConnected(true);
+    reload(!dummy);
+  }, [])
+
+  if (isUserConnected) {
+    return (
+      <Connected>
+        <NewSale />
+      </Connected>
+    );
+  }
   return (
     <>
       <Flex className={classes.loginbox}
@@ -55,15 +66,7 @@ export default function Login() {
         <Text className={classes.subtitle} color="dimmed" size="md" sx={{ maxWidth: 580 }} mx="auto" mb="lg">
           Sign in with an Ethereum address to set up your store
         </Text>
-        <ConnectKitButton.Custom>
-          {({ isConnected, truncatedAddress, ensName }) => (
-            <StyledButton>
-              {isConnected ? ensName ??
-                truncatedAddress : "Sign in with Ethereum"}
-            </StyledButton>
-          )}
-        </ConnectKitButton.Custom>
-        {isConnected && <Button color="dark" w={"100%"} size="lg" onClick={() => disconnect()}>Disconnect from wallet</Button>}
+        <Connect />
       </Flex >
     </>
   );

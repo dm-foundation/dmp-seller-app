@@ -1,4 +1,4 @@
-import { Title, Flex, Button, Divider, createStyles } from '@mantine/core';
+import { Title, Flex, Button, createStyles } from '@mantine/core';
 import Layout from '../../components/layout';
 import { IconBuildingStore, IconSettings, IconZoomMoney } from '@tabler/icons-react';
 import Link from 'next/link';

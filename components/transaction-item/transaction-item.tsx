@@ -1,4 +1,4 @@
-import { Box, Text, Group, Flex, Stack, ActionIcon, Container } from '@mantine/core';
+import { Text, Group, Flex, Stack, ActionIcon, Container } from '@mantine/core';
 import { IconReceipt2, IconChevronRight } from '@tabler/icons-react';
 import useStyles from './transaction-item.styles';
 

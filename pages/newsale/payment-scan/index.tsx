@@ -1,4 +1,4 @@
-import { Title, Text, Button, Flex, Divider, createStyles, Container } from '@mantine/core';
+import { Text, Flex, createStyles, Container } from '@mantine/core';
 import Layout from '../../../components/layout';
 import QRCode from "react-qr-code";
 

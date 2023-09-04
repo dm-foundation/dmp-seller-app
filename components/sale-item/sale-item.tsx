@@ -1,4 +1,4 @@
-import { Avatar, Text, Group, Flex, Box, Container } from '@mantine/core';
+import { Avatar, Text, Group, Flex, Container } from '@mantine/core';
 import useStyles from './sale-item.styles';
 
 interface SaleItemProps {

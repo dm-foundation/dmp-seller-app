@@ -1,4 +1,4 @@
-import { Title, Image, Flex, Divider, Box, Text, createStyles, Stack } from '@mantine/core';
+import { Image, Flex, Text, createStyles } from '@mantine/core';
 import Layout from '../../../components/layout';
 import EarningsItem from '../../../components/earnings-item/earnings-item';
 

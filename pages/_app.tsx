@@ -1,20 +1,44 @@
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { MantineProvider } from '@mantine/core';
-import { WagmiConfig, createConfig } from "wagmi";
-import { ConnectKitProvider, getDefaultConfig } from "connectkit";
+import { WagmiConfig, createConfig, configureChains, mainnet } from 'wagmi'
+import { publicProvider } from 'wagmi/providers/public'
+import React, { useEffect, useState } from 'react';
+import { CoinbaseWalletConnector } from "wagmi/connectors/coinbaseWallet";
+import { InjectedConnector } from "wagmi/connectors/injected";
+import { MetaMaskConnector } from "wagmi/connectors/metaMask";
+import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
 
-const config = createConfig(
-  getDefaultConfig({
-    alchemyId: process.env.ALCHEMY_ID,
-    walletConnectProjectId: process.env.WALLETCONNECT_PROJECT_ID as string,
-    appName: "DMP Seller App",
-  }),
+
+const { chains, publicClient, webSocketPublicClient } = configureChains(
+  [
+    mainnet,
+  ],
+  [publicProvider()]
 );
+
+const config = createConfig({
+  autoConnect: true,
+  connectors: [
+    new MetaMaskConnector({ chains }),
+    new InjectedConnector({
+      chains,
+      options: {
+        name: "Injected",
+        shimDisconnect: true,
+      },
+    }),
+  ],
+  publicClient,
+  webSocketPublicClient,
+  // walletConnectProjectId: process.env.WALLETCONNECT_PROJECT_ID as string,
+});
 
 
 export default function App(props: AppProps) {
   const { Component, pageProps } = props;
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
 
   return (
     <>
@@ -30,11 +54,8 @@ export default function App(props: AppProps) {
           colorScheme: 'light',
         }}
       >
-
         <WagmiConfig config={config}>
-          <ConnectKitProvider>
-            <Component {...pageProps} />
-          </ConnectKitProvider>
+          {mounted && < Component {...pageProps} />}
         </WagmiConfig>
       </MantineProvider >
     </>

@@ -1,4 +1,4 @@
-import { Title, Text, Button, Flex, Divider, createStyles } from '@mantine/core';
+import { Button, Flex, createStyles } from '@mantine/core';
 import Layout from '../../../components/layout';
 import SaleItem from '../../../components/sale-item/sale-item';
 import Link from 'next/link';
@@ -15,7 +15,6 @@ const useStyles = createStyles((theme) => ({
     color: '#fff'
   }
 }));
-
 
 export default function NewSale() {
   const { classes } = useStyles();
@@ -40,11 +39,11 @@ export default function NewSale() {
           <SaleItem {...mockData} />
           <SaleItem {...mockData} />
 
-          <Button color="dark" w={"100%"} size="lg">
-            <Link className={classes.link} href={'/newsale/payment-scan'}>
+          <Link className={classes.link} href={'/newsale/payment-scan'} style={{ display: 'contents' }}>
+            <Button color="dark" w={"100%"} size="lg">
               Scan to Charge $60.00
-            </Link>
-          </Button>
+            </Button>
+          </Link>
         </Flex>
       </Layout >
     </>
