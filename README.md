@@ -4,6 +4,7 @@ Created with Next.js (and Mantine) using this [template](https://github.com/mant
 
 ## Scripts
 
+Run `npm install` or `yarn install` to install the dependencies.
 Use `npm run` or `yarn` to run the scripts.
 
 ### Build and dev scripts
