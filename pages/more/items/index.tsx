@@ -1,6 +1,7 @@
 import { Flex, Button, createStyles } from '@mantine/core';
 import Layout from '../../../components/layout';
 import SaleItem from '../../../components/sale-item/sale-item';
+import Link from 'next/link';
 
 const useStyles = createStyles((theme) => ({
   title: {
@@ -54,8 +55,9 @@ export default function Transactions() {
         <SaleItem {...mockData} />
         <SaleItem {...mockData} />
         <SaleItem {...mockData} />
-
-        <Button color="dark" w={"100%"} size="lg">Add new item</Button>
+        <Link className={classes.link} href={'/more/items/create-items'} style={{ display: 'contents' }}>
+          <Button color="dark" w={"100%"} size="lg">Add new item</Button>
+        </Link>
       </Flex>
     </Layout >
   );
