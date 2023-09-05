@@ -5,6 +5,7 @@ import { Connect } from '../../components/connection/Connect';
 import { Connected } from '../../components/connection/Connected';
 import NewSale from '../newsale';
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 
 const useStyles = createStyles((theme) => ({
   title: {
@@ -66,7 +67,11 @@ export default function Login() {
         <Text className={classes.subtitle} color="dimmed" size="md" sx={{ maxWidth: 580 }} mx="auto" mb="lg">
           Sign in with an Ethereum address to set up your store
         </Text>
-        <Connect />
+        <Link href={'/login/wallet-selection'}>
+          <Button color="dark" size="lg">
+            Sign in with Ethereum
+          </Button>
+        </Link>
       </Flex >
     </>
   );

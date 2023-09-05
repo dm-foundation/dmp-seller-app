@@ -1,6 +1,7 @@
 import { Title, Text, Button, Flex, createStyles, Card, Container } from '@mantine/core';
 import Link from 'next/link';
 import Layout from '../../../components/layout';
+import { Connect } from '@/components/connection/Connect';
 
 const useStyles = createStyles((theme) => ({
   title: {
@@ -21,7 +22,7 @@ export default function WalletSelector() {
   const { classes } = useStyles();
 
   return (
-    <Container w={"90%"}>
+    <Container w={"90%"} mt={50} >
       <Flex
         mih={50}
         gap="sm"
@@ -32,18 +33,8 @@ export default function WalletSelector() {
         <Title className={classes.title} size="xl" mb="sm" mt="md">
           Choose your preferred wallet
         </Title>
-        <Card shadow="sm" padding="lg" radius="md" withBorder w={"100%"}>
-          <Button color="gray" w={"100%"} size="lg" mb={30} >
-            X
-          </Button>
-          <Button color="gray" w={"100%"} size="lg" mb={30}>
-            Y
-          </Button>
-          <Button color="gray" w={"100%"} size="lg" mb={30}>
-            Z
-          </Button>
-        </Card>
+        <Connect />
       </Flex >
-    </Container>
+    </Container >
   );
 }
