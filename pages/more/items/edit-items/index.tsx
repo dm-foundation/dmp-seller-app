@@ -15,7 +15,7 @@ const useStyles = createStyles((theme) => ({
 export default function Transactions() {
   const { classes } = useStyles();
   return (
-    <Layout title="Create Item">
+    <Layout title="Edit Item">
       <Flex direction="column" justify="center" gap={10} mb={100} w={'95%'} ta="left">
         <Dropzone
           onDrop={(files) => console.log('accepted files', files)}
@@ -38,7 +38,7 @@ export default function Transactions() {
           style={{ display: 'contents' }}
         >
           <Button color="dark" w={'100%'} size="lg">
-            Add new item
+            Save
           </Button>
         </Link>
       </Flex>
