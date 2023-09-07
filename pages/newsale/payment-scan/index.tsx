@@ -1,6 +1,7 @@
-import { Text, Flex, createStyles, Container } from '@mantine/core';
+import { Text, Flex, createStyles, Container, Image } from '@mantine/core';
 import Layout from '../../../components/layout';
 import QRCode from "react-qr-code";
+import { useAccount, useDisconnect } from "wagmi";
 
 const useStyles = createStyles((theme) => ({
   title: {
@@ -17,10 +18,11 @@ const useStyles = createStyles((theme) => ({
 
 
 export default function PaymentScan() {
-  const { classes } = useStyles();
+  const { address, isConnected } = useAccount();
 
   let mockData = {
-    "url": "http://google.com",
+    "qrcode_url": `ethereum:${address}?value=500000000000000`,
+    "qrcode_image_file": "1GaklZFWyP.png"
   }
 
   return (
@@ -37,7 +39,7 @@ export default function PaymentScan() {
             To begin checkout, open the camera on your mobile device and scan the QR code below.
           </Text>
           <Container>
-            <QRCode value={mockData.url} size={250} />
+            <QRCode value={mockData.qrcode_url} size={400} />
           </Container>
         </Flex>
       </Layout >
