@@ -13,22 +13,22 @@ function usdToEthConversionString(price_usd: number) {
     return `${0.0005} ETH`;
 }
 
-export default function SaleItem({ thumbnail, name, stock, price_usd, include_price_ethereum }: SaleItemProps) {
+export default function SaleItem(props: SaleItemProps) {
     const { classes } = useStyles();
     return (
         <Container w={"100%"} pl={0} pr={0}>
             <Group position="apart" mb={15}>
                 <Group>
-                    <Avatar src={thumbnail} size={64} />
+                    <Avatar src={props.thumbnail} size={64} />
                     <Flex
                         justify="flex-start"
                         align="flex-start"
                         direction="column"
                         wrap="wrap"
                     >
-                        <Text className={classes.itemTitle}>{name}</Text>
+                        <Text className={classes.itemTitle}>{props.name}</Text>
                         <Text c='dimmed'>
-                            {stock} in stock
+                            {props.stock} in stock
                         </Text>
                     </Flex>
                 </Group>
@@ -39,12 +39,12 @@ export default function SaleItem({ thumbnail, name, stock, price_usd, include_pr
                     gap={2}
                     wrap="wrap"
                 >
-                    <Text className={classes.itemTitle} mt={include_price_ethereum ? 0 : -20}>{price_usd.toLocaleString('en-US', {
+                    <Text className={classes.itemTitle} mt={props.include_price_ethereum ? 0 : -20}>{props.price_usd.toLocaleString('en-US', {
                         style: 'currency',
                         currency: 'USD',
                     })}
                     </Text>
-                    {include_price_ethereum && <Text fz="xs" c="dimmed" >{usdToEthConversionString(price_usd)}</Text>}
+                    {props.include_price_ethereum && <Text fz="xs" c="dimmed" >{usdToEthConversionString(props.price_usd)}</Text>}
                 </Flex>
             </ Group >
         </Container >

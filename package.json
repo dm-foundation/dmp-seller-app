@@ -32,6 +32,7 @@
     "@next/bundle-analyzer": "^13.1.6",
     "@tabler/icons": "^1.107.0",
     "@tabler/icons-react": "^2.4.0",
+    "axios": "^1.5.0",
     "connectkit": "^1.5.2",
     "cookies-next": "^2.1.1",
     "dayjs": "^1.11.6",
