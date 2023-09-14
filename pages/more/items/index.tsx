@@ -2,6 +2,8 @@ import { Flex, Button, createStyles } from '@mantine/core';
 import Layout from '../../../components/layout';
 import SaleItem from '../../../components/sale-item/sale-item';
 import Link from 'next/link';
+import { AppContext } from '@/context';
+import { useContext } from 'react';
 
 const useStyles = createStyles((theme) => ({
   title: {
@@ -34,6 +36,8 @@ const useStyles = createStyles((theme) => ({
 
 export default function Transactions() {
   const { classes } = useStyles();
+  const { walletContext } = useContext(AppContext);
+  console.log("🚀 ~ file: index.tsx:34 ~ Transactions ~ walletContext:", walletContext)
 
   let mockData = {
     "thumbnail": "https://images.pexels.com/photos/2425011/pexels-photo-2425011.jpeg?auto=compress&cs=tinysrgb&w=100&h=200&dpr=1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80",

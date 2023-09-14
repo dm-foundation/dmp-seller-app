@@ -2,6 +2,8 @@ import { Title, Flex, Button, createStyles } from '@mantine/core';
 import Layout from '../../components/layout';
 import { IconBuildingStore, IconSettings, IconZoomMoney } from '@tabler/icons-react';
 import Link from 'next/link';
+import { useContext } from 'react';
+import { AppContext } from '@/context';
 
 const useStyles = createStyles((theme) => ({
   subtitle: {
@@ -28,11 +30,14 @@ const useStyles = createStyles((theme) => ({
 
 export default function Transactions() {
   const { classes } = useStyles();
+  const { walletContext } = useContext(AppContext);
+  console.log("🚀 ~ file: index.tsx:34 ~ Transactions ~ walletContext:", walletContext)
 
   return (
     <Layout title="Welcome to Mass Market">
       <Title className={classes.subtitle}>
-        My Awesome Store
+        {walletContext?.eth_address}
+        {walletContext?.id_store}
       </Title>
       <Flex
         mih={50}

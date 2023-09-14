@@ -3,9 +3,12 @@ import { createStyles } from '@mantine/core';
 import Layout from '../../components/layout';
 import SaleItem from '../../components/sale-item/sale-item';
 import Link from 'next/link';
-import { SetStateAction, useEffect, useState } from 'react';
+import { SetStateAction, useContext, useEffect, useState } from 'react';
 import axios from "axios";
 import fetch from '../../api/api';
+import { useAccount } from 'wagmi';
+import { AppContext } from '@/context';
+import { WalletContext } from '@/types/walletAddress';
 
 const useStyles = createStyles((theme) => ({
   title: {
@@ -21,17 +24,28 @@ const useStyles = createStyles((theme) => ({
 }));
 
 
+
 export default function NewSale() {
   const { classes } = useStyles();
   const [saleItems, setSaleItems] = useState([]);
+  const [walletAddress, setWalletAddress] = useState({});
+  const { address, isConnected } = useAccount();
+  const context = useContext(AppContext);
 
   async function fetchSaleItems() {
-    const storeItemsData = await fetch("/item/store/1");
+    const storeItemsData = await fetch("/store/1/items");
     setSaleItems(storeItemsData);
+  }
+
+  async function fetchWalletAddress() {
+    const walletAddressData = await fetch(`/wallet-address/${address}`);
+    // context.id_store = walletAddressData.id_store;
+    context.updateContext(walletAddressData);
   }
 
   useEffect(() => {
     fetchSaleItems();
+    fetchWalletAddress();
   }, []);
 
   return (
