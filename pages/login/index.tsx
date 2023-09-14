@@ -1,11 +1,10 @@
 import { Title, Text, Button, Flex, createStyles } from '@mantine/core';
 import { useAccount, useConnect, useDisconnect } from 'wagmi'
 import { InjectedConnector } from 'wagmi/connectors/injected'
-import { Connect } from '../../components/connection/Connect';
-import { Connected } from '../../components/connection/Connected';
 import NewSale from '../newsale';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Connected from '@/components/connection/Connected';
 
 const useStyles = createStyles((theme) => ({
   title: {

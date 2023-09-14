@@ -12,7 +12,7 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export default function Transactions() {
+export default function CreateItems() {
   const { classes } = useStyles();
   return (
     <Layout title="Create Item">

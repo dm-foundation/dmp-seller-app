@@ -9,6 +9,7 @@ import { InjectedConnector } from "wagmi/connectors/injected";
 import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
 import { mainnet, optimism, polygon } from '@wagmi/core/chains'
+import ContextProvider from '@/context/myContext';
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [
@@ -51,6 +52,7 @@ const config = createConfig({
 export default function App(props: AppProps) {
   const { Component, pageProps } = props;
   const [mounted, setMounted] = useState(false)
+
   useEffect(() => setMounted(true), [])
 
   return (
@@ -60,17 +62,20 @@ export default function App(props: AppProps) {
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
       </Head>
 
-      <MantineProvider
-        withGlobalStyles
-        withNormalizeCSS
-        theme={{
-          colorScheme: 'light',
-        }}
-      >
-        <WagmiConfig config={config}>
-          {mounted && < Component {...pageProps} />}
-        </WagmiConfig>
-      </MantineProvider >
+      <ContextProvider>
+        <MantineProvider
+          withGlobalStyles
+          withNormalizeCSS
+          theme={{
+            colorScheme: 'light',
+          }}
+        >
+          <WagmiConfig config={config}>
+
+            {mounted && < Component {...pageProps} />}
+          </WagmiConfig>
+        </MantineProvider >
+      </ContextProvider>
     </>
   );
 }

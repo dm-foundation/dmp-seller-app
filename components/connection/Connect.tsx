@@ -3,7 +3,7 @@
 import { Button, Card, Flex, createStyles } from '@mantine/core'
 import Link from 'next/link'
 import { BaseError } from 'viem'
-import { useAccount, useConnect, useDisconnect } from 'wagmi'
+import { useAccount, useConnect } from 'wagmi'
 
 const useStyles = createStyles((theme) => ({
     link: {
@@ -28,7 +28,6 @@ export function Connect() {
     const { classes } = useStyles();
     const { connector, isConnected } = useAccount()
     const { connect, connectors, error } = useConnect()
-    const { disconnect } = useDisconnect()
 
     return (
         <div>

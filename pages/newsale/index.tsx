@@ -1,11 +1,12 @@
-import { Title, Text, Button, Flex, Divider, Container } from '@mantine/core';
+import { Button, Flex } from '@mantine/core';
 import { createStyles } from '@mantine/core';
 import Layout from '../../components/layout';
 import SaleItem from '../../components/sale-item/sale-item';
 import Link from 'next/link';
-import { SetStateAction, useEffect, useState } from 'react';
-import axios from "axios";
-import fetch from '../../api/api';
+import { useContext, useEffect, useState } from 'react';
+import get from '../../api/api';
+import { MyContext } from '@/context/myContext';
+import { ContextType } from '@/context/contextTypes';
 
 const useStyles = createStyles((theme) => ({
   title: {
@@ -25,13 +26,16 @@ export default function NewSale() {
   const { classes } = useStyles();
   const [saleItems, setSaleItems] = useState([]);
 
+  const { ctx, updateCtx } = useContext(MyContext) as ContextType;
+
   async function fetchSaleItems() {
-    const storeItemsData = await fetch("/item/store/1");
-    setSaleItems(storeItemsData);
+    const data = await get(`/store/${ctx.storeId}/items`);
+    setSaleItems(data);
   }
 
   useEffect(() => {
     fetchSaleItems();
+
   }, []);
 
   return (
@@ -42,6 +46,8 @@ export default function NewSale() {
         align="center"
         mb={100}
       >
+        {saleItems.length == 0 && <p>Loading items in your store..</p>}
+
         {saleItems.map(item => {
           return (
             <SaleItem
