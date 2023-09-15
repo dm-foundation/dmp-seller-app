@@ -1,8 +1,9 @@
 import { Title, TextInput, Flex, Button, Divider, Input, Box, createStyles } from '@mantine/core';
 import Layout from '../../../components/layout';
-import { IconAt, } from '@tabler/icons-react';
-import { useAccount, useDisconnect } from "wagmi";
-import { useEffect, useState } from 'react';
+import { IconAt, IconShoppingBag } from '@tabler/icons-react';
+import { useAccount, useDisconnect } from 'wagmi';
+import { useContext, useEffect, useState } from 'react';
+import { AppContext } from '@/context';
 
 const useStyles = createStyles((theme) => ({
   title: {
@@ -10,7 +11,7 @@ const useStyles = createStyles((theme) => ({
     fontSize: 28,
     fontWeight: 900,
     letterSpacing: -1,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   subtitle: {
     color: theme.colorScheme === 'dark' ? theme.white : theme.black,
@@ -20,7 +21,7 @@ const useStyles = createStyles((theme) => ({
     letterSpacing: -1,
     textAlign: 'left',
     marginLeft: '15px',
-    marginBottom: '15px'
+    marginBottom: '15px',
   },
   button: {
     fontSize: 24,
@@ -35,36 +36,44 @@ const useStyles = createStyles((theme) => ({
 
 export default function Transactions() {
   const { address, isConnected } = useAccount();
-  const { disconnect } = useDisconnect()
+  const { disconnect } = useDisconnect();
   const [dummy, reload] = useState(false);
+  const { walletStoreContext } = useContext(AppContext);
 
-  const [isUserConnected, setIsUserConnected] = useState(false)
+  const [isUserConnected, setIsUserConnected] = useState(false);
+
+  const [storeName, setStoreName] = useState(walletStoreContext?.name || '');
+  const [storeEmail, setStoreEmail] = useState(walletStoreContext?.email || '');
+
+  const handleStoreNameChange = (event: any) => {
+    setStoreName(event.target.value);
+  };
+  const handleStoreEmailChange = (event: any) => {
+    setStoreEmail(event.target.value);
+  };
+
   useEffect(() => {
-    setIsUserConnected(isConnected)
+    setIsUserConnected(isConnected);
   }, []);
 
   return (
     <Layout title="Settings">
-      <Flex
-        direction="column"
-        justify="center"
-        gap={10}
-        mb={100}
-        w={"95%"}
-        ta='left'
-      >
+      <Flex direction="column" justify="center" gap={10} mb={100} w={'95%'} ta="left">
+        <TextInput
+          label="Store Name"
+          size="md"
+          icon={<IconShoppingBag />}
+          withAsterisk
+          value={storeName}
+          onChange={handleStoreNameChange}
+        />
         <TextInput
           label="Email"
           size="md"
           icon={<IconAt />}
           withAsterisk
-          placeholder="Your email"
-        />
-        <TextInput
-          label="Store Name"
-          size="md"
-          withAsterisk
-          placeholder="Your store name"
+          value={storeEmail}
+          onChange={handleStoreEmailChange}
         />
         <TextInput
           label="ETH Address"
@@ -73,9 +82,17 @@ export default function Transactions() {
           description="Payments will be sent here"
           placeholder="0x..."
           disabled
-          value={address}
+          value={walletStoreContext?.eth_address}
         />
-        <Button color="dark" size="lg" disabled={!isUserConnected} onClick={() => { disconnect(); window.location.href = '/' }}>
+        <Button
+          color="dark"
+          size="lg"
+          disabled={!isUserConnected}
+          onClick={() => {
+            disconnect();
+            window.location.href = '/';
+          }}
+        >
           Disconnect from wallet
         </Button>
         <Button color="dark" size="lg">

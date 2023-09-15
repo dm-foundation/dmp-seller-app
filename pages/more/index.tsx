@@ -30,14 +30,13 @@ const useStyles = createStyles((theme) => ({
 
 export default function Transactions() {
   const { classes } = useStyles();
-  const { walletContext } = useContext(AppContext);
-  console.log("🚀 ~ file: index.tsx:34 ~ Transactions ~ walletContext:", walletContext)
+  const { walletStoreContext } = useContext(AppContext);
+  console.log("🚀 ~ file: index.tsx:34 ~ Transactions ~ walletContext:", walletStoreContext)
 
   return (
     <Layout title="Welcome to Mass Market">
       <Title className={classes.subtitle}>
-        {walletContext?.eth_address}
-        {walletContext?.id_store}
+        {walletStoreContext?.name}
       </Title>
       <Flex
         mih={50}
