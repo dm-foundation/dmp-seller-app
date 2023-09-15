@@ -73,10 +73,6 @@ export default function Transactions() {
           );
         }
         )}
-        {/* <SaleItem {...mockData} />
-        <SaleItem {...mockData} />
-        <SaleItem {...mockData} />
-        <SaleItem {...mockData} /> */}
         <Link className={classes.link} href={'/more/items/create-items'} style={{ display: 'contents' }}>
           <Button color="dark" w={"100%"} size="lg">Add new item</Button>
         </Link>
