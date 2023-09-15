@@ -35,13 +35,11 @@ export default function Login() {
   const { connect } = useConnect({
     connector: new InjectedConnector(),
   })
-  const [dummy, reload] = useState(false);
   const [isUserConnected, setIsUserConnected] = useState(false)
 
   useEffect(() => {
     if (isConnected)
       setIsUserConnected(true);
-    reload(!dummy);
   }, [])
 
   if (isUserConnected) {
