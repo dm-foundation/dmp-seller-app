@@ -3,8 +3,8 @@
 import { useContext, useEffect, useState } from 'react'
 import { useAccount } from 'wagmi'
 import { ContextType } from '@/context/contextTypes';
-import { MyContext } from '@/context/myContext';
 import get from '@/api/api';
+import { MyContext } from '@/context/myContext';
 
 export default function Connected({ children }: { children: React.ReactNode }) {
     const { address, isConnected } = useAccount()
