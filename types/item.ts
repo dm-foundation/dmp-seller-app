@@ -1,6 +1,6 @@
 export type Store = {
   id: number;
-  id_store: number;
+  storeId: number;
   name: string;
   price: number;
   sku: string;

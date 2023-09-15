@@ -42,7 +42,7 @@ export default function Transactions() {
   const [saleItems, setSaleItems] = useState<Store[]>();
 
   async function fetchSaleItems() {
-    const storeItemsData: Store[] = await fetch(`/store/${walletStoreContext?.id_store}/items`);
+    const storeItemsData: Store[] = await fetch(`/store/${walletStoreContext?.storeId}/items`);
     setSaleItems(storeItemsData);
     console.log("🚀 ~ file: index.tsx:46 ~ fetchSaleItems ~ storeItemsData:", storeItemsData)
   }

@@ -31,7 +31,7 @@ export default function NewSale() {
   // console.log("🚀 ~ file: index.tsx:32 ~ NewSale ~ context:", walletStoreContext)
 
   async function fetchSaleItems() {
-    const storeItemsData = await fetch(`/store/${walletStoreContext?.id_store}/items`);
+    const storeItemsData = await fetch(`/store/${walletStoreContext?.storeId}/items`);
     setSaleItems(storeItemsData);
     console.log("🚀 ~ file: index.tsx:36 ~ fetchSaleItems ~ storeItemsData:", storeItemsData)
   }

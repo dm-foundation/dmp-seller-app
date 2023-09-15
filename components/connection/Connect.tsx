@@ -35,9 +35,12 @@ export function Connect() {
   const context = useContext(AppContext);
 
   async function fetchWalletStore() {
+    console.log("🚀 ~ file: Connect.tsx:38 ~ fetchWalletStore ~ address:", address)
     const walletAddressData = await fetch(`/wallet-address/${address}`);
-    const storeData = await fetch(`/store/${walletAddressData?.id_store}`);
+    console.log("🚀 ~ file: Connect.tsx:40 ~ fetchWalletStore ~ walletAddressData:", walletAddressData)
+    const storeData = await fetch(`/store/${walletAddressData?.storeId}`);
     const walletStoreObj = { ...storeData, ...walletAddressData };
+    console.log("🚀 ~ file: Connect.tsx:43 ~ fetchWalletStore ~ storeData:", storeData)
     context.updateContext(walletStoreObj);
   }
 

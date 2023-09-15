@@ -82,7 +82,7 @@ export default function Transactions() {
           description="Payments will be sent here"
           placeholder="0x..."
           disabled
-          value={walletStoreContext?.eth_address}
+          value={walletStoreContext?.ethAddress}
         />
         <Button
           color="dark"

@@ -1,6 +1,6 @@
 export type WalletStoreContext = {
-  eth_address: string;
-  id_store: number;
+  ethAddress: string;
+  storeId: number;
   name: string;
   email: string;
 };
