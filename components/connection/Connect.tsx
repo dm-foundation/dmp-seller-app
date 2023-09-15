@@ -1,5 +1,6 @@
 'use client';
 
+import get from '@/api/api';
 import fetch from '@/api/api';
 import { AppContext } from '@/context';
 import { Button, Card, Flex, createStyles } from '@mantine/core';
@@ -35,12 +36,9 @@ export function Connect() {
   const context = useContext(AppContext);
 
   async function fetchWalletStore() {
-    console.log("🚀 ~ file: Connect.tsx:38 ~ fetchWalletStore ~ address:", address)
-    const walletAddressData = await fetch(`/wallet-address/${address}`);
-    console.log("🚀 ~ file: Connect.tsx:40 ~ fetchWalletStore ~ walletAddressData:", walletAddressData)
-    const storeData = await fetch(`/store/${walletAddressData?.storeId}`);
+    const walletAddressData = await get(`/wallet-address/${address}`);
+    const storeData = await get(`/store/${walletAddressData?.storeId}`);
     const walletStoreObj = { ...storeData, ...walletAddressData };
-    console.log("🚀 ~ file: Connect.tsx:43 ~ fetchWalletStore ~ storeData:", storeData)
     context.updateContext(walletStoreObj);
   }
 
