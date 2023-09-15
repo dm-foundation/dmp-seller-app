@@ -1,67 +1,79 @@
-import { TextInput, Flex, Button } from '@mantine/core';
+import { TextInput, Flex, Button, createStyles } from '@mantine/core';
 import Layout from '../../../components/layout';
-import { IconAt, } from '@tabler/icons-react';
-import { useAccount, useDisconnect } from "wagmi";
+import { IconAt, IconShoppingBag } from '@tabler/icons-react';
+import { useAccount, useDisconnect } from 'wagmi';
 import { useContext, useEffect, useState } from 'react';
-import { ContextType } from '@/context/contextTypes';
-import { MyContext } from '@/context/myContext';
-import get from '@/api/api';
+import { AppContext } from '@/context';
 
-export default function Settings() {
-  const [isUserConnected, setIsUserConnected] = useState(false)
+const useStyles = createStyles((theme) => ({
+  title: {
+    color: theme.colorScheme === 'dark' ? theme.white : theme.black,
+    fontSize: 28,
+    fontWeight: 900,
+    letterSpacing: -1,
+    textAlign: 'center',
+  },
+  subtitle: {
+    color: theme.colorScheme === 'dark' ? theme.white : theme.black,
+    opacity: 0.65,
+    fontSize: 24,
+    fontWeight: 800,
+    letterSpacing: -1,
+    textAlign: 'left',
+    marginLeft: '15px',
+    marginBottom: '15px',
+  },
+  button: {
+    fontSize: 24,
+    opacity: 0.8,
+  },
+  link: {
+    textDecoration: 'none',
+    textDecorationColor: '#fff',
+    color: '#666',
+  },
+}));
+
+export default function Transactions() {
   const { address, isConnected } = useAccount();
   const { disconnect } = useDisconnect();
+  const [dummy, reload] = useState(false);
+  const { walletStoreContext } = useContext(AppContext);
 
-  const { ctx, updateCtx } = useContext(MyContext) as ContextType;
+  const [isUserConnected, setIsUserConnected] = useState(false);
 
-  async function fetchStoreInfo() {
-    try {
-      const walletData = await get(`/wallet-address/${address}`);
-      ctx.ethAddress = walletData.ethAddress;
-      ctx.storeId = walletData.storeId;
+  const [storeName, setStoreName] = useState(walletStoreContext?.name || '');
+  const [storeEmail, setStoreEmail] = useState(walletStoreContext?.email || '');
 
-      const storeData = await get(`/store/${ctx.storeId}`);
-      ctx.storeName = storeData.name;
-      ctx.storeEmail = storeData.email;
-
-      updateCtx(ctx);
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  const handleStoreNameChange = (event: any) => {
+    setStoreName(event.target.value);
+  };
+  const handleStoreEmailChange = (event: any) => {
+    setStoreEmail(event.target.value);
+  };
 
   useEffect(() => {
-    setIsUserConnected(isConnected)
-    if (isConnected) {
-      fetchStoreInfo();
-    }
+    setIsUserConnected(isConnected);
   }, []);
 
   return (
     <Layout title="Settings">
-      <Flex
-        direction="column"
-        justify="center"
-        gap={10}
-        mb={100}
-        w={"95%"}
-        ta='left'
-      >
+      <Flex direction="column" justify="center" gap={10} mb={100} w={'95%'} ta="left">
+        <TextInput
+          label="Store Name"
+          size="md"
+          icon={<IconShoppingBag />}
+          withAsterisk
+          value={storeName}
+          onChange={handleStoreNameChange}
+        />
         <TextInput
           label="Email"
           size="md"
           icon={<IconAt />}
           withAsterisk
-          placeholder="Your email"
-          value={ctx.storeEmail}
-
-        />
-        <TextInput
-          label="Store Name"
-          size="md"
-          withAsterisk
-          placeholder="Your store name"
-          value={ctx.storeName}
+          value={storeEmail}
+          onChange={handleStoreEmailChange}
         />
         <TextInput
           label="ETH Address"
@@ -70,9 +82,17 @@ export default function Settings() {
           description="Payments will be sent here"
           placeholder="0x..."
           disabled
-          value={ctx.ethAddress}
+          value={walletStoreContext?.ethAddress}
         />
-        <Button color="dark" size="lg" disabled={!isUserConnected} onClick={() => { disconnect(); window.location.href = '/' }}>
+        <Button
+          color="dark"
+          size="lg"
+          disabled={!isUserConnected}
+          onClick={() => {
+            disconnect();
+            window.location.href = '/';
+          }}
+        >
           Disconnect from wallet
         </Button>
         <Button color="dark" size="lg">

@@ -1,12 +1,12 @@
-import { Button, Flex } from '@mantine/core';
+import { Button, Flex, } from '@mantine/core';
 import { createStyles } from '@mantine/core';
 import Layout from '../../components/layout';
 import SaleItem from '../../components/sale-item/sale-item';
 import Link from 'next/link';
 import { useContext, useEffect, useState } from 'react';
-import get from '../../api/api';
-import { MyContext } from '@/context/myContext';
-import { ContextType } from '@/context/contextTypes';
+import fetch from '../../api/api';
+import { useAccount } from 'wagmi';
+import { AppContext } from '@/context';
 
 const useStyles = createStyles((theme) => ({
   title: {
@@ -22,20 +22,32 @@ const useStyles = createStyles((theme) => ({
 }));
 
 
+
 export default function NewSale() {
   const { classes } = useStyles();
   const [saleItems, setSaleItems] = useState([]);
+  const { walletStoreContext } = useContext(AppContext);
+  // const { address, isConnected } = useAccount();
+  // console.log("🚀 ~ file: index.tsx:32 ~ NewSale ~ context:", walletStoreContext)
 
-  const { ctx, updateCtx } = useContext(MyContext) as ContextType;
 
   async function fetchSaleItems() {
-    const data = await get(`/store/${ctx.storeId}/items`);
-    setSaleItems(data);
+    const storeItemsData = await fetch(`/store/${walletStoreContext?.storeId}/items`);
+    setSaleItems(storeItemsData);
+    console.log("🚀 ~ file: index.tsx:36 ~ fetchSaleItems ~ storeItemsData:", storeItemsData)
   }
+
+  // async function fetchWalletAddress() {
+  //   const walletAddressData = await fetch(`/wallet-address/${address}`);
+  //   const storeData = await fetch(`/store/${walletAddressData.id_store}`);
+  //   const walletStoreObj = { ...storeData, ...walletAddressData };
+  //   // context.id_store = walletAddressData.id_store;
+  //   context.updateContext(walletStoreObj);
+  // }
 
   useEffect(() => {
     fetchSaleItems();
-
+    // fetchWalletAddress();
   }, []);
 
   return (
