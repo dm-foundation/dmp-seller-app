@@ -1,4 +1,4 @@
-import { Button, Flex } from '@mantine/core';
+import { Button, Flex, Select } from '@mantine/core';
 import { createStyles } from '@mantine/core';
 import Layout from '../../components/layout';
 import SaleItem from '../../components/sale-item/sale-item';
@@ -7,6 +7,7 @@ import { useContext, useEffect, useState } from 'react';
 import fetch from '../../api/api';
 import { useAccount } from 'wagmi';
 import { AppContext } from '@/context';
+import { Store } from '@/types/item';
 
 const useStyles = createStyles((theme) => ({
   title: {
@@ -23,19 +24,31 @@ const useStyles = createStyles((theme) => ({
 
 export default function NewSale() {
   const { classes } = useStyles();
-  const [saleItems, setSaleItems] = useState([]);
+  const [saleItems, setSaleItems] = useState<Store[]>([]);
+  const [selectedItems, setSelectedItems] = useState<Store[]>([]);
   const { walletStoreContext } = useContext(AppContext);
-
+  
   async function fetchSaleItems() {
-    const storeItemsData = await fetch(`/store/${walletStoreContext?.storeId}/items`);
+    const storeItemsData: Store[] = await fetch(`/store/${walletStoreContext?.storeId}/items`);
     setSaleItems(storeItemsData);
-    console.log('🚀 ~ file: index.tsx:36 ~ fetchSaleItems ~ storeItemsData:', storeItemsData);
   }
 
+  async function handleSelectedItem (selectedItemsProps: Store) {
+    console.log("🚀 ~ file: index.tsx:37 ~ handleSelectedItem ~ selectedItemsProps:", selectedItemsProps.id)
+    setSelectedItems((current)  => current.filter((item) => item.id !== selectedItemsProps.id));
+
+    setSelectedItems((current) => [...current,selectedItemsProps])
+  }
+
+  
   useEffect(() => {
     fetchSaleItems();
   }, []);
 
+  useEffect(() => {
+    console.log("🚀 ~ file: index.tsx:29 ~ NewSale ~ selectedItems:", selectedItems)
+  }, [selectedItems]);
+  
   return (
     <Layout title="New Sale">
       <Flex direction="column" justify="stretch" align="center" mb={100}>
@@ -43,16 +56,21 @@ export default function NewSale() {
 
         {saleItems.map((item) => {
           return (
-            <SaleItem
-              key={item['id']}
-              thumbnail={
-                'https://images.pexels.com/photos/2425011/pexels-photo-2425011.jpeg?auto=compress&cs=tinysrgb&w=100&h=200&dpr=1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80'
-              }
-              name={item['name']}
-              stock={item['units']}
-              price_usd={item['price']}
-              include_price_ethereum={false}
-            />
+            <>
+              <SaleItem
+                key={item['id']}
+                thumbnail={
+                  'https://images.pexels.com/photos/2425011/pexels-photo-2425011.jpeg?auto=compress&cs=tinysrgb&w=100&h=200&dpr=1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80'
+                }
+                id={item['id']}
+                name={item['name']}
+                stock={item['units']}
+                price_usd={item['price']}
+                include_price_ethereum={false}
+                include_select_units={true}
+                handleSelectedItems={handleSelectedItem}
+              />
+            </>
           );
         })}
 
