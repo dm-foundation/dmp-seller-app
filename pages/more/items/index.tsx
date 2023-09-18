@@ -60,7 +60,7 @@ export default function Transactions() {
         align="center"
         mb={100}
       >
-       {saleItems?.map(item => {
+        {saleItems?.map(item => {
           return (
             <SaleItem
               key={item['id']}
