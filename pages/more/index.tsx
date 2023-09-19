@@ -28,10 +28,9 @@ const useStyles = createStyles((theme) => ({
 }));
 
 
-export default function Transactions() {
+export default function More() {
   const { classes } = useStyles();
   const { walletStoreContext } = useContext(AppContext);
-  console.log("🚀 ~ file: index.tsx:34 ~ Transactions ~ walletContext:", walletStoreContext)
 
   return (
     <Layout title="Welcome to Mass Market">

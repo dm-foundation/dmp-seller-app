@@ -1,9 +1,9 @@
-import { TextInput, Flex, Button, createStyles } from '@mantine/core';
-import Layout from '../../../components/layout';
-import { IconAt, IconShoppingBag } from '@tabler/icons-react';
-import { useAccount, useDisconnect } from 'wagmi';
-import { useContext, useEffect, useState } from 'react';
 import { AppContext } from '@/context';
+import { Button, Flex, TextInput, createStyles } from '@mantine/core';
+import { IconAt, IconShoppingBag } from '@tabler/icons-react';
+import { useContext, useEffect, useState } from 'react';
+import { useAccount, useDisconnect } from 'wagmi';
+import Layout from '../../../components/layout';
 
 const useStyles = createStyles((theme) => ({
   title: {
@@ -37,7 +37,6 @@ const useStyles = createStyles((theme) => ({
 export default function Transactions() {
   const { address, isConnected } = useAccount();
   const { disconnect } = useDisconnect();
-  const [dummy, reload] = useState(false);
   const { walletStoreContext } = useContext(AppContext);
 
   const [isUserConnected, setIsUserConnected] = useState(false);

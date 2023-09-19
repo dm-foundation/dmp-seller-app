@@ -4,7 +4,7 @@ import SaleItem from '../../../components/sale-item/sale-item';
 import Link from 'next/link';
 import { AppContext } from '@/context';
 import { useContext, useEffect, useState } from 'react';
-import {get} from '@/api/api';
+import { get } from '@/api/api';
 import { Store } from '@/types/item';
 
 const useStyles = createStyles((theme) => ({
@@ -44,9 +44,7 @@ export default function Transactions() {
   async function fetchSaleItems() {
     const storeItemsData: Store[] = await get(`/store/${walletStoreContext?.storeId}/items`);
     setSaleItems(storeItemsData);
-    console.log("🚀 ~ file: index.tsx:46 ~ fetchSaleItems ~ storeItemsData:", storeItemsData)
   }
-
 
   useEffect(() => {
     fetchSaleItems();
@@ -60,7 +58,7 @@ export default function Transactions() {
         align="center"
         mb={100}
       >
-       {saleItems?.map(item => {
+        {saleItems?.map(item => {
           return (
             <SaleItem
               key={item['id']}

@@ -1,12 +1,12 @@
 'use client';
 
-import {get} from '@/api/api';
+import { get } from '@/api/api';
 import { AppContext } from '@/context';
 import { Button, Card, Flex, createStyles } from '@mantine/core';
 import Link from 'next/link';
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import { BaseError } from 'viem';
-import { useAccount, useConnect, useDisconnect } from 'wagmi';
+import { useAccount, useConnect } from 'wagmi';
 
 const useStyles = createStyles((theme) => ({
   link: {
@@ -31,14 +31,13 @@ export function Connect() {
   const { classes } = useStyles();
   const { address, connector, isConnected } = useAccount();
   const { connect, connectors, error } = useConnect();
-  const { disconnect } = useDisconnect();
-  const context = useContext(AppContext);
+  const { updateContext } = useContext(AppContext);
 
   async function fetchWalletStore() {
     const walletAddressData = await get(`/wallet-address/${address}`);
     const storeData = await get(`/store/${walletAddressData?.storeId}`);
     const walletStoreObj = { ...storeData, ...walletAddressData };
-    context.updateContext(walletStoreObj);
+    updateContext(walletStoreObj);
   }
 
   return (
