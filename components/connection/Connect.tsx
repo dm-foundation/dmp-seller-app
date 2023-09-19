@@ -1,7 +1,6 @@
 'use client';
 
-import get from '@/api/api';
-import fetch from '@/api/api';
+import {get} from '@/api/api';
 import { AppContext } from '@/context';
 import { Button, Card, Flex, createStyles } from '@mantine/core';
 import Link from 'next/link';

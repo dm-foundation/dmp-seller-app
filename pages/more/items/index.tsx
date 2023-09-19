@@ -4,7 +4,7 @@ import SaleItem from '../../../components/sale-item/sale-item';
 import Link from 'next/link';
 import { AppContext } from '@/context';
 import { useContext, useEffect, useState } from 'react';
-import fetch from '@/api/api';
+import {get} from '@/api/api';
 import { Store } from '@/types/item';
 
 const useStyles = createStyles((theme) => ({
@@ -42,7 +42,7 @@ export default function Transactions() {
   const [saleItems, setSaleItems] = useState<Store[]>();
 
   async function fetchSaleItems() {
-    const storeItemsData: Store[] = await fetch(`/store/${walletStoreContext?.storeId}/items`);
+    const storeItemsData: Store[] = await get(`/store/${walletStoreContext?.storeId}/items`);
     setSaleItems(storeItemsData);
     console.log("🚀 ~ file: index.tsx:46 ~ fetchSaleItems ~ storeItemsData:", storeItemsData)
   }

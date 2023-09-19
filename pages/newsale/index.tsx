@@ -4,7 +4,7 @@ import Layout from '../../components/layout';
 import SaleItem from '../../components/sale-item/sale-item';
 import Link from 'next/link';
 import { useContext, useEffect, useState } from 'react';
-import fetch from '../../api/api';
+import {get} from '../../api/api';
 import { useAccount } from 'wagmi';
 import { AppContext } from '@/context';
 
@@ -27,7 +27,7 @@ export default function NewSale() {
   const { walletStoreContext } = useContext(AppContext);
 
   async function fetchSaleItems() {
-    const storeItemsData = await fetch(`/store/${walletStoreContext?.storeId}/items`);
+    const storeItemsData = await get(`/store/${walletStoreContext?.storeId}/items`);
     setSaleItems(storeItemsData);
     console.log('🚀 ~ file: index.tsx:36 ~ fetchSaleItems ~ storeItemsData:', storeItemsData);
   }
