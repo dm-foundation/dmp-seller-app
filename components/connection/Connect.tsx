@@ -15,17 +15,6 @@ const useStyles = createStyles((theme) => ({
     color: '#666',
   },
 }));
-<Card shadow="sm" padding="lg" radius="md" withBorder w={'100%'}>
-  <Button color="gray" w={'100%'} size="lg" mb={30}>
-    X
-  </Button>
-  <Button color="gray" w={'100%'} size="lg" mb={30}>
-    Y
-  </Button>
-  <Button color="gray" w={'100%'} size="lg" mb={30}>
-    Z
-  </Button>
-</Card>;
 
 export function Connect() {
   const { classes } = useStyles();

@@ -4,11 +4,11 @@ import useStyles from './transaction-item.styles';
 
 interface TransactionItemProps {
     seller_name: string;
-    price_usd: number;
+    priceUSD: number;
     transaction_timestamp: Date;
 }
 
-export default function TransactionItem({ seller_name, price_usd, transaction_timestamp }: TransactionItemProps) {
+export default function TransactionItem({ seller_name, priceUSD, transaction_timestamp }: TransactionItemProps) {
     const { classes } = useStyles();
     return (
         <Container w={"100%"} pl={0} pr={0}>
@@ -23,7 +23,7 @@ export default function TransactionItem({ seller_name, price_usd, transaction_ti
                         gap={0.5}
                     >
                         <Text className={classes.itemTitle} mb={-5}>
-                            {price_usd.toLocaleString('en-US', {
+                            {priceUSD.toLocaleString('en-US', {
                                 style: 'currency',
                                 currency: 'USD',
                             })}

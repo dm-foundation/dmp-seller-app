@@ -16,7 +16,7 @@ export default function Transactions() {
 
   let mockData = {
     "seller_name": "Rome Travel Poster",
-    "price_usd": 30.00,
+    "priceUSD": 30.00,
     "transaction_timestamp": new Date(),
   }
 

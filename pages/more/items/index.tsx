@@ -1,11 +1,11 @@
-import { Flex, Button, createStyles } from '@mantine/core';
+import { get } from '@/api/api';
+import { AppContext } from '@/context';
+import { Button, Flex, createStyles } from '@mantine/core';
+import Link from 'next/link';
+import { useContext, useEffect, useState } from 'react';
 import Layout from '../../../components/layout';
 import SaleItem from '../../../components/sale-item/sale-item';
-import Link from 'next/link';
-import { AppContext } from '@/context';
-import { useContext, useEffect, useState } from 'react';
-import { get } from '@/api/api';
-import { Store } from '@/types/item';
+import { Item } from '@/types/item';
 
 const useStyles = createStyles((theme) => ({
   title: {
@@ -36,13 +36,17 @@ const useStyles = createStyles((theme) => ({
   }
 }));
 
-export default function Transactions() {
+export default function Items() {
   const { classes } = useStyles();
   const { walletStoreContext } = useContext(AppContext);
-  const [saleItems, setSaleItems] = useState<Store[]>();
+  const [saleItems, setSaleItems] = useState<Item[]>();
 
   async function fetchSaleItems() {
-    const storeItemsData: Store[] = await get(`/store/${walletStoreContext?.storeId}/items`);
+    if (!walletStoreContext?.storeId) {
+      console.error("No store id in context");
+      return
+    }
+    const storeItemsData: Item[] = await get(`/store/${walletStoreContext?.storeId}/items`);
     setSaleItems(storeItemsData);
   }
 
@@ -62,12 +66,15 @@ export default function Transactions() {
           return (
             <SaleItem
               key={item['id']}
+              id={item['id']}
               thumbnail={"https://images.pexels.com/photos/2425011/pexels-photo-2425011.jpeg?auto=compress&cs=tinysrgb&w=100&h=200&dpr=1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80"}
               name={item['name']}
               stock={item['units']}
-              price_usd={item['price']}
-              include_price_ethereum={false}
-            />
+              amount={item['amount']}
+              priceUSD={item['price']}
+              showPriceInEthereum={true}
+              isInCart={false}
+              itemHandler={() => { }} />
           );
         }
         )}
@@ -76,5 +83,6 @@ export default function Transactions() {
         </Link>
       </Flex>
     </Layout >
+
   );
 }

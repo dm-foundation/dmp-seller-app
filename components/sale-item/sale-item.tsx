@@ -1,26 +1,31 @@
 import { Avatar, Text, Group, Flex, Container, Select } from '@mantine/core';
 import useStyles from './sale-item.styles';
+import { useState } from 'react';
 
 interface SaleItemProps {
+  id: number,
   thumbnail: string;
   name: string;
   stock: number;
-  price_usd: number;
-  include_price_ethereum: boolean;
+  amount?: number;
+  priceUSD: number;
+  itemHandler: any;
+  showPriceInEthereum: boolean;
+  isInCart: boolean;
 }
 
-function usdToEthConversionString(price_usd: number) {
+function usdToEthConversionString(priceUSD: number) {
+  // [TODO: add logic to check showPriceInEthereum flag and fetch ethereum conversion rate
   return `${0.0005} ETH`;
 }
 
-function selectStockArray(units: number): number[] {
-  const stock: number[] = Array.from({ length: units }, (_, index) => index + 1);
-
-  return stock;
+function generateUISelectOptionsFromItemStockAvailability(stock: number): number[] {
+  return Array.from({ length: stock }, (_, index) => index + 1);
 }
 
 export default function SaleItem(props: SaleItemProps) {
   const { classes } = useStyles();
+
   return (
     <Container w={"100%"} pl={0} pr={0}>
       <Group position="apart" mb={30}>
@@ -38,25 +43,47 @@ export default function SaleItem(props: SaleItemProps) {
             </Text>
           </Flex>
         </Group>
-        <Group w={'10%'}>
-          <Flex
-            justify="flex-end"
-            align="flex-end"
-            direction="row"
-            wrap="wrap"
-            mt={-15}
-          >
-            <Select
-              data={selectStockArray(Number(props.stock)).map((unit) => ({
-                value: String(unit),
-                label: String(unit),
-              }))}
-              onChange={(e) => {
-              }}
+        {!props.isInCart ?
+          <Group w={'10%'}>
+            <Flex
+              justify="flex-end"
+              align="flex-end"
+              direction="row"
+              wrap="wrap"
+              mt={-15}
+            >
+              <Select
+                data={generateUISelectOptionsFromItemStockAvailability(Number(props.stock)).map((unit) => ({
+                  value: String(unit),
+                  label: String(unit),
+                }))}
+                onChange={(value) => {
+                  console.log(props.id, Number(value));
+                  props.itemHandler(props.id, Number(value));
+                }}
 
-            />
-          </Flex>
-        </Group>
+              />
+            </Flex>
+          </Group>
+          :
+          <Group>
+            <Flex
+              justify="flex-end"
+              align="flex-start"
+              direction="column"
+              wrap="wrap"
+              mt={10}
+            >
+              <Text className={classes.itemTitle} >{props.amount} units</Text>
+              <Text fz="xs" c="dimmed" >
+                {(props.priceUSD).toLocaleString('en-US', {
+                  style: 'currency',
+                  currency: 'USD',
+                })}  each
+              </Text>
+            </Flex>
+          </Group>
+        }
         <Flex
           w={'10%'}
           justify="flex-end"
@@ -66,12 +93,14 @@ export default function SaleItem(props: SaleItemProps) {
           mt={10}
           mr={5}
         >
-          <Text className={classes.itemTitle} mt={props.include_price_ethereum ? 0 : -20}>{props.price_usd.toLocaleString('en-US', {
-            style: 'currency',
-            currency: 'USD',
-          })}
+          <Text className={classes.itemTitle} mt={props.showPriceInEthereum ? 0 : -20}>
+            {
+              !props.isInCart ?
+                (props.priceUSD.toLocaleString('en-US', { style: 'currency', currency: 'USD' })) :
+                (props.priceUSD * Number(props.amount)).toLocaleString('en-US', { style: 'currency', currency: 'USD' })
+            }
           </Text>
-          {props.include_price_ethereum && <Text fz="xs" c="dimmed" >{usdToEthConversionString(props.price_usd)}</Text>}
+          {props.showPriceInEthereum && <Text fz="xs" c="dimmed" >{usdToEthConversionString(props.priceUSD)}</Text>}
         </Flex>
       </ Group >
     </Container >
