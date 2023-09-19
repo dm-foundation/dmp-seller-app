@@ -1,4 +1,4 @@
-export type Store = {
+export type Item = {
   id?: number;
   storeId: number;
   name: string;
@@ -6,4 +6,5 @@ export type Store = {
   sku: string;
   thumbnail: string;
   units: number;
+  amount: number;
 };

@@ -1,5 +1,6 @@
 import { Avatar, Text, Group, Flex, Container, Select } from '@mantine/core';
 import useStyles from './sale-item.styles';
+import { useState } from 'react';
 
 interface SaleItemProps {
   id?: number;
@@ -8,9 +9,10 @@ interface SaleItemProps {
   stock: number;
   price_usd: number;
   include_price_ethereum: boolean;
-  include_select_units: boolean;
-  handleSelectedItems: any;
-  amount?: number;
+  include_select_units?: boolean;
+  handleSelectedItems?: any;
+  handleAmountChange?: any;
+  amount?: number
 }
 
 function usdToEthConversionString(price_usd: number) {
@@ -18,13 +20,13 @@ function usdToEthConversionString(price_usd: number) {
 }
 
 function selectStockArray(units: number): number[] {
-  const stock: number[] = Array.from({ length: units }, (_, index) => index + 1);
-
+  const stock: number[] = Array.from({ length: units + 1 }, (_, index) => index);
   return stock;
 }
 
 export default function SaleItem(props: SaleItemProps) {
   const { classes } = useStyles();
+
   return (
     <Container w={'100%'} pl={0} pr={0}>
       <Group position="apart" mb={15}>
@@ -66,7 +68,7 @@ export default function SaleItem(props: SaleItemProps) {
                   label: String(unit),
                 }))}
                 onChange={(e) => {
-                  // props.amount = Number(e);
+                  props.handleAmountChange(Number(e));
                   props.handleSelectedItems(props)
                 }}
 

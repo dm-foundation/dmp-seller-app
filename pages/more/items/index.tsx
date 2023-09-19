@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { AppContext } from '@/context';
 import { useContext, useEffect, useState } from 'react';
 import fetch from '@/api/api';
-import { Store } from '@/types/item';
+import { Item } from '@/types/item';
 
 const useStyles = createStyles((theme) => ({
   title: {
@@ -39,14 +39,12 @@ const useStyles = createStyles((theme) => ({
 export default function Transactions() {
   const { classes } = useStyles();
   const { walletStoreContext } = useContext(AppContext);
-  const [saleItems, setSaleItems] = useState<Store[]>();
+  const [saleItems, setSaleItems] = useState<Item[]>();
 
   async function fetchSaleItems() {
-    const storeItemsData: Store[] = await fetch(`/store/${walletStoreContext?.storeId}/items`);
+    const storeItemsData: Item[] = await fetch(`/store/${walletStoreContext?.storeId}/items`);
     setSaleItems(storeItemsData);
-    console.log("🚀 ~ file: index.tsx:46 ~ fetchSaleItems ~ storeItemsData:", storeItemsData)
   }
-
 
   useEffect(() => {
     fetchSaleItems();

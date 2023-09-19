@@ -7,7 +7,7 @@ import { useContext, useEffect, useState } from 'react';
 import fetch from '../../api/api';
 import { useAccount } from 'wagmi';
 import { AppContext } from '@/context';
-import { Store } from '@/types/item';
+import { Item } from '@/types/item';
 
 const useStyles = createStyles((theme) => ({
   title: {
@@ -24,20 +24,26 @@ const useStyles = createStyles((theme) => ({
 
 export default function NewSale() {
   const { classes } = useStyles();
-  const [saleItems, setSaleItems] = useState<Store[]>([]);
-  const [selectedItems, setSelectedItems] = useState<Store[]>([]);
+  const [saleItems, setSaleItems] = useState<Item[]>([]);
+  const [selectedItems, setSelectedItems] = useState<Item[]>([]);
   const { walletStoreContext } = useContext(AppContext);
+  const [amountChange, setAmountChange] = useState(0);
   
   async function fetchSaleItems() {
-    const storeItemsData: Store[] = await fetch(`/store/${walletStoreContext?.storeId}/items`);
+    const storeItemsData: Item[] = await fetch(`/store/${walletStoreContext?.storeId}/items`);
     setSaleItems(storeItemsData);
   }
 
-  async function handleSelectedItem (selectedItemsProps: Store) {
-    console.log("🚀 ~ file: index.tsx:37 ~ handleSelectedItem ~ selectedItemsProps:", selectedItemsProps.id)
+  async function handleSelectedItem (selectedItemsProps: Item) {
     setSelectedItems((current)  => current.filter((item) => item.id !== selectedItemsProps.id));
 
     setSelectedItems((current) => [...current,selectedItemsProps])
+  }
+
+
+  async function handleAmountChange(amount: number) {
+    setAmountChange(amount);
+    console.log("🚀 ~ file: sale-item.tsx:32 ~ handleAmountChange ~ amount:", amount)
   }
 
   
@@ -46,7 +52,7 @@ export default function NewSale() {
   }, []);
 
   useEffect(() => {
-    console.log("🚀 ~ file: index.tsx:29 ~ NewSale ~ selectedItems:", selectedItems)
+    console.log("🚀 ~ file: index.tsx:49 ~ useEffect ~ selectedItems:", selectedItems)
   }, [selectedItems]);
   
   return (
@@ -69,6 +75,8 @@ export default function NewSale() {
                 include_price_ethereum={false}
                 include_select_units={true}
                 handleSelectedItems={handleSelectedItem}
+                handleAmountChange={handleAmountChange}
+                amount={amountChange}
               />
             </>
           );
