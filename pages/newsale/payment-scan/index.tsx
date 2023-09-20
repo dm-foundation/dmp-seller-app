@@ -1,11 +1,14 @@
 "use client";
 
+import { AppContext } from '@/context';
 import { Container, Flex, Text, createStyles } from '@mantine/core';
-import { erc20ABI } from '@wagmi/core';
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import QRCode from "react-qr-code";
-import { useAccount, useContractRead } from "wagmi";
+import { useContractRead } from "wagmi";
 import Layout from '../../../components/layout';
+import paymentFactoryABI from "../../../fixtures/PaymentFactory.json" assert { type: "json" };
+import { encode, decode } from '@ipld/dag-cbor'
+import { sha256 } from "multiformats/hashes/sha2";
 
 
 const useStyles = createStyles((theme) => ({
@@ -21,32 +24,55 @@ const useStyles = createStyles((theme) => ({
   }
 }));
 
-import paymentFactoryABI from "../../../fixtures/PaymentFactory.json" assert { type: "json" };
+async function hashData(data: Uint8Array): Promise<Uint8Array> {
+  let sha256Hasher = await sha256.digest(data);
+  console.log(sha256Hasher.digest);
+  return sha256Hasher.digest;
+}
 
 export default function PaymentScan() {
-  const { address } = useAccount();
-  const paymentAddress = '0x6Ef06eF5e16613Be525F229DadAC2a930aD98489';
+  const { walletStoreContext } = useContext(AppContext);
+  const storePaymentAddress = walletStoreContext?.ethAddress || "0x0000000000000000000000000000000000000000";
 
-  const contract = useContractRead({
-    address: '0xe7eD90d1EF91C23EE8531567419CC5554a4303b6',
-    abi: paymentFactoryABI.abi,
-    functionName: "getPaymentAddress",
-    args: [],
-  });
-  console.log(contract);
+  const PaymentFactoryContractAddress = "0xe7eD90d1EF91C23EE8531567419CC5554a4303b6";
+  const PaymentFactoryFunctionName = "getPaymentAddress";
 
-  async function findSeller() {
+  // args
+  const PaymentProof = "0x0000000000000000000000000000000000000000" // Blank proof
+  const Amount = 20 // in USDC
+  const Currency = "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48" // USDC
 
+  if (walletStoreContext?.cart) {
+    let contractData = JSON.stringify(walletStoreContext?.cart);
+    console.log("walletStoreContext?.cart: ", contractData);
+
+    const serializedSaleData = encode(contractData);
+
+    console.log('encoded:', serializedSaleData);
+    console.log('decoded:', decode(serializedSaleData));
+
+    const hashedData = hashData(serializedSaleData);
+    const receiptHash: string = Buffer.from(hashedData.toString()).toString('hex');
+    console.log('receiptHash:', receiptHash);
+    const finalReceiptHash = `0x${receiptHash}${'0'.repeat(64 - receiptHash.length - 1)}`;
+    console.log('finalReceiptHash:', finalReceiptHash);
+
+    const contract = useContractRead({
+      address: PaymentFactoryContractAddress,
+      abi: paymentFactoryABI.abi,
+      functionName: PaymentFactoryFunctionName,
+      args: [
+        storePaymentAddress,
+        PaymentProof,
+        Amount,
+        Currency,
+        finalReceiptHash
+      ],
+    });
+    console.log("contract:", contract);
   }
 
-  useEffect(() => {
-    findSeller();
-  }, []);
-
-
-  let mockData = {
-    "qrcode_url": `ethereum:${paymentAddress}?value=5000000000`,
-  }
+  const qrCodeURL = `ethereum:${storePaymentAddress}?value=5000000000`
 
   return (
     <>
@@ -58,14 +84,23 @@ export default function PaymentScan() {
           gap={30}
           mb={100}
         >
-          <Text>
-            To begin checkout, open the camera on your mobile device and scan the QR code below.
-          </Text>
-          <Container>
-            <QRCode value={mockData.qrcode_url} size={400} />
-          </Container>
+          {
+            !walletStoreContext?.cart ?
+              <p>
+                Cart is empty!
+              </p>
+              :
+              <><Text>
+                To begin checkout, open the camera on your mobile device and scan the QR code below.
+              </Text>
+                <Container>
+                  <QRCode value={qrCodeURL} size={400} />
+                </Container>
+              </>
+          }
         </Flex>
       </Layout >
     </>
   );
 }
+
