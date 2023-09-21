@@ -2,77 +2,72 @@
 
 import { AppContext } from '@/context';
 import { Container, Flex, Text, createStyles } from '@mantine/core';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import QRCode from "react-qr-code";
 import { useContractRead } from "wagmi";
 import Layout from '../../../components/layout';
 import paymentFactoryABI from "../../../fixtures/PaymentFactory.json" assert { type: "json" };
 import { encode, decode } from '@ipld/dag-cbor'
-import { sha256 } from "multiformats/hashes/sha2";
-
-
-const useStyles = createStyles((theme) => ({
-  title: {
-    fontSize: 28,
-    fontWeight: 900,
-    letterSpacing: - 1,
-  },
-  link: {
-    textDecoration: 'none',
-    textDecorationColor: '#fff',
-    color: '#fff'
-  }
-}));
-
-async function hashData(data: Uint8Array): Promise<Uint8Array> {
-  let sha256Hasher = await sha256.digest(data);
-  console.log(sha256Hasher.digest);
-  return sha256Hasher.digest;
-}
+import { buildPaymentContractParams, hashData, PaymentFactoryContractAddress, PaymentFactoryFunctionName } from '@/lib/utils';
+import { Item } from '@/types/item';
+import { ethers } from 'ethers';
+let currency = require('currency.js');
+const CryptoConvert = require("crypto-convert").default;
 
 export default function PaymentScan() {
   const { walletStoreContext } = useContext(AppContext);
   const storePaymentAddress = walletStoreContext?.ethAddress || "0x0000000000000000000000000000000000000000";
+  const paymentAmount: string = BigInt(walletStoreContext?.cart.reduce((acc, item: Item) => item.amount > 0 ? acc + (item.price * Number(item.amount)) : acc, 0) || 0).toString();
 
-  const PaymentFactoryContractAddress = "0xe7eD90d1EF91C23EE8531567419CC5554a4303b6";
-  const PaymentFactoryFunctionName = "getPaymentAddress";
+  const [amountInEth, setAmountInEth] = useState<string>("");
+  const [hashedData, setHashedData] = useState<string>("");
 
-  // args
-  const PaymentProof = "0x0000000000000000000000000000000000000000" // Blank proof
-  const Amount = 20 // in USDC
-  const Currency = "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48" // USDC
+  useEffect(() => {
+    const fetchData = async () => {
+      if (walletStoreContext?.cart) {
+        const serializedSaleData = encode(JSON.stringify(walletStoreContext?.cart));
+        let data = await hashData(serializedSaleData)
+        let hexHashedData = Buffer.from(data).toString('hex');
+        setHashedData(hexHashedData);
+      }
+    }
 
-  if (walletStoreContext?.cart) {
-    let contractData = JSON.stringify(walletStoreContext?.cart);
-    console.log("walletStoreContext?.cart: ", contractData);
+    const fetchUSDEth = async (amountInUSD: string) => {
+      const convert = new CryptoConvert();
+      await convert.ready();
+      const convertedAmount = convert.USD.ETH(amountInUSD)
+      console.log(convertedAmount);
+      setAmountInEth(convertedAmount);
+    }
 
-    const serializedSaleData = encode(contractData);
+    fetchUSDEth(paymentAmount);
+    fetchData();
+  }, [])
 
-    console.log('encoded:', serializedSaleData);
-    console.log('decoded:', decode(serializedSaleData));
-
-    const hashedData = hashData(serializedSaleData);
-    const receiptHash: string = Buffer.from(hashedData.toString()).toString('hex');
-    console.log('receiptHash:', receiptHash);
-    const finalReceiptHash = `0x${receiptHash}${'0'.repeat(64 - receiptHash.length - 1)}`;
-    console.log('finalReceiptHash:', finalReceiptHash);
-
-    const contract = useContractRead({
-      address: PaymentFactoryContractAddress,
-      abi: paymentFactoryABI.abi,
-      functionName: PaymentFactoryFunctionName,
-      args: [
-        storePaymentAddress,
-        PaymentProof,
-        Amount,
-        Currency,
-        finalReceiptHash
-      ],
-    });
-    console.log("contract:", contract);
+  const calculateAmountInWei = function (amountInEth: string) {
+    return (currency(amountInEth, { precision: 8 }).multiply(1000000000000000000)).value;
   }
 
-  const qrCodeURL = `ethereum:${storePaymentAddress}?value=5000000000`
+  const params = buildPaymentContractParams(storePaymentAddress, calculateAmountInWei(amountInEth), `0x${hashedData}`);
+  if (process.env.DEBUG) console.log("[DEBUG] buildPaymentContractParams:", params);
+  const contract = useContractRead({
+    address: PaymentFactoryContractAddress,
+    abi: paymentFactoryABI.abi,
+    functionName: PaymentFactoryFunctionName,
+    args: params
+  });
+
+  let amountInWei = calculateAmountInWei(amountInEth);
+  const qrCodeURL = `ethereum:${contract.data}?value=${amountInWei.toString()}`
+
+  /* [TODO]
+    - Adjust transaction model to include fields for saving the information below
+    - Save:
+        - contents of cart (walletStoreContext?.cart) in the database
+        - amount in WEI (amountInWei) passed to contract in the database
+        - hashed data (`0x${hashedData}`) in the database
+        - contract payment address  (contract.data) in the database
+  */
 
   return (
     <>

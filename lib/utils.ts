@@ -1,16 +1,22 @@
-import { base16 } from "multiformats/bases/base16";
+"use client";
 import { sha256 } from "multiformats/hashes/sha2";
-import { CID } from "multiformats/cid";
-import * as Digest from "multiformats/hashes/digest";
-import * as codec from "@ipld/dag-cbor";
 
-export function hexHashToCid(hash: string) {
-    const arrayBuf = base16.decode("f" + hash.slice(2));
-    const digest = Digest.create(sha256.code, arrayBuf);
-    const cid = CID.create(1, codec.code, digest);
-    return cid;
+export async function hashData(data: Uint8Array): Promise<Uint8Array> {
+    let hasher = await sha256.digest(data);
+    return hasher.digest;
 }
 
-export function toHexString(arr: Uint8Array) {
-    return Array.from(arr, (i) => i.toString(16).padStart(2, "0")).join("");
+export function buildPaymentContractParams(storePaymentAddress: string, amount: string, hashedData: string) {
+    const PaymentProof = "0x0000000000000000000000000000000000000000" // Blank proof
+    const Currency = "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48" // USDC
+    return [
+        storePaymentAddress,
+        PaymentProof,
+        amount,
+        Currency,
+        hashedData
+    ]
 }
+
+export const PaymentFactoryContractAddress = "0xe7eD90d1EF91C23EE8531567419CC5554a4303b6";
+export const PaymentFactoryFunctionName = "getPaymentAddress";
