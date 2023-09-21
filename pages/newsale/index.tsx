@@ -63,6 +63,7 @@ export default function NewSale() {
 
   useEffect(() => {
     fetchData();
+    console.log("Rodou o useEffect");
   }, [walletStoreContext?.storeId]);
 
   return (

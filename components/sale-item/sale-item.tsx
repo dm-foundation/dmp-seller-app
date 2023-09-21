@@ -3,7 +3,7 @@ import useStyles from './sale-item.styles';
 import { useState } from 'react';
 
 interface SaleItemProps {
-  id: number,
+  id: number;
   thumbnail: string;
   name: string;
   stock: number;
@@ -12,6 +12,7 @@ interface SaleItemProps {
   itemHandler: any;
   showPriceInEthereum: boolean;
   isInCart: boolean;
+  exclude_select_units?: boolean;
 }
 
 function usdToEthConversionString(priceUSD: number) {
@@ -27,63 +28,50 @@ export default function SaleItem(props: SaleItemProps) {
   const { classes } = useStyles();
 
   return (
-    <Container w={"100%"} pl={0} pr={0}>
+    <Container w={'100%'} pl={0} pr={0}>
       <Group position="apart" mb={30}>
         <Group w={'75%'}>
           <Avatar src={props.thumbnail} size={64} />
-          <Flex
-            justify="flex-start"
-            align="flex-start"
-            direction="column"
-            wrap="wrap"
-          >
+          <Flex justify="flex-start" align="flex-start" direction="column" wrap="wrap">
             <Text className={classes.itemTitle}>{props.name}</Text>
-            <Text c='dimmed'>
-              {props.stock} in stock
-            </Text>
+            <Text c="dimmed">{props.stock} in stock</Text>
           </Flex>
         </Group>
-        {!props.isInCart ?
+        {!props.isInCart ? (
           <Group w={'10%'}>
-            <Flex
-              justify="flex-end"
-              align="flex-end"
-              direction="row"
-              wrap="wrap"
-              mt={-15}
-            >
-              <Select
-                data={generateUISelectOptionsFromItemStockAvailability(Number(props.stock)).map((unit) => ({
-                  value: String(unit),
-                  label: String(unit),
-                }))}
-                onChange={(value) => {
-                  console.log(props.id, Number(value));
-                  props.itemHandler(props.id, Number(value));
-                }}
-
-              />
+            <Flex justify="flex-end" align="flex-end" direction="row" wrap="wrap" mt={-15}>
+              {props.exclude_select_units ? (
+                <></>
+              ) : (
+                <Select
+                  data={generateUISelectOptionsFromItemStockAvailability(Number(props.stock)).map(
+                    (unit) => ({
+                      value: String(unit),
+                      label: String(unit),
+                    })
+                  )}
+                  onChange={(value) => {
+                    console.log(props.id, Number(value));
+                    props.itemHandler(props.id, Number(value));
+                  }}
+                />
+              )}
             </Flex>
           </Group>
-          :
+        ) : (
           <Group>
-            <Flex
-              justify="flex-end"
-              align="flex-start"
-              direction="column"
-              wrap="wrap"
-              mt={10}
-            >
-              <Text className={classes.itemTitle} >{props.amount} units</Text>
-              <Text fz="xs" c="dimmed" >
-                {(props.priceUSD).toLocaleString('en-US', {
+            <Flex justify="flex-end" align="flex-start" direction="column" wrap="wrap" mt={10}>
+              <Text className={classes.itemTitle}>{props.amount} units</Text>
+              <Text fz="xs" c="dimmed">
+                {props.priceUSD.toLocaleString('en-US', {
                   style: 'currency',
                   currency: 'USD',
-                })}  each
+                })}{' '}
+                each
               </Text>
             </Flex>
           </Group>
-        }
+        )}
         <Flex
           w={'10%'}
           justify="flex-end"
@@ -94,15 +82,20 @@ export default function SaleItem(props: SaleItemProps) {
           mr={5}
         >
           <Text className={classes.itemTitle} mt={props.showPriceInEthereum ? 0 : -20}>
-            {
-              !props.isInCart ?
-                (props.priceUSD.toLocaleString('en-US', { style: 'currency', currency: 'USD' })) :
-                (props.priceUSD * Number(props.amount)).toLocaleString('en-US', { style: 'currency', currency: 'USD' })
-            }
+            {!props.isInCart
+              ? props.priceUSD.toLocaleString('en-US', { style: 'currency', currency: 'USD' })
+              : (props.priceUSD * Number(props.amount)).toLocaleString('en-US', {
+                  style: 'currency',
+                  currency: 'USD',
+                })}
           </Text>
-          {props.showPriceInEthereum && <Text fz="xs" c="dimmed" >{usdToEthConversionString(props.priceUSD)}</Text>}
+          {props.showPriceInEthereum && (
+            <Text fz="xs" c="dimmed">
+              {usdToEthConversionString(props.priceUSD)}
+            </Text>
+          )}
         </Flex>
-      </ Group >
-    </Container >
+      </Group>
+    </Container>
   );
 }

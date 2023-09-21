@@ -2,7 +2,7 @@ import axios from 'axios';
 axios.defaults.withCredentials = true;
 
 function host() {
-    return process.env.API_URL ?? "http://192.168.0.7:3000";
+    return process.env.API_URL ?? "http://127.0.0.1:3000";
 }
 
 export async function get(resource_url: string) {

@@ -74,7 +74,9 @@ export default function Items() {
               priceUSD={item['price']}
               showPriceInEthereum={true}
               isInCart={false}
-              itemHandler={() => { }} />
+              itemHandler={() => { }}
+              exclude_select_units={true}
+              />
           );
         }
         )}
