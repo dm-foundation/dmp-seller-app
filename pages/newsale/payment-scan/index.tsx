@@ -98,7 +98,7 @@ export default function PaymentScan() {
                 To begin checkout, open the camera on your mobile device and scan the QR code below.
               </Text>
                 <Container>
-                  <QRCode value={qrCodeURL} size={400} />}
+                  <QRCode value={qrCodeURL} size={400} />
                 </Container>
               </>
           }

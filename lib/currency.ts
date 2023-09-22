@@ -5,7 +5,6 @@ class CryptoConverter {
     private static instance: CryptoConverter;
 
     private constructor() {
-        CryptoConverter.instance = new CryptoConvert();
     }
 
     public static getInstance(): any {
