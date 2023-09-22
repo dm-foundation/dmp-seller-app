@@ -1,7 +1,8 @@
 "use client";
 
 import { AppContext } from '@/context';
-import { PaymentFactoryContractAddress, PaymentFactoryFunctionName, buildPaymentContractParams, hashData } from '@/lib/utils';
+import { PaymentFactoryContractAddress, PaymentFactoryFunctionName, buildPaymentContractParams } from '@/lib/contract';
+import { sha256Hash as hasher } from '@/lib/hashing';
 import { Item } from '@/types/item';
 import { encode } from '@ipld/dag-cbor';
 import { Container, Flex, Text } from '@mantine/core';
@@ -12,8 +13,9 @@ import { useContractRead } from "wagmi";
 import Layout from '../../../components/layout';
 import paymentFactoryABI from "../../../fixtures/PaymentFactory.json" assert { type: "json" };
 
-const CryptoConvert = require("crypto-convert").default;
-const convert = new CryptoConvert();
+
+import CryptoConverter from '@/lib/currency';
+const converter = CryptoConverter.getInstance();
 
 export default function PaymentScan() {
   const { walletStoreContext } = useContext(AppContext);
@@ -27,15 +29,15 @@ export default function PaymentScan() {
     const fetchData = async () => {
       if (walletStoreContext?.cart) {
         const serializedSaleData = encode(JSON.stringify(walletStoreContext?.cart));
-        let data = await hashData(serializedSaleData)
+        let data = await hasher(serializedSaleData)
         let hexHashedData = Buffer.from(data).toString('hex');
         setHashedData(hexHashedData);
       }
     }
 
     const fetchUSDEth = async (amountInUSD: string) => {
-      await convert.ready();
-      const convertedAmount = convert.USD.ETH(amountInUSD)
+      await converter.ready();
+      const convertedAmount = converter.USD.ETH(amountInUSD)
       console.log("convertedAmount USD->ETH", convertedAmount);
       setAmountInEth(convertedAmount);
     }

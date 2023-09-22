@@ -1,14 +1,9 @@
-"use client";
-import { sha256 } from "multiformats/hashes/sha2";
 
-export async function hashData(data: Uint8Array): Promise<Uint8Array> {
-    let hasher = await sha256.digest(data);
-    return hasher.digest;
-}
+const PaymentProof = "0x0000000000000000000000000000000000000000" // Blank proof
+const Currency = "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48" // USDC
 
 export function buildPaymentContractParams(storePaymentAddress: string, amount: string, hashedData: string) {
-    const PaymentProof = "0x0000000000000000000000000000000000000000" // Blank proof
-    const Currency = "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48" // USDC
+
     return [
         storePaymentAddress,
         PaymentProof,
