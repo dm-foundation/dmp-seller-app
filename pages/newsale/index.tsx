@@ -24,6 +24,7 @@ const useStyles = createStyles((theme) => ({
 
 export default function NewSale() {
   const { classes } = useStyles();
+  const { router } = useRouter();
   const { address } = useAccount();
   const { disconnect } = useDisconnect();
   const [error, setError] = useState<string | undefined>(undefined);
@@ -71,15 +72,6 @@ export default function NewSale() {
         {error &&
           <>
             <p className={classes.error}>An error occurred: {error}</p>
-            <Button
-              color="dark"
-              size="lg"
-              onClick={() => {
-                router.reload()
-              }}
-            >
-              Try reloading store data
-            </Button>
             <Button
               color="dark"
               size="lg"

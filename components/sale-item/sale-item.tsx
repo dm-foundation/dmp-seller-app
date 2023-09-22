@@ -1,7 +1,8 @@
-import { Avatar, Button, Container, Flex, Group, Popover, Select, Text } from '@mantine/core';
-import useStyles from './sale-item.styles';
-import { IconMoneybag } from '@tabler/icons-react';
+import CryptoConverter from '@/lib/currency';
+import { Avatar, Container, Flex, Group, Popover, Select, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+import { useEffect, useState } from 'react';
+import useStyles from './sale-item.styles';
 
 interface SaleItemProps {
   id: number;
@@ -14,11 +15,6 @@ interface SaleItemProps {
   showPriceInEthereum: boolean;
   isInCart: boolean;
   exclude_select_units?: boolean;
-}
-
-function usdToEthConversionString(priceUSD: number) {
-  // [TODO: add logic to check showPriceInEthereum flag and fetch ethereum conversion rate
-  return `${0.0005} ETH`;
 }
 
 function generateUISelectOptionsFromItemStockAvailability(stock: number): number[] {
@@ -84,24 +80,14 @@ export default function SaleItem(props: SaleItemProps) {
           mt={-5}
           mr={5}
         >
-
-          {props.showPriceInEthereum &&
-            <Popover width={200} position="bottom" withArrow shadow="md" opened={opened}>
-              <Popover.Target>
-                <Text onMouseEnter={open} onMouseLeave={close} className={classes.itemTitle} mt={props.showPriceInEthereum ? 0 : -20}>
-                  {!props.isInCart
-                    ? props.priceUSD.toLocaleString('en-US', { style: 'currency', currency: 'USD' })
-                    : (props.priceUSD * Number(props.amount)).toLocaleString('en-US', {
-                      style: 'currency',
-                      currency: 'USD',
-                    })}
-                </Text>
-              </Popover.Target>
-              <Popover.Dropdown style={{ pointerEvents: 'none' }}>
-                <Text fz="xs" c="dimmed" size="sm">{usdToEthConversionString(props.priceUSD)}</Text>
-              </Popover.Dropdown>
-            </Popover>
-          }
+          <Text onMouseEnter={open} onMouseLeave={close} className={classes.itemTitle} mt={props.showPriceInEthereum ? 0 : -20}>
+            {!props.isInCart
+              ? props.priceUSD.toLocaleString('en-US', { style: 'currency', currency: 'USD' })
+              : (props.priceUSD * Number(props.amount)).toLocaleString('en-US', {
+                style: 'currency',
+                currency: 'USD',
+              })}
+          </Text>
         </Flex>
       </Group>
     </Container>

@@ -16,7 +16,6 @@ import paymentFactoryABI from "../../../fixtures/PaymentFactory.json" assert { t
 
 
 export default function PaymentScan() {
-  const converter = CryptoConverter.getInstance();
   const { walletStoreContext } = useContext(AppContext);
   const storePaymentAddress = walletStoreContext?.ethAddress || "0x0000000000000000000000000000000000000000";
   const paymentAmount: string = BigInt(walletStoreContext?.cart.reduce((acc, item: Item) => item.amount > 0 ? acc + (item.price * Number(item.amount)) : acc, 0) || 0).toString();
@@ -31,16 +30,10 @@ export default function PaymentScan() {
         let data = await hasher(serializedSaleData)
         let hexHashedData = Buffer.from(data).toString('hex');
         setHashedData(hexHashedData);
+        setAmountInEth(CryptoConverter.convertUSDtoETH(paymentAmount).toString());
       }
     }
 
-    const fetchUSDEth = async (amountInUSD: string) => {
-      await converter.ready();
-      const convertedAmount = converter.USD.ETH(amountInUSD)
-      setAmountInEth(convertedAmount);
-    }
-
-    fetchUSDEth(paymentAmount);
     fetchData();
 
   }, [amountInEth, hashedData])
@@ -96,7 +89,7 @@ export default function PaymentScan() {
               <><Text>
                 To begin checkout, open the camera on your mobile device and scan the QR code below.
               </Text>
-                {
+                {contract.data &&
                   <Container>
                     <QRCode value={qrCodeURL} size={'95%'} />
                   </Container>

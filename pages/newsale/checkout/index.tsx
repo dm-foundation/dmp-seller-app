@@ -30,7 +30,7 @@ export default function Checkout() {
           align="center"
           mb={100}
         >
-          {cart.map((item) => {
+          {cart && cart.map((item) => {
             if (item['amount'] > 0) {
               return (
                 <SaleItem
