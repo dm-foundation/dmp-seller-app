@@ -77,7 +77,7 @@ export default function NewSale() {
               size="lg"
               onClick={() => {
                 disconnect()
-                router.replace('/login/wallet-selection');
+                window.location.href = '/login/wallet-selection';
               }}
             >
               Connect with different wallet
