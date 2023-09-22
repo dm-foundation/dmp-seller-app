@@ -6,8 +6,6 @@ import Link from 'next/link';
 
 const useStyles = createStyles((theme) => ({
   link: {
-    textDecoration: 'none',
-    textDecorationColor: '#fff',
     color: '#666',
   },
 }));

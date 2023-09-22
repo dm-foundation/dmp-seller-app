@@ -22,11 +22,6 @@ const useStyles = createStyles((theme) => ({
     margin: 30,
     fontSize: 30,
   },
-  link: {
-    textDecoration: 'none',
-    textDecorationColor: '#fff',
-    color: '#fff'
-  }
 }));
 
 export default function Login() {

@@ -30,8 +30,6 @@ const useStyles = createStyles((theme) => ({
     opacity: 0.8,
   },
   link: {
-    textDecoration: 'none',
-    textDecorationColor: '#fff',
     color: '#666',
   }
 }));
@@ -76,7 +74,7 @@ export default function Items() {
               isInCart={false}
               itemHandler={() => { }}
               exclude_select_units={true}
-              />
+            />
           );
         }
         )}

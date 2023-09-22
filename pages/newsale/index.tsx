@@ -3,6 +3,7 @@ import { Item } from '@/types/item';
 import { WalletStoreContext } from '@/types/wallet-store.context';
 import { Button, Flex, createStyles } from '@mantine/core';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
 import { useAccount, useDisconnect } from 'wagmi';
 import { get } from '../../api/api';
@@ -15,11 +16,10 @@ const useStyles = createStyles((theme) => ({
     fontWeight: 900,
     letterSpacing: -1,
   },
-  link: {
-    textDecoration: 'none',
-    textDecorationColor: '#fff',
-    color: '#fff',
-  },
+  error: {
+    fontSize: 24,
+    fontWeight: 900,
+  }
 }));
 
 export default function NewSale() {
@@ -39,62 +39,60 @@ export default function NewSale() {
     setSelectedItems(saleItems);
   }
 
-  async function fetchWalletStore() {
-    try {
-      const walletAddressData = await get(`/wallet-address/${address}`);
-      if (!walletStoreContext?.storeId) { throw Error("Store not found") }
-
-      const storeData = await get(`/store/${walletAddressData?.storeId}`);
-      const walletStoreObj = { ...storeData, ...walletAddressData };
-      updateContext(walletStoreObj);
-    } catch (e) {
-      let errorMsg = (e as Error).message;
-      setError(errorMsg);
-    }
-  }
-
-  async function fetchSaleItems() {
-    if (!walletStoreContext?.storeId) { return; }
-
-    const storeItemsData: Item[] = await get(`/store/${walletStoreContext?.storeId}/items`);
-    setSaleItems(storeItemsData);
-  }
-
   async function updateCart() {
     const walletStoreObj = { ...walletStoreContext, ...{ cart: selectedItems } };
     updateContext(walletStoreObj as WalletStoreContext);
   }
 
-  async function fetchData() {
-    await fetchWalletStore();
-    return await fetchSaleItems();
-  }
-
   useEffect(() => {
-    fetchData();
-  }, [walletStoreContext?.storeId]);
+    const fetchWalletStore = async () => {
+      try {
+        const walletAddressData = await get(`/wallet-address/${address}`);
+        if (!walletAddressData?.storeId) { throw Error(`Store not found for you wallet address ${address}`) }
+
+        const storeData = await get(`/store/${walletAddressData?.storeId}`);
+        const walletStoreObj = { ...storeData, ...walletAddressData };
+        updateContext(walletStoreObj);
+
+        const storeItemsData: Item[] = await get(`/store/${walletAddressData?.storeId}/items`);
+        setSaleItems(storeItemsData);
+
+      } catch (e) {
+        let errorMsg = (e as Error).message;
+        setError(errorMsg);
+      }
+    }
+    setTimeout(() => fetchWalletStore(), 1000)
+  }, [address]);
 
   return (
-
     <Layout title="New Sale">
       <Flex direction="column" justify="stretch" align="center" mb={100}>
         {error &&
           <>
-            <p>An error occurred: {error}</p>
+            <p className={classes.error}>An error occurred: {error}</p>
             <Button
               color="dark"
               size="lg"
               onClick={() => {
-                disconnect();
-                window.location.href = '/login/wallet-selection';
+                router.reload()
               }}
             >
-              Connect with a different wallet
+              Try reloading store data
+            </Button>
+            <Button
+              color="dark"
+              size="lg"
+              onClick={() => {
+                disconnect()
+                router.replace('/login/wallet-selection');
+              }}
+            >
+              Connect with different wallet
             </Button>
           </>
         }
-
-        {!error && saleItems.length == 0 && <p>Loading..</p>}
+        {!error && saleItems.length == 0 && <p className={classes.error}>Loading store items..</p>}
         {!error && saleItems.length > 0 &&
           saleItems.map((item) => {
             return (

@@ -9,6 +9,6 @@ export default createStyles((theme) => ({
     fontFamily: `Greycliff CF, ${theme.fontFamily}`,
   },
   itemTitle: {
-    fontSize: theme.fontSizes.lg,
+    fontSize: theme.fontSizes.md,
   }
 }));

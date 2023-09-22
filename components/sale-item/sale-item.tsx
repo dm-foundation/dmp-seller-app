@@ -1,6 +1,7 @@
-import { Avatar, Text, Group, Flex, Container, Select } from '@mantine/core';
+import { Avatar, Button, Container, Flex, Group, Popover, Select, Text } from '@mantine/core';
 import useStyles from './sale-item.styles';
-import { useState } from 'react';
+import { IconMoneybag } from '@tabler/icons-react';
+import { useDisclosure } from '@mantine/hooks';
 
 interface SaleItemProps {
   id: number;
@@ -26,24 +27,27 @@ function generateUISelectOptionsFromItemStockAvailability(stock: number): number
 
 export default function SaleItem(props: SaleItemProps) {
   const { classes } = useStyles();
+  const [opened, { close, open }] = useDisclosure(false);
 
   return (
     <Container w={'100%'} pl={0} pr={0}>
       <Group position="apart" mb={30}>
-        <Group w={'60%'}>
-          <Avatar src={props.thumbnail} size={64} />
+        <Group w={'50%'}>
+          <Avatar src={props.thumbnail} size={54} />
           <Flex justify="flex-start" align="flex-start" direction="column" wrap="wrap">
-            <Text className={classes.itemTitle}>{props.name}</Text>
+            <Text className={classes.itemTitle}>{props.name.substring(0, 12)}{props.name.length > 10 ? '..' : ""}</Text>
             <Text c="dimmed">{props.stock} in stock</Text>
           </Flex>
         </Group>
         {!props.isInCart ? (
-          <Group w={'15%'}>
+          <Group w={'20%'}>
             <Flex justify="flex-end" align="flex-end" direction="row" wrap="wrap" mt={-15}>
               {props.exclude_select_units ? (
                 <></>
               ) : (
                 <Select
+                  size='sm'
+
                   data={generateUISelectOptionsFromItemStockAvailability(Number(props.stock)).map(
                     (unit) => ({
                       value: String(unit),
@@ -72,29 +76,35 @@ export default function SaleItem(props: SaleItemProps) {
           </Group>
         )}
         <Flex
-          w={'10%'}
+          w={'15%'}
           justify="flex-end"
           align="flex-start"
           direction="row"
           wrap="wrap"
-          mt={10}
+          mt={-5}
           mr={5}
         >
-          <Text className={classes.itemTitle} mt={props.showPriceInEthereum ? 0 : -20}>
-            {!props.isInCart
-              ? props.priceUSD.toLocaleString('en-US', { style: 'currency', currency: 'USD' })
-              : (props.priceUSD * Number(props.amount)).toLocaleString('en-US', {
-                style: 'currency',
-                currency: 'USD',
-              })}
-          </Text>
-          {props.showPriceInEthereum && (
-            <Text fz="xs" c="dimmed">
-              {usdToEthConversionString(props.priceUSD)}
-            </Text>
-          )}
+
+          {props.showPriceInEthereum &&
+            <Popover width={200} position="bottom" withArrow shadow="md" opened={opened}>
+              <Popover.Target>
+                <Text onMouseEnter={open} onMouseLeave={close} className={classes.itemTitle} mt={props.showPriceInEthereum ? 0 : -20}>
+                  {!props.isInCart
+                    ? props.priceUSD.toLocaleString('en-US', { style: 'currency', currency: 'USD' })
+                    : (props.priceUSD * Number(props.amount)).toLocaleString('en-US', {
+                      style: 'currency',
+                      currency: 'USD',
+                    })}
+                </Text>
+              </Popover.Target>
+              <Popover.Dropdown style={{ pointerEvents: 'none' }}>
+                <Text fz="xs" c="dimmed" size="sm">{usdToEthConversionString(props.priceUSD)}</Text>
+              </Popover.Dropdown>
+            </Popover>
+          }
         </Flex>
       </Group>
     </Container>
   );
 }
+

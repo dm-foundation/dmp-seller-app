@@ -9,11 +9,6 @@ const useStyles = createStyles((theme) => ({
     fontWeight: 900,
     letterSpacing: - 1,
     textAlign: 'center',
-  },
-  link: {
-    textDecoration: 'none',
-    textDecorationColor: '#fff',
-    color: '#fff'
   }
 }));
 

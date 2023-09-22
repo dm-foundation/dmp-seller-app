@@ -2,6 +2,7 @@
 
 import { AppContext } from '@/context';
 import { PaymentFactoryContractAddress, PaymentFactoryFunctionName, buildPaymentContractParams } from '@/lib/contract';
+import CryptoConverter from '@/lib/currency';
 import { sha256Hash as hasher } from '@/lib/hashing';
 import { Item } from '@/types/item';
 import { encode } from '@ipld/dag-cbor';
@@ -14,10 +15,8 @@ import Layout from '../../../components/layout';
 import paymentFactoryABI from "../../../fixtures/PaymentFactory.json" assert { type: "json" };
 
 
-import CryptoConverter from '@/lib/currency';
-const converter = CryptoConverter.getInstance();
-
 export default function PaymentScan() {
+  const converter = CryptoConverter.getInstance();
   const { walletStoreContext } = useContext(AppContext);
   const storePaymentAddress = walletStoreContext?.ethAddress || "0x0000000000000000000000000000000000000000";
   const paymentAmount: string = BigInt(walletStoreContext?.cart.reduce((acc, item: Item) => item.amount > 0 ? acc + (item.price * Number(item.amount)) : acc, 0) || 0).toString();
@@ -38,13 +37,14 @@ export default function PaymentScan() {
     const fetchUSDEth = async (amountInUSD: string) => {
       await converter.ready();
       const convertedAmount = converter.USD.ETH(amountInUSD)
-      console.log("convertedAmount USD->ETH", convertedAmount);
       setAmountInEth(convertedAmount);
     }
 
     fetchUSDEth(paymentAmount);
     fetchData();
-  }, [hashedData, amountInEth])
+
+  }, [amountInEth, hashedData])
+
 
   const calculateAmountInWei = function (amountInEth: string) {
     return ((currency(amountInEth, { precision: 8 }).multiply(1000000000000000000)).value).toString();
@@ -52,21 +52,6 @@ export default function PaymentScan() {
 
   const params = buildPaymentContractParams(storePaymentAddress, calculateAmountInWei(amountInEth), `0x${hashedData}`);
   console.log("paymentContractParams", params);
-
-  let qrCodeURL = "";
-  try {
-    const contract = useContractRead({
-      address: PaymentFactoryContractAddress,
-      abi: paymentFactoryABI.abi,
-      functionName: PaymentFactoryFunctionName,
-      args: params
-    });
-    console.log("contract", contract);
-    let amountInWei = calculateAmountInWei(amountInEth);
-    qrCodeURL = `ethereum:${contract.data}?value=${amountInWei.toString()}`
-  } catch (error) {
-    console.error("Error fetching contract: ", error);
-  }
 
 
   /* [TODO]
@@ -77,6 +62,20 @@ export default function PaymentScan() {
         - hashed data (`0x${hashedData}`) in the database
         - contract payment address  (contract.data) in the database
   */
+
+  let qrCodeURL = "";
+  const contract = useContractRead({
+    address: PaymentFactoryContractAddress,
+    abi: paymentFactoryABI.abi,
+    functionName: PaymentFactoryFunctionName,
+    args: params
+  });
+
+  if (contract.data) {
+    console.log("contract", contract);
+    let amountInWei = calculateAmountInWei(amountInEth);
+    qrCodeURL = `ethereum:${contract.data}?value=${amountInWei.toString()}`
+  }
 
   return (
     <>
@@ -97,9 +96,9 @@ export default function PaymentScan() {
               <><Text>
                 To begin checkout, open the camera on your mobile device and scan the QR code below.
               </Text>
-                {qrCodeURL.length > 0 &&
+                {
                   <Container>
-                    <QRCode value={qrCodeURL} size={400} />
+                    <QRCode value={qrCodeURL} size={'95%'} />
                   </Container>
                 }
               </>

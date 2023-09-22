@@ -12,11 +12,6 @@ const useStyles = createStyles((theme) => ({
     fontWeight: 900,
     letterSpacing: - 1,
   },
-  link: {
-    textDecoration: 'none',
-    textDecorationColor: '#fff',
-    color: '#fff'
-  }
 }));
 
 export default function Checkout() {
@@ -24,7 +19,7 @@ export default function Checkout() {
   const { walletStoreContext } = useContext(AppContext);
 
   let cart = walletStoreContext?.cart as [];
-  const cartSum = cart.reduce((acc, item: Item) => item.amount > 0 ? acc + (item.price * Number(item.amount)) : acc, 0);
+  const cartSum = walletStoreContext?.cart ? cart.reduce((acc, item: Item) => item.amount > 0 ? acc + (item.price * Number(item.amount)) : acc, 0) : 0;
 
   return (
     <>
@@ -53,7 +48,7 @@ export default function Checkout() {
               );
             }
           })}
-          <Link className={classes.link} href={'/newsale/payment-scan'} style={{ display: 'contents' }}>
+          <Link href={'/newsale/payment-scan'} style={{ display: 'contents' }}>
             <Button color="dark" w={"100%"} size="lg">
               Scan to Charge {cartSum.toLocaleString('en-US', {
                 style: 'currency',

@@ -1,6 +1,6 @@
 import { AppContext } from '@/context';
 import { Button, Flex, TextInput, createStyles } from '@mantine/core';
-import { IconAt, IconShoppingBag } from '@tabler/icons-react';
+import { IconBuildingStore, IconMail, IconTemplate, IconUser } from '@tabler/icons-react';
 import { useContext, useEffect, useState } from 'react';
 import { useAccount, useDisconnect } from 'wagmi';
 import Layout from '../../../components/layout';
@@ -61,7 +61,7 @@ export default function Transactions() {
         <TextInput
           label="Store Name"
           size="md"
-          icon={<IconShoppingBag />}
+          icon={<IconBuildingStore />}
           withAsterisk
           value={storeName}
           onChange={handleStoreNameChange}
@@ -69,7 +69,7 @@ export default function Transactions() {
         <TextInput
           label="Email"
           size="md"
-          icon={<IconAt />}
+          icon={<IconMail />}
           withAsterisk
           value={storeEmail}
           onChange={handleStoreEmailChange}

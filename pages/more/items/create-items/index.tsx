@@ -9,8 +9,6 @@ import { post } from '../../../../api/api';
 
 const useStyles = createStyles((theme) => ({
   link: {
-    textDecoration: 'none',
-    textDecorationColor: '#fff',
     color: '#666',
   },
 }));
