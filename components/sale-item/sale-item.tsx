@@ -30,7 +30,7 @@ export default function SaleItem(props: SaleItemProps) {
   return (
     <Container w={'100%'} pl={0} pr={0}>
       <Group position="apart" mb={30}>
-        <Group w={'75%'}>
+        <Group w={'60%'}>
           <Avatar src={props.thumbnail} size={64} />
           <Flex justify="flex-start" align="flex-start" direction="column" wrap="wrap">
             <Text className={classes.itemTitle}>{props.name}</Text>
@@ -38,7 +38,7 @@ export default function SaleItem(props: SaleItemProps) {
           </Flex>
         </Group>
         {!props.isInCart ? (
-          <Group w={'10%'}>
+          <Group w={'15%'}>
             <Flex justify="flex-end" align="flex-end" direction="row" wrap="wrap" mt={-15}>
               {props.exclude_select_units ? (
                 <></>
