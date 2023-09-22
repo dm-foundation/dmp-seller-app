@@ -7,11 +7,10 @@ export const ContextProvider = ({ children }: { children: JSX.Element }) => {
 
   const updateContext = async (ctx: WalletStoreContext) => {
     try {
-      console.log("updating context: ", walletStoreContext, ctx);
       setWalletStoreContext(ctx);
       return ctx;
     } catch (error) {
-      console.error("error updating context: ", ctx);
+      console.error("[ERROR] Context: could not be updated", ctx);
       return ctx;
     }
   };

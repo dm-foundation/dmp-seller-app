@@ -8,11 +8,11 @@ import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet';
 import { InjectedConnector } from 'wagmi/connectors/injected';
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
-import { mainnet, optimism, polygon } from '@wagmi/core/chains';
+import { sepolia } from '@wagmi/core/chains';
 import { ContextProvider } from '@/providers/context.provider';
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [mainnet],
+  [sepolia],
   [publicProvider()]
 );
 
@@ -20,7 +20,7 @@ const config = createConfig({
   autoConnect: true,
   connectors: [
     new MetaMaskConnector({
-      chains: [mainnet, optimism, polygon],
+      chains,
     }),
     new InjectedConnector({
       chains,
@@ -69,6 +69,6 @@ export default function App(props: AppProps) {
           <WagmiConfig config={config}>{mounted && <Component {...pageProps} />}</WagmiConfig>
         </MantineProvider>
       </>
-      </ContextProvider>
+    </ContextProvider>
   );
 }

@@ -4,7 +4,7 @@ import useStyles from './navbar.styles';
 import Link from 'next/link';
 
 const mockData = [
-    { link: '/newsale', label: 'Checkout', icon: IconShoppingCart },
+    { link: '/newsale', label: 'New Sale', icon: IconShoppingCart },
     { link: '/transactions', label: 'Transactions', icon: IconTransform },
     { link: '/more', label: 'More', icon: IconMenuOrder },
 ];
