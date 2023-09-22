@@ -51,7 +51,6 @@ export default function SaleItem(props: SaleItemProps) {
                     })
                   )}
                   onChange={(value) => {
-                    console.log(props.id, Number(value));
                     props.itemHandler(props.id, Number(value));
                   }}
                 />
@@ -85,9 +84,9 @@ export default function SaleItem(props: SaleItemProps) {
             {!props.isInCart
               ? props.priceUSD.toLocaleString('en-US', { style: 'currency', currency: 'USD' })
               : (props.priceUSD * Number(props.amount)).toLocaleString('en-US', {
-                  style: 'currency',
-                  currency: 'USD',
-                })}
+                style: 'currency',
+                currency: 'USD',
+              })}
           </Text>
           {props.showPriceInEthereum && (
             <Text fz="xs" c="dimmed">

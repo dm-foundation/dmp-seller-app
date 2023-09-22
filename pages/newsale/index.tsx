@@ -72,7 +72,6 @@ export default function NewSale() {
 
   useEffect(() => {
     fetchData();
-    console.log("Rodou o useEffect");
   }, [walletStoreContext?.storeId]);
 
   return (
@@ -87,7 +86,7 @@ export default function NewSale() {
               size="lg"
               onClick={() => {
                 disconnect();
-                window.location.href = 'http://localhost:3001/login/wallet-selection';
+                window.location.href = '/login/wallet-selection';
               }}
             >
               Connect with a different wallet

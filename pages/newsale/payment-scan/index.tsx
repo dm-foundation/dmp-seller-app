@@ -1,18 +1,19 @@
 "use client";
 
 import { AppContext } from '@/context';
-import { Container, Flex, Text, createStyles } from '@mantine/core';
+import { PaymentFactoryContractAddress, PaymentFactoryFunctionName, buildPaymentContractParams, hashData } from '@/lib/utils';
+import { Item } from '@/types/item';
+import { encode } from '@ipld/dag-cbor';
+import { Container, Flex, Text } from '@mantine/core';
+import currency from 'currency.js';
 import { useContext, useEffect, useState } from 'react';
 import QRCode from "react-qr-code";
 import { useContractRead } from "wagmi";
 import Layout from '../../../components/layout';
 import paymentFactoryABI from "../../../fixtures/PaymentFactory.json" assert { type: "json" };
-import { encode, decode } from '@ipld/dag-cbor'
-import { buildPaymentContractParams, hashData, PaymentFactoryContractAddress, PaymentFactoryFunctionName } from '@/lib/utils';
-import { Item } from '@/types/item';
-import { ethers } from 'ethers';
-let currency = require('currency.js');
+
 const CryptoConvert = require("crypto-convert").default;
+const convert = new CryptoConvert();
 
 export default function PaymentScan() {
   const { walletStoreContext } = useContext(AppContext);
@@ -33,10 +34,9 @@ export default function PaymentScan() {
     }
 
     const fetchUSDEth = async (amountInUSD: string) => {
-      const convert = new CryptoConvert();
       await convert.ready();
       const convertedAmount = convert.USD.ETH(amountInUSD)
-      console.log(convertedAmount);
+      console.log("convertedAmount USD->ETH", convertedAmount);
       setAmountInEth(convertedAmount);
     }
 
@@ -45,20 +45,27 @@ export default function PaymentScan() {
   }, [])
 
   const calculateAmountInWei = function (amountInEth: string) {
-    return (currency(amountInEth, { precision: 8 }).multiply(1000000000000000000)).value;
+    return ((currency(amountInEth, { precision: 8 }).multiply(1000000000000000000)).value).toString();
   }
 
   const params = buildPaymentContractParams(storePaymentAddress, calculateAmountInWei(amountInEth), `0x${hashedData}`);
-  if (process.env.DEBUG) console.log("[DEBUG] buildPaymentContractParams:", params);
-  const contract = useContractRead({
-    address: PaymentFactoryContractAddress,
-    abi: paymentFactoryABI.abi,
-    functionName: PaymentFactoryFunctionName,
-    args: params
-  });
+  console.log("paymentContractParams", params);
 
-  let amountInWei = calculateAmountInWei(amountInEth);
-  const qrCodeURL = `ethereum:${contract.data}?value=${amountInWei.toString()}`
+  let qrCodeURL = "";
+  try {
+    const contract = useContractRead({
+      address: PaymentFactoryContractAddress,
+      abi: paymentFactoryABI.abi,
+      functionName: PaymentFactoryFunctionName,
+      args: params
+    });
+    console.log("contract", contract);
+    let amountInWei = calculateAmountInWei(amountInEth);
+    qrCodeURL = `ethereum:${contract.data}?value=${amountInWei.toString()}`
+  } catch (error) {
+    console.error("Error fetching contract: ", error);
+  }
+
 
   /* [TODO]
     - Adjust transaction model to include fields for saving the information below
@@ -89,7 +96,7 @@ export default function PaymentScan() {
                 To begin checkout, open the camera on your mobile device and scan the QR code below.
               </Text>
                 <Container>
-                  <QRCode value={qrCodeURL} size={400} />
+                  <QRCode value={qrCodeURL} size={400} />}
                 </Container>
               </>
           }
