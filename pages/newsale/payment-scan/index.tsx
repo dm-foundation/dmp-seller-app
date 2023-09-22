@@ -44,7 +44,7 @@ export default function PaymentScan() {
 
     fetchUSDEth(paymentAmount);
     fetchData();
-  }, [])
+  }, [hashedData, amountInEth])
 
   const calculateAmountInWei = function (amountInEth: string) {
     return ((currency(amountInEth, { precision: 8 }).multiply(1000000000000000000)).value).toString();
@@ -97,9 +97,11 @@ export default function PaymentScan() {
               <><Text>
                 To begin checkout, open the camera on your mobile device and scan the QR code below.
               </Text>
-                <Container>
-                  <QRCode value={qrCodeURL} size={400} />
-                </Container>
+                {qrCodeURL.length > 0 &&
+                  <Container>
+                    <QRCode value={qrCodeURL} size={400} />
+                  </Container>
+                }
               </>
           }
         </Flex>

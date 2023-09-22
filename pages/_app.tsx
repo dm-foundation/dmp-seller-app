@@ -32,7 +32,7 @@ const config = createConfig({
     new CoinbaseWalletConnector({
       options: {
         appName: 'dmp-mass-market',
-        jsonRpcUrl: `https://eth-mainnet.alchemyapi.io/v2/{process.env.ALCHEMY_ID}`,
+        jsonRpcUrl: `https://eth-mainnet.alchemyapi.io/v2/{process.env.REACT_APP_ALCHEMY_ID}`,
       },
     }),
     new WalletConnectConnector({
@@ -43,7 +43,6 @@ const config = createConfig({
   ],
   publicClient,
   webSocketPublicClient,
-  // walletConnectProjectId: process.env.WALLETCONNECT_PROJECT_ID as string,
 });
 
 export default function App(props: AppProps) {
