@@ -3,7 +3,6 @@ import { Item } from '@/types/item';
 import { WalletStoreContext } from '@/types/wallet-store.context';
 import { Button, Flex, createStyles } from '@mantine/core';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
 import { useAccount, useDisconnect } from 'wagmi';
 import { get } from '../../api/api';
@@ -24,7 +23,6 @@ const useStyles = createStyles((theme) => ({
 
 export default function NewSale() {
   const { classes } = useStyles();
-  const { router } = useRouter();
   const { address } = useAccount();
   const { disconnect } = useDisconnect();
   const [error, setError] = useState<string | undefined>(undefined);
@@ -104,7 +102,7 @@ export default function NewSale() {
           })
         }
         {!error &&
-          < Link className={classes.link} href={'/newsale/checkout'} style={{ display: 'contents' }}>
+          < Link href={'/newsale/checkout'} style={{ display: 'contents' }}>
             <Button color="dark" w={'100%'} size="lg" onClick={updateCart}>
               Proceed to checkout
             </Button>
