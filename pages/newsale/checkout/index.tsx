@@ -1,21 +1,21 @@
-import { Button, Flex, createStyles } from '@mantine/core';
+import { Button, Flex } from '@mantine/core';
 import Layout from '../../../components/layout';
 import SaleItem from '../../../components/sale-item/sale-item';
 import Link from 'next/link';
 import { AppContext } from '@/context';
 import { useContext } from 'react';
 import { Item } from '@/types/item';
+import classes from '@/pages/App.module.css';
 
-const useStyles = createStyles((theme) => ({
-  title: {
-    fontSize: 28,
-    fontWeight: 900,
-    letterSpacing: - 1,
-  },
-}));
+// const useStyles = createStyles((theme) => ({
+//   title: {
+//     fontSize: 28,
+//     fontWeight: 900,
+//     letterSpacing: - 1,
+//   },
+// }));
 
 export default function Checkout() {
-  const { classes } = useStyles();
   const { walletStoreContext } = useContext(AppContext);
 
   let cart = walletStoreContext?.cart as [];

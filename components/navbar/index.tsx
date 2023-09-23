@@ -1,7 +1,7 @@
 import { Group, Flex } from '@mantine/core';
 import { IconMenuOrder, IconShoppingCart, IconTransform } from '@tabler/icons-react';
-import useStyles from './navbar.styles';
 import Link from 'next/link';
+import classes from '@/pages/App.module.css';
 
 const mockData = [
     { link: '/newsale', label: 'New Sale', icon: IconShoppingCart },
@@ -10,10 +10,9 @@ const mockData = [
 ];
 
 export default function SellerNavbar() {
-    const { classes } = useStyles();
 
     const links = mockData.map((item) => (
-        <Link key={item.label} href={item.link} className={classes.link}>
+        <Link key={item.label} href={item.link} className={classes.navbar_link}>
             <item.icon /><br />
             <span>{item.label}</span>
         </Link >
@@ -26,9 +25,9 @@ export default function SellerNavbar() {
             bg={'#eee'}
             className={classes.navbar}
         >
-            <Group spacing="xl" className={classes.navbar_links}>
+            <Group gap={'xl'} className={classes.navbar_links}>
                 {links}
             </Group>
-        </Flex>
+        </Flex >
     );
 }

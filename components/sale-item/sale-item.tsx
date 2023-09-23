@@ -2,7 +2,7 @@ import CryptoConverter from '@/lib/currency';
 import { Avatar, Container, Flex, Group, Popover, Select, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useEffect, useState } from 'react';
-import useStyles from './sale-item.styles';
+import classes from '@/pages/App.module.css';
 
 interface SaleItemProps {
   id: number;
@@ -22,21 +22,20 @@ function generateUISelectOptionsFromItemStockAvailability(stock: number): number
 }
 
 export default function SaleItem(props: SaleItemProps) {
-  const { classes } = useStyles();
   const [opened, { close, open }] = useDisclosure(false);
 
   return (
-    <Container w={'100%'} pl={0} pr={0}>
-      <Group position="apart" mb={30}>
-        <Group w={'50%'}>
-          <Avatar src={props.thumbnail} size={54} />
+    <Container w={'100%'} pl={0} pr={0} mr={0} ml={0} mb={10}>
+      <Group justify="space-between" gap="xs">
+        <Group justify="flex-start" w={'35%'} gap="xs">
+          <Avatar variant="light" radius="xs" size="lg" color="indigo" src={props.thumbnail} />
           <Flex justify="flex-start" align="flex-start" direction="column" wrap="wrap">
-            <Text className={classes.itemTitle}>{props.name.substring(0, 12)}{props.name.length > 10 ? '..' : ""}</Text>
-            <Text c="dimmed">{props.stock} in stock</Text>
+            <Text className={classes.itemTitle}>{props.name.substring(0, 10)}{props.name.length > 10 ? '..' : ""}</Text>
+            <Text size={'sm'} c="dimmed">{props.stock} in stock</Text>
           </Flex>
         </Group>
         {!props.isInCart ? (
-          <Group w={'20%'}>
+          <Group w={'30%'}>
             <Flex justify="flex-end" align="flex-end" direction="row" wrap="wrap" mt={-15}>
               {props.exclude_select_units ? (
                 <></>
@@ -58,7 +57,7 @@ export default function SaleItem(props: SaleItemProps) {
             </Flex>
           </Group>
         ) : (
-          <Group>
+          <Group w={'12%'}>
             <Flex justify="flex-end" align="flex-start" direction="column" wrap="wrap" mt={10}>
               <Text className={classes.itemTitle}>{props.amount} units</Text>
               <Text fz="xs" c="dimmed">

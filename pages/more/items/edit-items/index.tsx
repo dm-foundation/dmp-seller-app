@@ -1,17 +1,11 @@
 import Layout from '@/components/layout';
-import { Button, Flex, TextInput, createStyles } from '@mantine/core';
+import { Button, Flex, TextInput } from '@mantine/core';
 import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import { IconUpload } from '@tabler/icons-react';
 import Link from 'next/link';
-
-const useStyles = createStyles((theme) => ({
-  link: {
-    color: '#666',
-  },
-}));
+import classes from '@/pages/App.module.css';
 
 export default function Transactions() {
-  const { classes } = useStyles();
   return (
     <Layout title="Edit Item">
       <Flex direction="column" justify="center" gap={10} mb={100} w={'95%'} ta="left">

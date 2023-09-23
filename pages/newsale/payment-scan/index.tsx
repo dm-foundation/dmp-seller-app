@@ -91,12 +91,11 @@ export default function PaymentScan() {
               </Text>
                 {contract.data &&
                   <Container>
-                    <div style={{ height: "auto", margin: "0 auto", maxWidth: 64, width: "100%" }}>
+                    <div style={{ height: "auto", margin: "0 auto", maxWidth: 300, width: "100%" }}>
                       <QRCode
-                        size={256}
+                        size={300}
                         style={{ height: "auto", maxWidth: "100%", width: "100%" }}
                         value={qrCodeURL}
-                        viewBox={`0 0 256 256`}
                       />
                     </div>
                   </Container>

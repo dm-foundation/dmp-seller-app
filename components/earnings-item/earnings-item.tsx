@@ -1,5 +1,5 @@
 import { Text, Group, Flex, Stack, Divider, Container } from '@mantine/core';
-import useStyles from './earnings-item.styles';
+import classes from '@/pages/App.module.css';
 
 interface EarningsItemProps {
     date: Date;
@@ -9,12 +9,11 @@ interface EarningsItemProps {
 }
 
 export default function EarningsItem({ date, item_name, item_count, item_total_price }: EarningsItemProps) {
-    const { classes } = useStyles();
     return (
         <Container w={"100%"} pl={0} pr={0}>
             <Divider orientation="horizontal" w={"100%"} />
-            <Group position="apart" mb={15} mt={15}>
-                <Group spacing="xl">
+            <Group gap={'sm'} mb={15} mt={15}>
+                <Group>
                     <Flex
                         justify="flex-start"
                         align="flex-start"

@@ -10,6 +10,7 @@ import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
 import { sepolia } from '@wagmi/core/chains';
 import { ContextProvider } from '@/providers/context.provider';
+import '@mantine/core/styles.css';
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [sepolia],
@@ -56,15 +57,10 @@ export default function App(props: AppProps) {
         <Head>
           <title>Mass Market</title>
           <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
+          <meta name="viewport" content="width=device-width, user-scalable=no" />
         </Head>
 
-        <MantineProvider
-          withGlobalStyles
-          withNormalizeCSS
-          theme={{
-            colorScheme: 'light',
-          }}
-        >
+        <MantineProvider>
           <WagmiConfig config={config}>{mounted && <Component {...pageProps} />}</WagmiConfig>
         </MantineProvider>
       </>

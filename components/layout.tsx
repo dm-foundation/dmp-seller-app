@@ -1,22 +1,11 @@
-import { Container, Divider, Flex, Title, createStyles } from '@mantine/core'
+import { Container, Divider, Flex, Title } from '@mantine/core'
 import Navbar from './navbar'
 import { useAccount } from 'wagmi';
 import { useState, useEffect } from 'react';
 import Login from '../pages/login';
-
-const useStyles = createStyles((theme) => ({
-    title: {
-        fontSize: 28,
-        textTransform: 'uppercase',
-        color: '#fff',
-        fontWeight: 800,
-        letterSpacing: - 1,
-    }
-}));
-
+import classes from '@/pages/App.module.css';
 
 export default function Layout({ title, children }: any) {
-    const { classes } = useStyles();
     const { isConnected } = useAccount()
     const [isUserConnected, setIsUserConnected] = useState(false)
 
@@ -29,15 +18,15 @@ export default function Layout({ title, children }: any) {
         <>
             {isUserConnected ?
                 <>
-                    < Title className={classes.title} ta='center' p={10} bg="#000" >
+                    < Title className={classes.title_layout} ta='center' p={10} bg="#000" >
                         {title}
                     </Title >
                     <Divider orientation="horizontal" w={"100%"} mb="xl" />
                     <Container w={"98%"}>
                         <Flex
                             gap="xs"
-                            justify="center"
-                            align="center"
+                            justify="flex-start"
+                            align="flex-start"
                             direction="column"
                             wrap="nowrap"
                         >

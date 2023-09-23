@@ -1,41 +1,41 @@
 import { AppContext } from '@/context';
-import { Button, Flex, TextInput, createStyles } from '@mantine/core';
+import { Button, Flex, TextInput } from '@mantine/core';
 import { IconBuildingStore, IconMail, IconTemplate, IconUser } from '@tabler/icons-react';
 import { useContext, useEffect, useState } from 'react';
 import { useAccount, useDisconnect } from 'wagmi';
 import Layout from '../../../components/layout';
 
-const useStyles = createStyles((theme) => ({
-  title: {
-    color: theme.colorScheme === 'dark' ? theme.white : theme.black,
-    fontSize: 28,
-    fontWeight: 900,
-    letterSpacing: -1,
-    textAlign: 'center',
-  },
-  subtitle: {
-    color: theme.colorScheme === 'dark' ? theme.white : theme.black,
-    opacity: 0.65,
-    fontSize: 24,
-    fontWeight: 800,
-    letterSpacing: -1,
-    textAlign: 'left',
-    marginLeft: '15px',
-    marginBottom: '15px',
-  },
-  button: {
-    fontSize: 24,
-    opacity: 0.8,
-  },
-  link: {
-    textDecoration: 'none',
-    textDecorationColor: '#fff',
-    color: '#666',
-  },
-}));
+// const useStyles = createStyles((theme) => ({
+//   title: {
+//     color: theme.colorScheme === 'dark' ? theme.white : theme.black,
+//     fontSize: 28,
+//     fontWeight: 900,
+//     letterSpacing: -1,
+//     textAlign: 'center',
+//   },
+//   subtitle: {
+//     color: theme.colorScheme === 'dark' ? theme.white : theme.black,
+//     opacity: 0.65,
+//     fontSize: 24,
+//     fontWeight: 800,
+//     letterSpacing: -1,
+//     textAlign: 'left',
+//     marginLeft: '15px',
+//     marginBottom: '15px',
+//   },
+//   button: {
+//     fontSize: 24,
+//     opacity: 0.8,
+//   },
+//   link: {
+//     textDecoration: 'none',
+//     textDecorationColor: '#fff',
+//     color: '#666',
+//   },
+// }));
 
 export default function Transactions() {
-  const { address, isConnected } = useAccount();
+  const { isConnected } = useAccount();
   const { disconnect } = useDisconnect();
   const { walletStoreContext } = useContext(AppContext);
 
@@ -61,7 +61,7 @@ export default function Transactions() {
         <TextInput
           label="Store Name"
           size="md"
-          icon={<IconBuildingStore />}
+          leftSection={<IconBuildingStore />}
           withAsterisk
           value={storeName}
           onChange={handleStoreNameChange}
@@ -69,7 +69,7 @@ export default function Transactions() {
         <TextInput
           label="Email"
           size="md"
-          icon={<IconMail />}
+          leftSection={<IconMail />}
           withAsterisk
           value={storeEmail}
           onChange={handleStoreEmailChange}

@@ -2,22 +2,14 @@
 
 import { get } from '@/api/api';
 import { AppContext } from '@/context';
-import { Button, Card, Flex, createStyles } from '@mantine/core';
+import { Button, Card, Flex } from '@mantine/core';
 import Link from 'next/link';
 import { useContext } from 'react';
 import { BaseError } from 'viem';
 import { useAccount, useConnect } from 'wagmi';
-
-const useStyles = createStyles((theme) => ({
-  link: {
-    textDecoration: 'none',
-    textDecorationColor: '#fff',
-    color: '#666',
-  },
-}));
+import classes from '@/pages/App.module.css';
 
 export function Connect() {
-  const { classes } = useStyles();
   const { address, connector, isConnected } = useAccount();
   const { connect, connectors, error } = useConnect();
   const { updateContext } = useContext(AppContext);

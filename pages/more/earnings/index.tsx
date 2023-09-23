@@ -1,18 +1,17 @@
-import { Image, Flex, Text, createStyles } from '@mantine/core';
+import { Image, Flex, Text } from '@mantine/core';
 import Layout from '../../../components/layout';
 import EarningsItem from '../../../components/earnings-item/earnings-item';
 
-const useStyles = createStyles((theme) => ({
-  totalEarnings: {
-    fontSize: 44,
-    fontWeight: 600,
-  }
-}));
+// const useStyles = createStyles((theme) => ({
+//   totalEarnings: {
+//     fontSize: 44,
+//     fontWeight: 600,
+//   }
+// }));
 
+import classes from '@/pages/App.module.css';
 
 export default function Transactions() {
-  const { classes } = useStyles();
-
   let mockData = {
     date: new Date(),
     item_name: "poster",

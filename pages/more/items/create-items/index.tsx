@@ -1,20 +1,15 @@
 import Layout from '@/components/layout';
 import { AppContext } from '@/context';
-import { Button, Flex, TextInput, createStyles } from '@mantine/core';
+import { Button, Flex, TextInput } from '@mantine/core';
 import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import { IconUpload } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useContext, useEffect, useState } from 'react';
-import { post } from '../../../../api/api';
+import { post } from '@/api/api';
+import classes from '@/pages/App.module.css';
 
-const useStyles = createStyles((theme) => ({
-  link: {
-    color: '#666',
-  },
-}));
 
 export default function CreateItems() {
-  const { classes } = useStyles();
   const [name, setName] = useState<string>();
   const [sku, setSku] = useState<string>();
   const [price, setPrice] = useState<number>();

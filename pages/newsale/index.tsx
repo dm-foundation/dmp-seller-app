@@ -1,28 +1,17 @@
 import { AppContext } from '@/context';
 import { Item } from '@/types/item';
 import { WalletStoreContext } from '@/types/wallet-store.context';
-import { Button, Flex, createStyles } from '@mantine/core';
+import { Button, Flex } from '@mantine/core';
 import Link from 'next/link';
 import { useContext, useEffect, useState } from 'react';
 import { useAccount, useDisconnect } from 'wagmi';
 import { get } from '../../api/api';
 import Layout from '../../components/layout';
 import SaleItem from '../../components/sale-item/sale-item';
+import classes from '@/pages/App.module.css';
 
-const useStyles = createStyles((theme) => ({
-  title: {
-    fontSize: 28,
-    fontWeight: 900,
-    letterSpacing: -1,
-  },
-  error: {
-    fontSize: 24,
-    fontWeight: 900,
-  }
-}));
 
 export default function NewSale() {
-  const { classes } = useStyles();
   const { address } = useAccount();
   const { disconnect } = useDisconnect();
   const [error, setError] = useState<string | undefined>(undefined);
@@ -103,7 +92,7 @@ export default function NewSale() {
         }
         {!error &&
           < Link href={'/newsale/checkout'} style={{ display: 'contents' }}>
-            <Button color="dark" w={'100%'} size="lg" onClick={updateCart}>
+            <Button className={classes.button} color="dark" w={'100%'} size="lg" onClick={updateCart}>
               Proceed to checkout
             </Button>
           </Link>}
