@@ -2,7 +2,7 @@ import axios from 'axios';
 axios.defaults.withCredentials = true;
 
 function host() {
-    return process.env.REACT_APP_API_URL ?? "http://127.0.0.1:3000";
+    return process.env.API_URL ?? "https://d3k2555wexgp0x.cloudfront.net:3000/api";
 }
 
 export async function get(resource_url: string) {
