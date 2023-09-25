@@ -1,24 +1,18 @@
 const CryptoConvert = require("crypto-convert").default;
+const Web3 = require('web3');
+const convert = new CryptoConvert();
 
 class CryptoConverter {
 
-    private static instance: CryptoConverter;
-
-    private constructor() {
-        CryptoConverter.instance = new CryptoConvert();
+    public static convertUSDtoETH = async (amountInUSD: number) => {
+        await convert.ready();
+        console.log("convert.USD.ETH(amountInUSD): ", convert.USD.ETH(amountInUSD));
+        return await convert.USD.ETH(amountInUSD);
     }
 
-    private static getInstance(): any {
-        if (CryptoConverter.instance == undefined) {
-            CryptoConverter.instance = new CryptoConvert();
-        }
-        return CryptoConverter.instance;
-    }
-
-    public static convertUSDtoETH = async (amountInUSD: string) => {
-        const converter = CryptoConverter.getInstance()
-        await converter.ready();
-        return await converter.USD.ETH(amountInUSD)
+    public static convertETHtoWei = async function (amountInEth: number) {
+        console.log("amountInEth: ", amountInEth);
+        return await Web3.utils.toWei(amountInEth, 'ether');
     }
 }
 
