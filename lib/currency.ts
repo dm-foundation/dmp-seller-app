@@ -1,11 +1,12 @@
 const CryptoConvert = require("crypto-convert").default;
-const Web3 = require('web3');
 const convert = new CryptoConvert();
+// await convert.ready();
+
+const Web3 = require('web3');
 
 class CryptoConverter {
 
     public static convertUSDtoETH = async (amountInUSD: number) => {
-        await convert.ready();
         console.log("convert.USD.ETH(amountInUSD): ", convert.USD.ETH(amountInUSD));
         return await convert.USD.ETH(amountInUSD);
     }
