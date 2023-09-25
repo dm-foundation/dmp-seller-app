@@ -26,3 +26,14 @@ export async function post(resource_url: string, data: any) {
         throw error;
     }
 }
+
+export async function patch(resource_url: string, data: any) {
+    try {
+        const API_URL = host();
+        const response = await axios.patch(`${API_URL}${resource_url}`, data);
+        return response.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}

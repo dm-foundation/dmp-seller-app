@@ -78,7 +78,7 @@ export default function NewSale() {
               <SaleItem
                 key={item['id']}
                 id={item['id']}
-                thumbnail={'https://images.pexels.com/photos/2425011/pexels-photo-2425011.jpeg?auto=compress&cs=tinysrgb&w=100&h=200&dpr=1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80'}
+                thumbnail={item['thumbnail']}
                 name={item['name']}
                 stock={item['units']}
                 priceUSD={item['price']}

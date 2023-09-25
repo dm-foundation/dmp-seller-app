@@ -2,12 +2,11 @@ import Layout from '@/components/layout';
 import { AppContext } from '@/context';
 import { Button, Flex, TextInput } from '@mantine/core';
 import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
-import { IconUpload } from '@tabler/icons-react';
+import { IconUpload, IconX } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useContext, useEffect, useState } from 'react';
 import { post } from '@/api/api';
 import classes from '@/pages/App.module.css';
-
 
 export default function CreateItems() {
   const [name, setName] = useState<string>();
@@ -37,30 +36,52 @@ export default function CreateItems() {
       console.error('Please fill all fields');
     }
   }
-  useEffect(() => {
-    console.log('🚀 ~ file: index.tsx:25 ~ CreateItems ~ thumbnail:', thumbnail);
-  }, [thumbnail]);
+
+  const handleClearThumbnail = () => {
+    setThumbnail(null);
+  };
+
   return (
     <Layout title="Create Item">
       <Flex direction="column" justify="center" gap={10} mb={100} w={'95%'} ta="left">
-        <Dropzone
-          onDrop={(files) => setThumbnail(files)}
-          onReject={(files) => console.log('rejected files', files)}
-          maxSize={3 * 1024 ** 2}
-          accept={IMAGE_MIME_TYPE}
+        <Flex
+          style={{
+            cursor: 'pointer',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexDirection: 'column',
+          }}
         >
-          {thumbnail ? (
-            <Flex justify={'center'} align="center" w={'100%'}>
-              <IconUpload />
-              {thumbnail[0]?.name}
-            </Flex>
-          ) : (
-            <Flex justify={'center'} align="center" w={'100%'}>
-              <IconUpload />
-              Drag 'n' drop some files here, or click to select files
-            </Flex>
-          )}
-        </Dropzone>
+          <Dropzone
+            onDrop={(files) => setThumbnail(files)}
+            onReject={(files) => console.log('rejected files', files)}
+            maxSize={3 * 1024 ** 2}
+            accept={IMAGE_MIME_TYPE}
+          >
+            { thumbnail ? <IconX onClick={handleClearThumbnail} /> : null }
+            {thumbnail ? (
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <img
+                  src={URL.createObjectURL(thumbnail[0])}
+                  alt="Thumbnail"
+                  style={{ width: '40%', objectFit: 'cover' }}
+                />
+                
+              </div>
+            ) : (
+              <Flex justify={'center'} align="center" w={'100%'}>
+                <IconUpload />
+                Drag 'n' drop a file here, or click to select file
+              </Flex>
+            )}
+          </Dropzone>
+        </Flex>
         <TextInput
           label="Name"
           size="md"

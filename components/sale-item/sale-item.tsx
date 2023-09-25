@@ -15,6 +15,8 @@ interface SaleItemProps {
   showPriceInEthereum: boolean;
   isInCart: boolean;
   exclude_select_units?: boolean;
+  onSelectItem?: any;
+  cursorPointer?: boolean;
 }
 
 function generateUISelectOptionsFromItemStockAvailability(stock: number): number[] {
@@ -25,13 +27,26 @@ export default function SaleItem(props: SaleItemProps) {
   const [opened, { close, open }] = useDisclosure(false);
 
   return (
-    <Container w={'100%'} pl={0} pr={0} mr={0} ml={0} mb={10}>
+    <Container
+      w={'100%'}
+      pl={0}
+      pr={0}
+      mr={0}
+      ml={0}
+      mb={10}
+      style={props.cursorPointer ? { cursor: "pointer" } : undefined}
+    >
       <Group justify="space-between" gap="xs">
         <Group justify="flex-start" w={'35%'} gap="xs">
           <Avatar variant="light" radius="xs" size="lg" color="indigo" src={props.thumbnail} />
           <Flex justify="flex-start" align="flex-start" direction="column" wrap="wrap">
-            <Text className={classes.itemTitle}>{props.name.substring(0, 10)}{props.name.length > 10 ? '..' : ""}</Text>
-            <Text size={'sm'} c="dimmed">{props.stock} in stock</Text>
+            <Text className={classes.itemTitle}>
+              {props.name.substring(0, 10)}
+              {props.name.length > 10 ? '..' : ''}
+            </Text>
+            <Text size={'sm'} c="dimmed">
+              {props.stock} in stock
+            </Text>
           </Flex>
         </Group>
         {!props.isInCart ? (
@@ -41,8 +56,7 @@ export default function SaleItem(props: SaleItemProps) {
                 <></>
               ) : (
                 <Select
-                  size='sm'
-
+                  size="sm"
                   data={generateUISelectOptionsFromItemStockAvailability(Number(props.stock)).map(
                     (unit) => ({
                       value: String(unit),
@@ -79,17 +93,21 @@ export default function SaleItem(props: SaleItemProps) {
           mt={-5}
           mr={5}
         >
-          <Text onMouseEnter={open} onMouseLeave={close} className={classes.itemTitle} mt={props.showPriceInEthereum ? 0 : -20}>
+          <Text
+            onMouseEnter={open}
+            onMouseLeave={close}
+            className={classes.itemTitle}
+            mt={props.showPriceInEthereum ? 0 : -20}
+          >
             {!props.isInCart
               ? props.priceUSD.toLocaleString('en-US', { style: 'currency', currency: 'USD' })
               : (props.priceUSD * Number(props.amount)).toLocaleString('en-US', {
-                style: 'currency',
-                currency: 'USD',
-              })}
+                  style: 'currency',
+                  currency: 'USD',
+                })}
           </Text>
         </Flex>
       </Group>
     </Container>
   );
 }
-
