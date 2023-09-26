@@ -1,5 +1,6 @@
 "use client";
 
+import { post } from '@/api/api';
 import { AppContext } from '@/context';
 import { PaymentFactoryContractAddress, PaymentFactoryFunctionName, buildPaymentConfirmationURL, buildPaymentContractParams } from '@/lib/contract';
 import CryptoConverter from '@/lib/currency';
@@ -7,14 +8,12 @@ import { sha256Hasher } from '@/lib/hashing';
 import { Item } from '@/types/item';
 import { encode } from '@ipld/dag-cbor';
 import { Container, Flex, Text } from '@mantine/core';
+import axios from 'axios';
 import { useContext, useEffect, useState } from 'react';
 import QRCode from "react-qr-code";
 import { useContractRead } from "wagmi";
 import Layout from '../../../components/layout';
 import paymentFactoryABI from "../../../fixtures/PaymentFactory.json" assert { type: "json" };
-import { post } from '@/api/api';
-import axios from 'axios';
-import PaymentConfirmation from '../payment-confirmation';
 
 
 export default function PaymentScan() {

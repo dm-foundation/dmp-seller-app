@@ -1,15 +1,15 @@
 import axios from 'axios';
 axios.defaults.withCredentials = true;
 
-function host() {
-    console.log("process.env.NEXT_PUBLIC_API_URL: ", process.env.NEXT_PUBLIC_API_URL);
-    return process.env.NEXT_PUBLIC_API_URL ?? "http://192.168.0.7:3000/api";
+function apiURL() {
+    const apiURL = process.env.NEXT_PUBLIC_API_URL ?? "https://d2v76rwlkzvt6c.cloudfront.net/api"
+    console.log("apiURL: ", apiURL);
+    return apiURL;
 }
 
 export async function get(resource_url: string) {
     try {
-        const API_URL = host();
-        const response = await axios.get(`${API_URL}${resource_url}`);
+        const response = await axios.get(`${apiURL()}${resource_url}`);
         return response.data;
     } catch (error) {
         console.log(error);
@@ -19,8 +19,7 @@ export async function get(resource_url: string) {
 
 export async function post(resource_url: string, data: any) {
     try {
-        const API_URL = host();
-        const response = await axios.post(`${API_URL}${resource_url}`, data);
+        const response = await axios.post(`${apiURL()}${resource_url}`, data);
         return response.data;
     } catch (error) {
         console.log(error);
@@ -30,8 +29,7 @@ export async function post(resource_url: string, data: any) {
 
 export async function patch(resource_url: string, data: any) {
     try {
-        const API_URL = host();
-        const response = await axios.patch(`${API_URL}${resource_url}`, data);
+        const response = await axios.patch(`${apiURL()}${resource_url}`, data);
         return response.data;
     } catch (error) {
         console.log(error);
