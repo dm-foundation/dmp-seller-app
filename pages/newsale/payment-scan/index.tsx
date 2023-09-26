@@ -27,7 +27,7 @@ export default function PaymentScan() {
   const [amountInEth, setAmountInEth] = useState<number>(0);
   const [amountInWei, setAmountInWei] = useState<number>(0);
 
-  const [paymentConfirmation, setPaymentConfirmation] = useState<number>({});
+  const [paymentConfirmation, setPaymentConfirmation] = useState({});
 
   const [hashedCart, setHashedCart] = useState({});
   const [cart, setCart] = useState({});

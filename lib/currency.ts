@@ -8,13 +8,11 @@ class CryptoConverter {
 
     public static convertUSDtoETH = async (amountInUSD: number) => {
         const amountInEth = await convert.USD.ETH(amountInUSD);
-        console.log("convertUSDtoETH: ", amountInEth);
         return amountInEth;
     }
 
     public static convertETHtoWei = async function (amountInEth: number) {
         const amountInWei = await Web3.utils.toWei(amountInEth, 'ether')
-        console.log("convertETHtoWei: ", amountInWei);
         return amountInWei;
     }
 }

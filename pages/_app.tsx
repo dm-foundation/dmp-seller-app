@@ -51,8 +51,6 @@ export default function App(props: AppProps) {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
-  console.log(".env: ", process.env);
-
   return (
     <ContextProvider>
       <>
