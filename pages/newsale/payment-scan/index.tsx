@@ -46,18 +46,20 @@ export default function PaymentScan() {
       }
     }
 
-    const fetchPaymetConfirmation = async () => {
+    const fetchPaymentConfirmation = async () => {
       if (contract.data) {
         console.log("Fetching payment confirmation..");
         const paymentConfirmationURL = buildPaymentConfirmationURL(contract.data.toString() ?? "");
+
+        console.log("paymentConfirmationURL: ", paymentConfirmationURL);
         const paymentTransactionData = await axios.get(paymentConfirmationURL);
 
-        console.log("paymentConfirmation: ", paymentConfirmation);
+        console.log("paymentTransactionData.data: ", paymentTransactionData.data);
         setPaymentConfirmation(paymentTransactionData.data);
       }
     }
 
-    setTimeout(() => { fetchPaymetConfirmation() }, 2000);
+    setTimeout(() => { fetchPaymentConfirmation() }, 2000);
     fetchData();
   }, [hashedCart, amountInEth, amountInWei])
 
@@ -120,11 +122,6 @@ export default function PaymentScan() {
                   />
                 </div>
               </Container>
-            </>
-          }
-          {qrCodeURL && paymentConfirmation &&
-            <>
-              Pending transaction..
             </>
           }
         </Flex>

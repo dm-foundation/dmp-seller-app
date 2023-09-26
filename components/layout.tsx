@@ -30,7 +30,6 @@ export default function Layout({ title, children }: any) {
                             direction="column"
                             wrap="nowrap"
                         >
-
                             <main style={{ width: '100%' }}>{children}</main>
                         </Flex>
                     </Container>
