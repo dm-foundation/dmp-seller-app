@@ -114,6 +114,11 @@
     color: #666;
 }
 
+.link_transaction_confirmation {
+    font-size: small;
+    color: #67f;
+}
+
 .subtitle_more {
     opacity: 0.65;
     font-weight: 800;

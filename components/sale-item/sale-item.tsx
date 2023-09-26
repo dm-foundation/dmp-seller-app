@@ -36,13 +36,13 @@ export default function SaleItem(props: SaleItemProps) {
       mb={10}
       style={props.cursorPointer ? { cursor: "pointer" } : undefined}
     >
-      <Group justify="space-between" gap="xs">
-        <Group justify="flex-start" w={'35%'} gap="xs">
-          <Avatar variant="light" radius="xs" size="lg" color="indigo" src={props.thumbnail} />
+      <Group justify={'space-between'} gap='xs'>
+        <Group gap="xs">
+          <Avatar variant="light" radius="xs" size="lg" src={props.thumbnail} />
           <Flex justify="flex-start" align="flex-start" direction="column" wrap="wrap">
             <Text className={classes.itemTitle}>
-              {props.name.substring(0, 10)}
-              {props.name.length > 10 ? '..' : ''}
+              {props.name.substring(0, 8)}
+              {props.name.length > 8 ? '..' : '  '}
             </Text>
             <Text size={'sm'} c="dimmed">
               {props.stock} in stock
@@ -50,8 +50,8 @@ export default function SaleItem(props: SaleItemProps) {
           </Flex>
         </Group>
         {!props.isInCart ? (
-          <Group w={'30%'}>
-            <Flex justify="flex-end" align="flex-end" direction="row" wrap="wrap" mt={-15}>
+          <Group>
+            <Flex justify="flex-end" align="flex-end" direction="column" wrap="wrap" mt={-15}>
               {props.exclude_select_units ? (
                 <></>
               ) : (
@@ -71,8 +71,8 @@ export default function SaleItem(props: SaleItemProps) {
             </Flex>
           </Group>
         ) : (
-          <Group w={'12%'}>
-            <Flex justify="flex-end" align="flex-start" direction="column" wrap="wrap" mt={10}>
+          <Group>
+            <Flex justify="flex-end" align="flex-end" direction="column" wrap="wrap" mt={10}>
               <Text className={classes.itemTitle}>{props.amount} units</Text>
               <Text fz="xs" c="dimmed">
                 {props.priceUSD.toLocaleString('en-US', {
@@ -85,29 +85,29 @@ export default function SaleItem(props: SaleItemProps) {
           </Group>
         )}
         <Flex
-          w={'15%'}
+          w={'13%'}
           justify="flex-end"
-          align="flex-start"
+          align="flex-end"
           direction="row"
           wrap="wrap"
           mt={-5}
-          mr={5}
         >
           <Text
             onMouseEnter={open}
             onMouseLeave={close}
             className={classes.itemTitle}
-            mt={props.showPriceInEthereum ? 0 : -20}
+            mt={-20}
+            size="md"
           >
             {!props.isInCart
               ? props.priceUSD.toLocaleString('en-US', { style: 'currency', currency: 'USD' })
               : (props.priceUSD * Number(props.amount)).toLocaleString('en-US', {
-                  style: 'currency',
-                  currency: 'USD',
-                })}
+                style: 'currency',
+                currency: 'USD',
+              })}
           </Text>
         </Flex>
       </Group>
-    </Container>
+    </Container >
   );
 }

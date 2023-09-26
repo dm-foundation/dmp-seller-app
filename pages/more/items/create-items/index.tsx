@@ -58,7 +58,7 @@ export default function CreateItems() {
             maxSize={3 * 1024 ** 2}
             accept={IMAGE_MIME_TYPE}
           >
-            { thumbnail ? <IconX onClick={handleClearThumbnail} /> : null }
+            {thumbnail ? <IconX onClick={handleClearThumbnail} /> : null}
             {thumbnail ? (
               <div
                 style={{
@@ -72,7 +72,7 @@ export default function CreateItems() {
                   alt="Thumbnail"
                   style={{ width: '40%', objectFit: 'cover' }}
                 />
-                
+
               </div>
             ) : (
               <Flex justify={'center'} align="center" w={'100%'}>

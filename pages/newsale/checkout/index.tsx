@@ -3,7 +3,7 @@ import Layout from '../../../components/layout';
 import SaleItem from '../../../components/sale-item/sale-item';
 import Link from 'next/link';
 import { AppContext } from '@/context';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { Item } from '@/types/item';
 import classes from '@/pages/App.module.css';
 
@@ -17,6 +17,7 @@ import classes from '@/pages/App.module.css';
 
 export default function Checkout() {
   const { walletStoreContext } = useContext(AppContext);
+  const [disabled, setDisabled] = useState(false);
 
   let cart = walletStoreContext?.cart as [];
   const cartSum = walletStoreContext?.cart ? cart.reduce((acc, item: Item) => item.amount > 0 ? acc + (item.price * Number(item.amount)) : acc, 0) : 0;
@@ -49,7 +50,14 @@ export default function Checkout() {
             }
           })}
           <Link href={'/newsale/payment-scan'} style={{ display: 'contents' }}>
-            <Button color="dark" w={"100%"} size="lg">
+            <Button color="dark" w={"100%"} size="lg"
+              onClick={(e) => {
+                setDisabled(true);
+                setTimeout(() => {
+                  setDisabled(false);
+                }, 20000)
+              }
+              } disabled={disabled}>
               Scan to Charge {cartSum.toLocaleString('en-US', {
                 style: 'currency',
                 currency: 'USD',

@@ -1,7 +1,7 @@
 "use client";
 
 import { AppContext } from '@/context';
-import { PaymentFactoryContractAddress, PaymentFactoryFunctionName, buildPaymentContractParams } from '@/lib/contract';
+import { PaymentFactoryContractAddress, PaymentFactoryFunctionName, buildPaymentConfirmationURL, buildPaymentContractParams } from '@/lib/contract';
 import CryptoConverter from '@/lib/currency';
 import { sha256Hasher } from '@/lib/hashing';
 import { Item } from '@/types/item';
@@ -12,32 +12,57 @@ import QRCode from "react-qr-code";
 import { useContractRead } from "wagmi";
 import Layout from '../../../components/layout';
 import paymentFactoryABI from "../../../fixtures/PaymentFactory.json" assert { type: "json" };
+import { post } from '@/api/api';
+import axios from 'axios';
+import PaymentConfirmation from '../payment-confirmation';
 
 
 export default function PaymentScan() {
+  const [error, setError] = useState<string | undefined>(undefined);
+
   const { walletStoreContext } = useContext(AppContext);
   const storePaymentAddress = walletStoreContext?.ethAddress || "0x0000000000000000000000000000000000000000";
   const paymentAmount: number = walletStoreContext?.cart.reduce((acc, item: Item) => item.amount > 0 ? acc + (item.price * Number(item.amount)) : acc, 0) || 0;
 
   const [amountInEth, setAmountInEth] = useState<number>(0);
   const [amountInWei, setAmountInWei] = useState<number>(0);
-  const [hashedData, setHashedData] = useState<string>("");
+
+  const [paymentConfirmation, setPaymentConfirmation] = useState<number>({});
+
+  const [hashedCart, setHashedCart] = useState({});
+  const [cart, setCart] = useState({});
+
 
   useEffect(() => {
     const fetchData = async () => {
       if (walletStoreContext?.cart) {
-        const serializedSaleData = encode(JSON.stringify(walletStoreContext?.cart));
-        let hexHashedData = sha256Hasher(serializedSaleData);
-        setHashedData(hexHashedData);
+        const saleJSON = encode(JSON.stringify(walletStoreContext?.cart));
+        let hashedSaleJSON = sha256Hasher(saleJSON);
+
+        setCart(saleJSON);
+        setHashedCart(hashedSaleJSON);
+
         setAmountInEth(await CryptoConverter.convertUSDtoETH(paymentAmount));
         setAmountInWei(await CryptoConverter.convertETHtoWei(amountInEth));
       }
     }
 
-    fetchData();
-  }, [hashedData])
+    const fetchPaymetConfirmation = async () => {
+      if (contract.data) {
+        console.log("Fetching payment confirmation..");
+        const paymentConfirmationURL = buildPaymentConfirmationURL(contract.data.toString() ?? "");
+        const paymentTransactionData = await axios.get(paymentConfirmationURL);
 
-  const params = buildPaymentContractParams(storePaymentAddress, amountInWei.toString(), `0x${hashedData}`);
+        console.log("paymentConfirmation: ", paymentConfirmation);
+        setPaymentConfirmation(paymentTransactionData.data);
+      }
+    }
+
+    setTimeout(() => { fetchPaymetConfirmation() }, 2000);
+    fetchData();
+  }, [hashedCart, amountInEth, amountInWei])
+
+  const params = buildPaymentContractParams(storePaymentAddress, amountInWei.toString(), `0x${hashedCart}`);
   console.log("[INFO] Payment contract params", params);
 
   const contract = useContractRead({
@@ -48,9 +73,26 @@ export default function PaymentScan() {
   });
 
   let qrCodeURL;
-  if (contract.data) {
-    console.log("[INFO] Contract", contract);
-    qrCodeURL = `ethereum:${contract.data}?value=${amountInWei}`;
+
+  try {
+    if (contract.data && amountInWei) {
+
+      console.log("[INFO] Contract", contract);
+      qrCodeURL = `ethereum:${contract.data}?value=${amountInWei}`;
+
+      const saleData = {
+        store: walletStoreContext?.storeId,
+        amountInUSD: paymentAmount,
+        amountInEth: amountInEth,
+        amountInWei: amountInWei,
+        contractPaymentAddress: PaymentFactoryContractAddress,
+        transactionHash: contract.data,
+        hashedCart: hashedCart,
+      }
+      post('/sale', saleData);
+    }
+  } catch (e) {
+    console.log("[ERROR] Could not save transaction!")
   }
 
   return (
@@ -63,9 +105,9 @@ export default function PaymentScan() {
           gap={30}
           mb={100}
         >
-          {!qrCodeURL && <p>Could not generate QR code for payment.</p>}
           {!walletStoreContext?.cart && <p>Cart is empty! Start a new sale.</p>}
-          {qrCodeURL &&
+          {!qrCodeURL && walletStoreContext?.cart && <p>Generating QR code for payment..</p>}
+          {qrCodeURL && walletStoreContext?.cart && !paymentConfirmation &&
             <>
               <Text>
                 To begin checkout, open the camera on your mobile device and scan the QR code below.
@@ -79,6 +121,11 @@ export default function PaymentScan() {
                   />
                 </div>
               </Container>
+            </>
+          }
+          {qrCodeURL && paymentConfirmation &&
+            <>
+              Pending transaction..
             </>
           }
         </Flex>

@@ -2,7 +2,8 @@ import axios from 'axios';
 axios.defaults.withCredentials = true;
 
 function host() {
-    return process.env.API_URL ?? "http://staging.massmarket.avantsoft.com.br:3000/api";
+    console.log("process.env.NEXT_PUBLIC_API_URL: ", process.env.NEXT_PUBLIC_API_URL);
+    return process.env.NEXT_PUBLIC_API_URL ?? "http://192.168.0.7:3000/api";
 }
 
 export async function get(resource_url: string) {

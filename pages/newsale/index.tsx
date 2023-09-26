@@ -63,11 +63,10 @@ export default function NewSale() {
               color="dark"
               size="lg"
               onClick={() => {
-                disconnect()
-                window.location.href = '/login/wallet-selection';
+                window.location.href = '/newsale';
               }}
             >
-              Connect with different wallet
+              Reload the store
             </Button>
           </>
         }
