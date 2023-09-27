@@ -33,7 +33,7 @@ export default function PaymentScan() {
 
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchPaymentData = async () => {
       if (walletStoreContext?.cart) {
         const saleJSON = encode(JSON.stringify(walletStoreContext?.cart));
         let hashedSaleJSON = sha256Hasher(saleJSON);
@@ -46,21 +46,21 @@ export default function PaymentScan() {
       }
     }
 
-    const fetchPaymentConfirmation = async () => {
+    const fetchPaymentAddress = async () => {
       if (contract.data) {
         console.log("Fetching payment confirmation..");
         const paymentConfirmationURL = buildPaymentConfirmationURL(contract.data.toString() ?? "");
 
         console.log("paymentConfirmationURL: ", paymentConfirmationURL);
-        const paymentTransactionData = await axios.get(paymentConfirmationURL);
+        // const paymentTransactionData = await axios.get(paymentConfirmationURL);
 
-        console.log("paymentTransactionData.data: ", paymentTransactionData.data);
-        setPaymentConfirmation(paymentTransactionData.data);
+        // console.log("paymentTransactionData.data: ", paymentTransactionData.data);
+        // setPaymentConfirmation(paymentTransactionData.data);
       }
     }
 
-    setTimeout(() => { fetchPaymentConfirmation() }, 2000);
-    fetchData();
+    fetchPaymentData();
+    fetchPaymentAddress();
   }, [hashedCart, amountInEth, amountInWei])
 
   const params = buildPaymentContractParams(storePaymentAddress, amountInWei.toString(), `0x${hashedCart}`);
@@ -76,7 +76,7 @@ export default function PaymentScan() {
   let qrCodeURL;
 
   try {
-    if (contract.data && amountInWei) {
+    if (contract.data && amountInWei > 0) {
 
       console.log("[INFO] Contract", contract);
       qrCodeURL = `ethereum:${contract.data}?value=${amountInWei}`;
@@ -86,8 +86,8 @@ export default function PaymentScan() {
         amountInUSD: paymentAmount,
         amountInEth: amountInEth,
         amountInWei: amountInWei,
-        contractPaymentAddress: PaymentFactoryContractAddress,
-        transactionHash: contract.data,
+        paymentFactoryAddress: PaymentFactoryContractAddress,
+        paymentAddress: contract.data,
         hashedCart: hashedCart,
       }
       post('/sale', saleData);
@@ -108,7 +108,7 @@ export default function PaymentScan() {
         >
           {!walletStoreContext?.cart && <p>Cart is empty! Start a new sale.</p>}
           {!qrCodeURL && walletStoreContext?.cart && <p>Generating QR code for payment..</p>}
-          {qrCodeURL && walletStoreContext?.cart && !paymentConfirmation &&
+          {qrCodeURL && walletStoreContext?.cart &&
             <>
               <Text>
                 To begin checkout, open the camera on your mobile device and scan the QR code below.
