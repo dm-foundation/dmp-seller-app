@@ -29,12 +29,12 @@ export default function Transactions() {
   const { itemId } = router.query;
 
   async function handleSubmit() {
-    const formData = {};
-    formData['name'], name || '';
-    formData['sku'] = sku || '';
-    formData['price'] = price?.toString() || '';
-    formData['units'] = units?.toString() || '';
-    formData['storeId'] = walletStoreContext?.storeId.toString() || '';
+    const formData: any = {};
+    formData.name = name || '';
+    formData.sku = sku || '';
+    formData.price = price?.toString() || '';
+    formData.units = units?.toString() || '';
+    formData.storeId = walletStoreContext?.storeId.toString() || '';
 
     console.log("formData:", formData);
 
