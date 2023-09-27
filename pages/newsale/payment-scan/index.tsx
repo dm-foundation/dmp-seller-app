@@ -2,18 +2,19 @@
 
 import { post } from '@/api/api';
 import { AppContext } from '@/context';
-import { PaymentFactoryContractAddress, PaymentFactoryFunctionName, buildPaymentConfirmationURL, buildPaymentContractParams } from '@/lib/contract';
+import { PaymentFactoryContractAddress, PaymentFactoryFunctionName, buildPaymentContractParams } from '@/lib/contract';
 import CryptoConverter from '@/lib/currency';
 import { sha256Hasher } from '@/lib/hashing';
 import { Item } from '@/types/item';
 import { encode } from '@ipld/dag-cbor';
 import { Container, Flex, Text } from '@mantine/core';
-import axios from 'axios';
 import { useContext, useEffect, useState } from 'react';
 import QRCode from "react-qr-code";
 import { useContractRead } from "wagmi";
 import Layout from '../../../components/layout';
 import paymentFactoryABI from "../../../fixtures/PaymentFactory.json" assert { type: "json" };
+import PaymentConfirmation from '@/pages/newsale/payment-confirmation/payment-confirmation';
+import Link from 'next/link';
 
 
 export default function PaymentScan() {
@@ -26,14 +27,12 @@ export default function PaymentScan() {
   const [amountInEth, setAmountInEth] = useState<number>(0);
   const [amountInWei, setAmountInWei] = useState<number>(0);
 
-  const [paymentConfirmation, setPaymentConfirmation] = useState({});
-
   const [hashedCart, setHashedCart] = useState({});
   const [cart, setCart] = useState({});
 
 
   useEffect(() => {
-    const fetchPaymentData = async () => {
+    const fetchPaymentParamsData = async () => {
       if (walletStoreContext?.cart) {
         const saleJSON = encode(JSON.stringify(walletStoreContext?.cart));
         let hashedSaleJSON = sha256Hasher(saleJSON);
@@ -46,21 +45,8 @@ export default function PaymentScan() {
       }
     }
 
-    const fetchPaymentAddress = async () => {
-      if (contract.data) {
-        console.log("Fetching payment confirmation..");
-        const paymentConfirmationURL = buildPaymentConfirmationURL(contract.data.toString() ?? "");
+    fetchPaymentParamsData();
 
-        console.log("paymentConfirmationURL: ", paymentConfirmationURL);
-        // const paymentTransactionData = await axios.get(paymentConfirmationURL);
-
-        // console.log("paymentTransactionData.data: ", paymentTransactionData.data);
-        // setPaymentConfirmation(paymentTransactionData.data);
-      }
-    }
-
-    fetchPaymentData();
-    fetchPaymentAddress();
   }, [hashedCart, amountInEth, amountInWei])
 
   const params = buildPaymentContractParams(storePaymentAddress, amountInWei.toString(), `0x${hashedCart}`);
@@ -122,6 +108,13 @@ export default function PaymentScan() {
                   />
                 </div>
               </Container>
+              <Link
+                href={{
+                  pathname: `/payment-confirmation/${contract.data}`,
+                }}
+              >
+                Go to payment confirmation
+              </Link>
             </>
           }
         </Flex>
