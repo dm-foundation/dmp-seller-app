@@ -27,9 +27,9 @@ export async function post(resource_url: string, data: any) {
     }
 }
 
-export async function patch(resource_url: string, data: any) {
+export async function put(resource_url: string, data: any) {
     try {
-        const response = await axios.patch(`${apiURL()}${resource_url}`, data);
+        const response = await axios.put(`${apiURL()}${resource_url}`, data);
         return response.data;
     } catch (error) {
         console.log(error);

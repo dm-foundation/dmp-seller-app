@@ -1,4 +1,4 @@
-import { Title, Flex, Button } from '@mantine/core';
+import { Title, Flex, Group } from '@mantine/core';
 import Layout from '../../components/layout';
 import { IconBuildingStore, IconSettings, IconZoomMoney } from '@tabler/icons-react';
 import Link from 'next/link';
@@ -12,29 +12,25 @@ export default function More() {
   return (
     <Layout title="Welcome to Mass Market">
       <Title className={classes.subtitle_more}>
-        {walletStoreContext?.name}
+        {walletStoreContext?.name || "Store"}
       </Title>
       <Flex
         justify="flex-start"
         align="flex-start"
         direction="column"
         wrap="nowrap"
+        gap={12}
+        mt={30}
       >
-        <Button className={classes.button_more} leftSection={<IconBuildingStore style={{ width: '28px', height: '28px' }} />} size="xl" variant="light" color="gray" fullWidth>
-          <Link className={classes.link_more} href={'/more/items'}>
-            Items
-          </Link>
-        </Button>
-        <Button className={classes.button_more} leftSection={<IconZoomMoney style={{ width: '28px', height: '28px' }} />} size="xl" variant="light" color="gray" fullWidth>
-          <Link className={classes.link_more} href={'/more/earnings'}>
-            Earnings
-          </Link>
-        </Button>
-        <Button className={classes.button_more} leftSection={<IconSettings style={{ width: '28px', height: '28px' }} />} size="xl" variant="light" color="gray" fullWidth>
-          <Link className={classes.link_more} href={'/more/settings'}>
-            Settings
-          </Link>
-        </Button>
+        <Link className={classes.link_more} href={'/more/items'}>
+          Items
+        </Link>
+        <Link className={classes.link_more} href={'/more/earnings'}>
+          Earnings
+        </Link>
+        <Link className={classes.link_more} href={'/more/settings'}>
+          Settings
+        </Link>
       </Flex>
     </Layout >
   );

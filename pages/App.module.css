@@ -108,9 +108,11 @@
 }
 
 .link_more {
-    font-size: larger;
+    font-size: 28px;
+    font-weight: 700;
     text-decoration: none;
     text-decoration-color: #fff;
+    letter-spacing: -2;
     color: #666;
 }
 

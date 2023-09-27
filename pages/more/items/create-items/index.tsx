@@ -110,7 +110,7 @@ export default function CreateItems() {
           label="Units for Sale"
           size="md"
           type="number"
-          placeholder="12"
+          placeholder="1"
           value={units}
           onChange={(e) => setUnits(Number(e.target.value))}
         />

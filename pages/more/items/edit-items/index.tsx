@@ -6,7 +6,7 @@ import Link from 'next/link';
 import classes from '@/pages/App.module.css';
 import { useContext, useEffect, useState } from 'react';
 import { AppContext } from '@/context';
-import { get, patch } from '@/api/api';
+import { get, put } from '@/api/api';
 import { useRouter } from 'next/router';
 
 interface EditItemProps {
@@ -27,34 +27,21 @@ export default function Transactions() {
   const { walletStoreContext } = useContext(AppContext);
   const router = useRouter();
   const { itemId } = router.query;
-  
-  useEffect(()=>{
-    console.log(price, units, thumbnail, sku, name);
-  },[name,sku,price,units])
 
   async function handleSubmit() {
-    if (name && sku && price && units && thumbnail) {
-      const formData = new FormData();
+    const formData = {};
+    formData['name'], name || '';
+    formData['sku'] = sku || '';
+    formData['price'] = price?.toString() || '';
+    formData['units'] = units?.toString() || '';
+    formData['storeId'] = walletStoreContext?.storeId.toString() || '';
 
-      
+    console.log("formData:", formData);
 
-      formData.append('name', name);
-      formData.append('sku', sku);
-      formData.append('price', price.toString());
-      formData.append('units', units.toString());
-      formData.append('thumbnail', thumbnail);
-      formData.append('storeId', walletStoreContext?.storeId.toString() || '');
-
-      console.log(formData)
-
-      try {
-        const updatedItem = await patch(`/item/${itemId}`, formData);
-        console.log('🚀 ~ file: index.tsx:45 ~ handleSubmit ~ updatedItem:', updatedItem);
-      } catch (error) {
-        console.error('Error while creating item:', error);
-      }
-    } else {
-      console.error('Please fill all fields');
+    try {
+      const updatedItem = await put(`/item/${itemId}`, formData);
+    } catch (error) {
+      console.error('Error while creating item:', error);
     }
   }
 
@@ -122,28 +109,25 @@ export default function Transactions() {
           onChange={(e) => setName(e.target.value)}
         />
         <TextInput
-          label="SKU"
-          size="md"
-          type="text"
-          placeholder="MIL-001"
-          value={sku}
-          onChange={(e) => setSku(e.target.value)}
-        />
-        <TextInput
           label="Price"
           size="md"
           type="number"
-          placeholder="$ 0.00"
           value={price}
           onChange={(e) => setPrice(Number(e.target.value))}
+        />
+        <TextInput
+          label="SKU"
+          size="md"
+          type="text"
+          value={sku}
+          disabled
         />
         <TextInput
           label="Units for Sale"
           size="md"
           type="number"
-          placeholder="12"
           value={units}
-          onChange={(e) => setUnits(Number(e.target.value))}
+          disabled
         />
         <Link className={classes.link} href={'/more/items'} style={{ display: 'contents' }}>
           <Button color="dark" w={'100%'} size="lg" onClick={handleSubmit}>

@@ -4,7 +4,7 @@ import { WalletStoreContext } from '@/types/wallet-store.context';
 import { Button, Flex } from '@mantine/core';
 import Link from 'next/link';
 import { useContext, useEffect, useState } from 'react';
-import { useAccount, useDisconnect } from 'wagmi';
+import { useAccount } from 'wagmi';
 import { get } from '../../api/api';
 import Layout from '../../components/layout';
 import SaleItem from '../../components/sale-item/sale-item';
@@ -13,7 +13,6 @@ import classes from '@/pages/App.module.css';
 
 export default function NewSale() {
   const { address } = useAccount();
-  const { disconnect } = useDisconnect();
   const [error, setError] = useState<string | undefined>(undefined);
 
   const [saleItems, setSaleItems] = useState<Item[]>([]);
