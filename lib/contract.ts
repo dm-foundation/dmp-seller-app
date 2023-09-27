@@ -3,7 +3,7 @@ const DEFAULT_PAYMENT_PROOF_ADDRESS = "0x000000000000000000000000000000000000000
 const USDC_CURRENCY_ADDRESS = "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48" // USDC
 
 const ETHERSCAN_API_KEY = "BPPR4YEESP9GSPKCE2EEKRMMVFPZAIGI4J";
-const ETHERSCAN_API_URL = "https://api-sepolia.etherscan.io/api";
+const ETHERSCAN_API_URL = "http://api-sepolia.etherscan.io/api";
 
 
 export function buildPaymentConfirmationURL(address: string) {

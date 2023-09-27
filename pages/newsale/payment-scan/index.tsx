@@ -13,7 +13,6 @@ import QRCode from "react-qr-code";
 import { useContractRead } from "wagmi";
 import Layout from '../../../components/layout';
 import paymentFactoryABI from "../../../fixtures/PaymentFactory.json" assert { type: "json" };
-import PaymentConfirmation from '@/pages/newsale/payment-confirmation/payment-confirmation';
 import Link from 'next/link';
 
 
@@ -110,7 +109,7 @@ export default function PaymentScan() {
               </Container>
               <Link
                 href={{
-                  pathname: `/payment-confirmation/${contract.data}`,
+                  pathname: `/newsale/payment-confirmation/${contract.data}`,
                 }}
               >
                 Go to payment confirmation

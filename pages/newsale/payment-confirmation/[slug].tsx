@@ -16,28 +16,25 @@ export default function Page() {
   const router = useRouter();
 
   useEffect(() => {
-
     const fetchTransactionConfirmation = async () => {
-      const paymentConfirmationURL = buildPaymentConfirmationURL(router.query.slug?.toString() ?? "");
+      const paymentConfirmationURL = buildPaymentConfirmationURL(router.query.slug as string);
 
       console.log("paymentConfirmationURL: ", paymentConfirmationURL);
       const paymentTransactionData = await axios.get(paymentConfirmationURL, {
         withCredentials: false,
         headers: {
           'Content-Type': 'application/json;charset=UTF-8',
-          'Access-Control-Allow-Origin': '*'
         },
       });
 
-      console.log("paymentTransactionData.data: ", paymentTransactionData);
-      setTransactionConfirmation(paymentTransactionData);
+      console.log("paymentTransactionData.data: ", paymentTransactionData.data);
+      setTransactionConfirmation(paymentTransactionData.data);
     }
 
-    fetchTransactionConfirmation();
-  }, [])
-
-  console.log("router.query", router.query);
-  console.log("transactionConfirmation:", transactionConfirmation);
+    setInterval(() => {
+      fetchTransactionConfirmation();
+    }, 7000)
+  }, [router.query.slug])
 
   return (
     <>
@@ -47,7 +44,8 @@ export default function Page() {
           justify="center"
           align="center"
         >
-          {transactionStatus === 'PENDING' &&
+          {
+            transactionConfirmation.status !== '1' &&
             <>
               <Loader color="black" />
               <h2>
@@ -58,23 +56,24 @@ export default function Page() {
               </Text>
             </>
           }
+
           {
-            transactionStatus === 'COMPLETE' &&
+            transactionConfirmation.status === '1' &&
             <>
               <Avatar variant="light" radius="xs" size="lg" src="../green-checkmark-icon.png" />
               <h2>
                 Transaction complete
               </h2>
               <Text mb={20} >
-                Your transaction of {0.0034} ETH has been confirmed.
+                Your transaction has been confirmed.
               </Text>
-              <Link className={classes.link_transaction_confirmation} href={''} >
+              <Link className={classes.link_transaction_confirmation} href={`https://sepolia.etherscan.io/tx/${transactionConfirmation.result[0].hash}`} >
                 View on Block Explorer
               </Link>
             </>
           }
         </Flex>
-      </Layout>
+      </Layout >
     </>
   );
 }
