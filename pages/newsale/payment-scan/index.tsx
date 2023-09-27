@@ -20,8 +20,11 @@ export default function PaymentScan() {
   const [error, setError] = useState<string | undefined>(undefined);
 
   const { walletStoreContext } = useContext(AppContext);
+
+  const cartItems = walletStoreContext?.cart.filter(item => item.amount > 0) || [];
+  const amountInUSD: number = cartItems?.reduce((acc, item: Item) => acc + (item.price * Number(item.amount)), 0) || 0;
+
   const storePaymentAddress = walletStoreContext?.ethAddress || "0x0000000000000000000000000000000000000000";
-  const paymentAmount: number = walletStoreContext?.cart.reduce((acc, item: Item) => item.amount > 0 ? acc + (item.price * Number(item.amount)) : acc, 0) || 0;
 
   const [amountInEth, setAmountInEth] = useState<number>(0);
   const [amountInWei, setAmountInWei] = useState<number>(0);
@@ -39,7 +42,7 @@ export default function PaymentScan() {
         setCart(saleJSON);
         setHashedCart(hashedSaleJSON);
 
-        setAmountInEth(await CryptoConverter.convertUSDtoETH(paymentAmount));
+        setAmountInEth(await CryptoConverter.convertUSDtoETH(amountInUSD));
         setAmountInWei(await CryptoConverter.convertETHtoWei(amountInEth));
       }
     }
@@ -66,16 +69,17 @@ export default function PaymentScan() {
       console.log("[INFO] Contract", contract);
       qrCodeURL = `ethereum:${contract.data}?value=${amountInWei}`;
 
-      const saleData = {
+      const orderData = {
         store: walletStoreContext?.storeId,
-        amountInUSD: paymentAmount,
+        amountInUSD: amountInUSD,
         amountInEth: amountInEth,
         amountInWei: amountInWei,
         paymentFactoryAddress: PaymentFactoryContractAddress,
         paymentAddress: contract.data,
         hashedCart: hashedCart,
+        items: cartItems.map(item => item.id)
       }
-      post('/sale', saleData);
+      post('/order', orderData);
     }
   } catch (e) {
     console.log("[ERROR] Could not save transaction!")
