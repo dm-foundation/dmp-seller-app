@@ -11,7 +11,7 @@ import Layout from '../../../components/layout';
 
 export default function Page() {
 
-  const [transactionConfirmation, setTransactionConfirmation] = useState({});
+  const [transactionConfirmation, setTransactionConfirmation] = useState<any>({});
   const [transactionStatus, setTansactionStatus] = useState("PENDING");
   const router = useRouter();
 
@@ -45,7 +45,7 @@ export default function Page() {
           align="center"
         >
           {
-            transactionConfirmation.status !== '1' &&
+            transactionConfirmation?.status !== '1' &&
             <>
               <Loader color="black" />
               <h2>
@@ -58,7 +58,7 @@ export default function Page() {
           }
 
           {
-            transactionConfirmation.status === '1' &&
+            transactionConfirmation?.status === '1' &&
             <>
               <Avatar variant="light" radius="xs" size="lg" src="../green-checkmark-icon.png" />
               <h2>
