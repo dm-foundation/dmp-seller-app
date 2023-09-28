@@ -40,6 +40,7 @@ export default function NewSale() {
         const storeData = await get(`/store/${walletAddressData?.storeId}`);
         const walletStoreObj = { ...storeData, ...walletAddressData };
         updateContext(walletStoreObj);
+        console.log(walletStoreObj);
 
         const storeItemsData: Item[] = await get(`/store/${walletAddressData?.storeId}/items`);
         setSaleItems(storeItemsData);
@@ -49,7 +50,7 @@ export default function NewSale() {
         setError(errorMsg);
       }
     }
-    setTimeout(() => fetchWalletStore(), 1000)
+    setTimeout(() => fetchWalletStore(), 500)
   }, [address]);
 
   return (
@@ -57,7 +58,7 @@ export default function NewSale() {
       <Flex direction="column" justify="stretch" align="center" mb={100}>
         {error &&
           <>
-            <p className={classes.error}>An error occurred: {error}</p>
+            <p className={classes.error}>An error occurred: {error} {address}</p>
             <Button
               color="dark"
               size="lg"

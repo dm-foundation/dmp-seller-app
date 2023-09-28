@@ -50,7 +50,7 @@ export default function SaleItem(props: SaleItemProps) {
           </Flex>
         </Group>
         {!props.isInCart ? (
-          <Group>
+          <Group w={'25%'}>
             <Flex justify="flex-end" align="flex-end" direction="column" wrap="wrap" mt={-15}>
               {props.exclude_select_units ? (
                 <></>

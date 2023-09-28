@@ -103,7 +103,6 @@ export default function Transactions() {
         <TextInput
           label="Name"
           size="md"
-          placeholder="e.g. Milan Travel Poster"
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
@@ -120,6 +119,7 @@ export default function Transactions() {
           size="md"
           type="text"
           value={sku}
+          style={{ color: '#000'! }}
           disabled
         />
         <TextInput
@@ -127,6 +127,7 @@ export default function Transactions() {
           size="md"
           type="number"
           value={units}
+          style={{ color: '#000'! }}
           disabled
         />
         <Link className={classes.link} href={'/more/items'} style={{ display: 'contents' }}>

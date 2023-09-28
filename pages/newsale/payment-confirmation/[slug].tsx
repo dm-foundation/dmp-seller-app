@@ -23,7 +23,9 @@ export default function Page() {
       const paymentTransactionData = await axios.get(paymentConfirmationURL, {
         withCredentials: false,
         headers: {
-          'Content-Type': 'application/json;charset=UTF-8',
+          'Content-Type': 'application/json; charset=utf-8',
+          'Access-Control-Allow-Origin': '*',
+          'X-Frame-Options': 'SAMEORIGIN',
         },
       });
 

@@ -8,25 +8,32 @@ import { useContext } from 'react';
 import { BaseError } from 'viem';
 import { useAccount, useConnect } from 'wagmi';
 import classes from '@/pages/App.module.css';
+import { useEffect, useState } from 'react';
 
 export function Connect() {
   const { address, connector, isConnected } = useAccount();
   const { connect, connectors, error } = useConnect();
   const { updateContext } = useContext(AppContext);
 
-  async function fetchWalletStore() {
-    const walletAddressData = await get(`/wallet-address/${address}`);
-    const storeData = await get(`/store/${walletAddressData?.storeId}`);
-    const walletStoreObj = { ...storeData, ...walletAddressData };
-    updateContext(walletStoreObj);
-  }
+  useEffect(() => {
+    const fetchWalletStore = async () => {
+      if (address) {
+        const walletAddressData = await get(`/wallet-address/${address}`);
+        const storeData = await get(`/store/${walletAddressData?.storeId}`);
+        const walletStoreObj = { ...storeData, ...walletAddressData };
+        updateContext(walletStoreObj);
+      }
+    }
+
+    fetchWalletStore();
+  }, [address]);
 
   return (
     <div>
       {isConnected && (
         <>
           <Link className={classes.link} href={'/newsale'} style={{ display: 'contents' }}>
-            <Button color="dark" size="lg" onClick={fetchWalletStore}>
+            <Button color="dark" size="lg">
               Go to your store
             </Button>
           </Link>
