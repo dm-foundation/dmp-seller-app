@@ -119,7 +119,7 @@ export default function PaymentScan() {
               </Flex >
               <Paper shadow="xs" p="xl">
                 <Text fz={'sm'}>
-                  <b>Payment address:</b> {contract?.data}
+                  <b>Payment address:</b> {contract?.data as string}
                 </Text>
                 <Table mt={30} mb={30}>
                   <Table.Thead>
