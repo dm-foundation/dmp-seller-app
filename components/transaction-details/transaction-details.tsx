@@ -8,6 +8,8 @@ import {
   Button,
   Table,
   Paper,
+  Box,
+  Space,
 } from '@mantine/core';
 import { IconReceipt2, IconChevronRight } from '@tabler/icons-react';
 import classes from '@/pages/App.module.css';
@@ -44,93 +46,86 @@ interface TransactionDetailsProps {
 }
 
 export default function TransactionDetails({ orders }: any) {
-  const tableStyle = {
-    width: '100%',
-    borderCollapse: 'collapse',
-    border: '1px solid #e2e8f0',
-  };
 
-  const thTdStyle = {
-    border: '1px solid #e2e8f0',
-    padding: '8px',
-    textAlign: 'left',
-  };
+  const rows = orders?.items.map((item: any) => (
+    <Table.Tr key={item.id}>
+      <Table.Td>{item.units}</Table.Td>
+      <Table.Td>{item.sku}</Table.Td>
+      <Table.Td>{item.name}</Table.Td>
+      <Table.Td>{item.price.toFixed(2)}</Table.Td>
+    </Table.Tr>
+  ));
 
   return (
     <Container style={{ width: '100%', padding: 0 }}>
       <Group gap={'sm'} mb={15} justify="space-between">
         <Group gap={'lg'}>
-          <IconReceipt2 style={{ width: '48px', height: '48px', marginTop: '0px' }} />
-          <Flex justify="flex-start" align="flex-start" direction="column" gap={0.5}>
-            <Text className={classes.itemTitle_transactions} mb={-5}>
-              {'$' + orders?.amountInUSD}
-            </Text>
-            <Text color="dimmed" size="md">
-              {orders?.customer_email}
-            </Text>
-          </Flex>
-        </Group>
-        <Group gap={'sm'}>
-          <Stack>
-            <Text className={classes.itemTitle_transactions} size="lg">
+          <Flex justify="flex-start" align="flex-start" direction="column" gap={5}>
+            <Text className={classes.transaction_title} mb={-5}>
+              {new Date(orders?.created_at).toLocaleDateString('en-US', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+              })}
+              {' - '}
               {new Date(orders?.created_at).toLocaleTimeString('en-US', {
                 hour: '2-digit',
                 minute: '2-digit',
               })}
             </Text>
-          </Stack>
+            {!orders?.paymentTransactionHash && <Text size="sm" color="orange">Transaction hash: pending</Text>}
+            {orders?.paymentTransactionHash && <Text size="sm">Transaction hash: {orders?.paymentTransactionHash}</Text>}
+          </Flex>
         </Group>
       </Group>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-        <div>
-          <Text size="sm">{orders?.paymentTransactionHash}</Text>
-        </div>
+      <Table>
+        <Table.Thead>
+          <Table.Tr>
+            <Table.Th>QTY</Table.Th>
+            <Table.Th>CODE</Table.Th>
+            <Table.Th>DESCRIPTION</Table.Th>
+            <Table.Th>PRICE</Table.Th>
+          </Table.Tr>
+        </Table.Thead>
+        <Table.Tbody>{rows}</Table.Tbody>
+      </Table>
 
-        <div style={{ flex: '1' }}>
-          <Paper shadow="xs" p="lg">
-            <Table striped style={{ minWidth: '100%' }}>
-              <thead>
-                <tr>
-                  <th>SKU</th>
-                  <th>Name</th>
-                  <th>Price</th>
-                </tr>
-              </thead>
-              <tbody>
-                {orders?.items.map((item: any) => (
-                  <tr key={item.id}>
-                    <td>{item.sku}</td>
-                    <td>{item.name}</td>
-                    <td>${item.price.toFixed(2)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </Table>
-          </Paper>
-        </div>
-
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <div>
-              <Text>Amount in USD:</Text>
-              <Text>${orders?.amountInUSD}</Text>
-            </div>
-            <div>
-              <Text>Amount in ETH:</Text>
-              <Text>{orders?.amountInEth} ETH</Text>
-            </div>
-            <div>
-              <Text>Amount in WEI:</Text>
-              <Text>{orders?.amountInWei} WEI</Text>
-            </div>
-          </div>
-        </div>
-      </div>
+      <Flex justify="flex-start" align="flex-start" direction="column" gap={5} mt={30}>
+        <Table>
+          <Table.Tbody>
+            <Table.Tr>
+              <Flex
+                gap="md"
+                justify="flex-start"
+                align="flex-start"
+                direction="column"
+                wrap="wrap"
+                mt={10}
+              >
+                <Text size="sm" fw={600}>TOTAL</Text>
+              </Flex>
+              <Table.Th>
+                <Flex
+                  gap="md"
+                  justify="flex-start"
+                  align="flex-end"
+                  direction="column"
+                  wrap="wrap"
+                >
+                  <Text size="sm" fw={600}>{orders?.amountInUSD} USD</Text>
+                  <Text size="sm" fw={600}>{orders?.amountInEth} ETH</Text>
+                  <Text size="sm" fw={600}>{orders?.amountInWei} WEI</Text>
+                </Flex>
+              </Table.Th>
+            </Table.Tr>
+          </Table.Tbody>
+        </Table>
+      </Flex>
 
       <Button className={classes.button} color="dark" w={'100%'} size="lg" mt={30}>
         Send receipt
       </Button>
-    </Container>
+    </Container >
   );
 }

@@ -1,9 +1,10 @@
+import { get } from '@/api/api';
+import { AppContext } from '@/context';
+import classes from '@/pages/App.module.css';
 import { Flex, Loader } from '@mantine/core';
+import { useContext, useEffect, useState } from 'react';
 import Layout from '../../components/layout';
 import TransactionItem from '../../components/transaction-item/transaction-item';
-import { get } from '@/api/api';
-import { useContext, useEffect, useState } from 'react';
-import { AppContext } from '@/context';
 
 export type ItemProps = {
   id: number;
@@ -32,39 +33,43 @@ export type TransactionProps = {
 };
 
 export default function Transactions() {
-  const { walletStoreContext, updateContext } = useContext(AppContext);
+  const { walletStoreContext } = useContext(AppContext);
   const [orders, setOrders] = useState<TransactionProps[]>([]);
-
-  const fetchTransations = async () => {
-    try {
-      const response = await get(`/store/${walletStoreContext?.storeId}/store-orders-items`);
-      setOrders(response);
-
-      
-    } catch (error) {}
-  };
-
-  const [isLoad, setLoad] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const loadingTransations = async () => {
-      await fetchTransations();
-      setLoad(true);
+
+    const fetchStoreTransactions = async () => {
+      try {
+        setLoading(true);
+        const storeOrderItemData = await get(`/store/${walletStoreContext?.storeId}/store-orders-items`);
+        console.log("orders", orders);
+        setOrders(storeOrderItemData);
+        setLoading(false);
+      } catch (error) {
+        console.log("Error fetching API data from store", `/store/${walletStoreContext?.storeId}/store-orders-items`, error)
+      }
     };
 
-    if (!isLoad) loadingTransations();
-  }, [isLoad]);
+    setTimeout(() => fetchStoreTransactions(), 700)
+
+  }, []);
 
   return (
     <Layout title="Transactions">
       <Flex direction="column" justify="center" align="center" mb={100}>
-        {!isLoad && <Loader size={30} />}
-        {orders.map((order) => (
+        {loading &&
+          <>
+            <Loader size={40} color='#000' />
+            <p className={classes.error}>Loading past transactions data...</p>
+          </>
+        }
+        {!loading && orders.map((order) => (
           <TransactionItem
             key={order.id}
-            seller_name={order.customer_email}
+            sellerName={order.customer_email}
             priceUSD={order.amountInUSD}
-            transaction_timestamp={new Date(order.created_at)}
+            transactionTimestamp={new Date(order.created_at)}
             orders={orders}
             id={order.id}
           />

@@ -7,7 +7,7 @@ import CryptoConverter from '@/lib/currency';
 import { sha256Hasher } from '@/lib/hashing';
 import { Item } from '@/types/item';
 import { encode } from '@ipld/dag-cbor';
-import { Container, Flex, Text } from '@mantine/core';
+import { Button, Container, Flex, Paper, Stack, Table, Text } from '@mantine/core';
 import { useContext, useEffect, useState } from 'react';
 import QRCode from "react-qr-code";
 import { useContractRead } from "wagmi";
@@ -92,7 +92,7 @@ export default function PaymentScan() {
           direction="column"
           justify="center"
           align="center"
-          gap={30}
+          gap={20}
           mb={100}
         >
           {!walletStoreContext?.cart && <p>Cart is empty! Start a new sale.</p>}
@@ -102,25 +102,60 @@ export default function PaymentScan() {
               <Text>
                 To begin checkout, open the camera on your mobile device and scan the QR code below.
               </Text>
-              <Container>
-                <div style={{ height: "auto", margin: "0 auto", maxWidth: 300, width: "100%" }}>
+              <Flex
+                direction="column"
+                justify="center"
+                align="center"
+                gap={10}
+                mb={20}
+              >
+                <Container mt={30} style={{ height: "auto", margin: "0 auto", maxWidth: 300, width: "100%" }}>
                   <QRCode
-                    size={300}
+                    size={250}
                     style={{ height: "auto", maxWidth: "100%", width: "100%" }}
                     value={qrCodeURL}
                   />
-                </div>
-              </Container>
-              <Link
-                href={{
-                  pathname: `/newsale/payment-confirmation/${contract.data}`,
-                }}
-              >
-                Go to payment confirmation
-              </Link>
+                </Container>
+              </Flex >
+              <Paper shadow="xs" p="xl">
+                <Text fz={'sm'}>
+                  <b>Payment address:</b> {contract?.data}
+                </Text>
+                <Table mt={30} mb={30}>
+                  <Table.Thead>
+                    <Table.Tr>
+                      <Table.Th><b>Total Payment Amount:</b></Table.Th>
+                      <Table.Th></Table.Th>
+                    </Table.Tr>
+                  </Table.Thead>
+                  <Table.Tbody>
+                    <Table.Tr>
+                      <Table.Td></Table.Td>
+                      <Table.Td>{amountInUSD.toLocaleString('en-US', { style: 'currency', currency: 'USD' })} USD</Table.Td>
+                    </Table.Tr>
+                    <Table.Tr>
+                      <Table.Td></Table.Td>
+                      <Table.Td>{amountInEth} ETH</Table.Td>
+                    </Table.Tr>
+                    <Table.Tr>
+                      <Table.Td></Table.Td>
+                      <Table.Td>{amountInWei} WEI</Table.Td>
+                    </Table.Tr>
+                  </Table.Tbody>
+                </Table>
+                <Button color="dark" w={"100%"} size="lg">
+                  <Link style={{ textDecoration: 'none', color: '#fff' }}
+                    href={{
+                      pathname: `/newsale/payment-confirmation/${contract.data}`,
+                    }}
+                  >
+                    Go to payment confirmation
+                  </Link>
+                </Button>
+              </Paper>
             </>
           }
-        </Flex>
+        </Flex >
       </Layout >
     </>
   );

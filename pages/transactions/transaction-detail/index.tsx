@@ -1,10 +1,8 @@
-import { Flex, Loader } from '@mantine/core';
-import Layout from '../../../components/layout';
-import TransactionItem from '../../../components/transaction-item/transaction-item';
-import { get } from '@/api/api';
-import { useContext, useEffect, useState } from 'react';
-import { AppContext } from '@/context';
 import TransactionDetails from '@/components/transaction-details/transaction-details';
+import { AppContext } from '@/context';
+import { Flex, Loader } from '@mantine/core';
+import { useContext, useEffect, useState } from 'react';
+import Layout from '../../../components/layout';
 
 export type ItemProps = {
   id: number;
@@ -34,32 +32,25 @@ export type TransactionProps = {
 };
 
 export default function TransactionDetail() {
-  const { walletStoreContext, updateContext, orderContext } = useContext(AppContext);
+  const { orderContext } = useContext(AppContext);
   const [orders, setOrders] = useState<any>([]);
 
-
-  const [isLoad, setLoad] = useState(false);
+  const [loading, isLoading] = useState(false);
 
   useEffect(() => {
-    const loadingTransations = async () => {
-        setOrders(orderContext)
-
-        setLoad(true)
+    const loadingTransactions = async () => {
+      setOrders(orderContext)
+      isLoading(true)
     }
 
-    if(!isLoad) loadingTransations()
-  },[isLoad])
-
-
-  console.log("orders")
-
-console.log(orderContext)
+    if (!loading) loadingTransactions()
+  }, [])
 
   return (
     <Layout title="Transaction Details">
       <Flex direction="column" justify="center" align="center" mb={100}>
-        {!isLoad && <Loader size={30} />}
-        <TransactionDetails orders={orders}/>
+        {!loading && <Loader size={30} />}
+        <TransactionDetails orders={orders} />
       </Flex>
     </Layout>
   );

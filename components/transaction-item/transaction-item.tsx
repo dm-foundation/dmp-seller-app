@@ -1,66 +1,64 @@
-import { Text, Group, Flex, Stack, ActionIcon, Container } from '@mantine/core';
-import { IconReceipt2, IconChevronRight } from '@tabler/icons-react';
-import classes from '@/pages/App.module.css';
-import { useContext } from 'react';
 import { AppContext } from '@/context';
+import classes from '@/pages/App.module.css';
+import { ItemProps } from '@/pages/transactions';
+import { ActionIcon, Container, Flex, Group, Stack, Text } from '@mantine/core';
+import { IconArrowBadgeRightFilled, IconCircle, IconCoin, IconInfoHexagonFilled, IconMessageCircleExclamation, IconReceipt } from '@tabler/icons-react';
 import Link from 'next/link';
+import { useContext } from 'react';
 
 interface TransactionItemProps {
-  seller_name: string;
+  sellerName: string;
   priceUSD: number;
-  transaction_timestamp: Date;
+  transactionTimestamp: Date;
   orders?: any;
   id?: number;
 }
 
 export default function TransactionItem({
-  seller_name,
+  sellerName,
   priceUSD,
-  transaction_timestamp,
+  transactionTimestamp,
   orders,
   id
 }: TransactionItemProps) {
   const { updateCtxOrder } = useContext(AppContext);
 
-  
-  const handleGetTransaction = (id:number | undefined) => {
-    const getOrder = orders.find((order:any) => order.id === id);
-    updateCtxOrder(getOrder);
+
+  const findTransactionDetailsById = (id: number | undefined) => {
+    const order = orders.find((order: any) => order.id === id);
+    updateCtxOrder(order);
   }
 
   return (
     <Container w={'100%'} pl={0} pr={0}>
       <Group gap={'sm'} mb={15} justify="space-between">
         <Group gap={'lg'}>
-          <IconReceipt2 style={{ width: '48', height: '48', marginTop: '0px' }} />
-          <Flex justify="flex-start" align="flex-start" direction="column" gap={0.5}>
-            <Text className={classes.itemTitle_transactions} mb={-5}>
+          <IconCoin style={{ width: '48', height: '48', marginTop: '0px' }} />
+          <Flex justify="flex-start" align="flex-start" direction="column" mb={0}>
+            <Text className={classes.transaction_title} mt={5}>
               {'$' +
                 priceUSD.toLocaleString('en-US', {
                   style: 'currency',
                   currency: 'USD',
                 })}
             </Text>
-            <Text c="dimmed" fz="md">
-              {seller_name}
+            <Text c="dimmed" fz="12px">
+              {/* {orders?.items?.map((item: ItemProps) => item.name).join(', ')} */}
+              Poster (2x), LoTR Poster (1x)
             </Text>
           </Flex>
         </Group>
         <Group gap={'sm'}>
           <Stack>
-            <Text className={classes.itemTitle_transactions} fz="lg">
-              {transaction_timestamp.toLocaleTimeString('en-US', {
+            <Text>
+              {transactionTimestamp.toLocaleTimeString('en-US', {
                 hour: '2-digit',
                 minute: '2-digit',
               })}
             </Text>
           </Stack>
-          < Link href={`/transactions/transaction-detail`}>
-          <ActionIcon className={classes.button_transactions} onClick={() => handleGetTransaction(id)} >
-            <IconChevronRight
-              style={{ width: '36px', height: '36px' }}
-            />
-          </ActionIcon>
+          < Link href={`/transactions/transaction-detail`} onClick={() => findTransactionDetailsById(id)}>
+            <IconArrowBadgeRightFilled style={{ width: '24px', height: '24px', marginTop: '5px', color: '#666' }} />
           </ Link>
         </Group>
       </Group>

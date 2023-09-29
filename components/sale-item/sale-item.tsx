@@ -101,10 +101,7 @@ export default function SaleItem(props: SaleItemProps) {
           >
             {!props.isInCart
               ? props.priceUSD.toLocaleString('en-US', { style: 'currency', currency: 'USD' })
-              : (props.priceUSD * Number(props.amount)).toLocaleString('en-US', {
-                style: 'currency',
-                currency: 'USD',
-              })}
+              : (props.priceUSD * Number(props.amount)).toLocaleString('en-US', { style: 'currency', currency: 'USD' })}
           </Text>
         </Flex>
       </Group>

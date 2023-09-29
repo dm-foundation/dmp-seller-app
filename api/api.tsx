@@ -5,7 +5,6 @@ axios.defaults.headers = { 'Access-Control-Allow-Origin': '*' }
 
 function apiURL() {
     const apiURL = process.env.NEXT_PUBLIC_API_URL ?? "https://d2v76rwlkzvt6c.cloudfront.net/api"
-    console.log("apiURL: ", apiURL);
     return apiURL;
 }
 

@@ -1,7 +1,7 @@
 import { AppContext } from '@/context';
 import { Item } from '@/types/item';
 import { WalletStoreContext } from '@/types/wallet-store.context';
-import { Button, Flex } from '@mantine/core';
+import { Button, Flex, Loader } from '@mantine/core';
 import Link from 'next/link';
 import { useContext, useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
@@ -40,7 +40,7 @@ export default function NewSale() {
         const storeData = await get(`/store/${walletAddressData?.storeId}`);
         const walletStoreObj = { ...storeData, ...walletAddressData };
         updateContext(walletStoreObj);
-        console.log(walletStoreObj);
+        console.log("walletStoreContext: ", walletStoreContext);
 
         const storeItemsData: Item[] = await get(`/store/${walletAddressData?.storeId}/items`);
         setSaleItems(storeItemsData);
@@ -70,31 +70,39 @@ export default function NewSale() {
             </Button>
           </>
         }
-        {!error && saleItems.length == 0 && <p className={classes.error}>Loading store items..</p>}
-        {!error && saleItems.length > 0 &&
-          saleItems.map((item) => {
-            return (
-              <SaleItem
-                key={item['id']}
-                id={item['id']}
-                thumbnail={item['thumbnail']}
-                name={item['name']}
-                stock={item['units']}
-                priceUSD={item['price']}
-                amount={selectedItems.filter((item) => item.id == item['id'])[0]?.amount || 0}
-                showPriceInEthereum={true}
-                isInCart={false}
-                itemHandler={itemHandler}
-              />
-            );
-          })
+        {!error && saleItems.length == 0 &&
+          <>
+            <Loader size={40} color='#000' />
+            <p className={classes.error}>Loading store items..</p>
+          </>
         }
-        {!error &&
-          < Link href={'/newsale/checkout'} style={{ display: 'contents' }}>
-            <Button className={classes.button} color="dark" w={'100%'} size="lg" onClick={updateCart}>
-              Proceed to checkout
-            </Button>
-          </Link>}
+        {!error && saleItems.length > 0 &&
+          <>
+            {
+              saleItems.map((item) => {
+                return (
+                  <SaleItem
+                    key={item['id']}
+                    id={item['id']}
+                    thumbnail={item['thumbnail']}
+                    name={item['name']}
+                    stock={item['units']}
+                    priceUSD={item['price']}
+                    amount={selectedItems.filter((item) => item.id == item['id'])[0]?.amount || 0}
+                    showPriceInEthereum={true}
+                    isInCart={false}
+                    itemHandler={itemHandler}
+                  />
+                )
+              })
+            }
+            < Link href={'/newsale/checkout'} style={{ display: 'contents' }}>
+              <Button className={classes.button} color="dark" w={'100%'} size="lg" onClick={updateCart}>
+                Proceed to checkout
+              </Button>
+            </Link>
+          </>
+        }
       </Flex>
     </Layout >
   );
