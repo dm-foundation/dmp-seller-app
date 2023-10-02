@@ -12,6 +12,7 @@ import { useContext, useEffect, useState } from 'react';
 import QRCode from "react-qr-code";
 import { useContractRead } from "wagmi";
 import Layout from '../../../components/layout';
+// import paymentFactoryABI from "../../../fixtures/PaymentFactory.json" assert { type: "json" };
 import paymentFactoryABI from "../../../fixtures/PaymentFactory.json" assert { type: "json" };
 import Link from 'next/link';
 
