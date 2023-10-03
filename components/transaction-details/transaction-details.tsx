@@ -1,18 +1,12 @@
-import {
-  Text,
-  Group,
-  Flex,
-  Stack,
-  ActionIcon,
-  Container,
-  Button,
-  Table,
-  Paper,
-  Box,
-  Space,
-} from '@mantine/core';
-import { IconReceipt2, IconChevronRight } from '@tabler/icons-react';
 import classes from '@/pages/App.module.css';
+import {
+  Button,
+  Container,
+  Flex,
+  Group,
+  Table,
+  Text
+} from '@mantine/core';
 
 interface ItemProps {
   id: number;

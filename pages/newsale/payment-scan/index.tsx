@@ -1,89 +1,109 @@
 "use client";
 
-import { post } from '@/api/api';
 import { AppContext } from '@/context';
-import { PaymentFactoryContractAddress, PaymentFactoryFunctionName, buildPaymentContractParams } from '@/lib/contract';
+import { PaymentFactoryDefaultCurrency, PaymentFactoryDefaultProofAddress, PaymentFactoryFunctionName, PaymentFactoryMainnetContractAddress, buildPaymentContractParams, buildPaymentURI } from '@/lib/contract';
 import CryptoConverter from '@/lib/currency';
 import { sha256Hasher } from '@/lib/hashing';
+import classes from '@/pages/App.module.css';
 import { Item } from '@/types/item';
 import { encode } from '@ipld/dag-cbor';
-import { Button, Container, Flex, Paper, Stack, Table, Text } from '@mantine/core';
+import { Button, Container, Flex, Paper, Table, Text } from '@mantine/core';
+import Link from 'next/link';
 import { useContext, useEffect, useState } from 'react';
 import QRCode from "react-qr-code";
 import { useContractRead } from "wagmi";
 import Layout from '../../../components/layout';
-// import paymentFactoryABI from "../../../fixtures/PaymentFactory.json" assert { type: "json" };
 import paymentFactoryABI from "../../../fixtures/PaymentFactory.json" assert { type: "json" };
-import Link from 'next/link';
-
+import { post } from '@/api/api';
 
 export default function PaymentScan() {
-  const [error, setError] = useState<string | undefined>(undefined);
-
   const { walletStoreContext } = useContext(AppContext);
 
+  const paymentCurrency = walletStoreContext?.paymentCurrency || PaymentFactoryDefaultCurrency;
   const cartItems = walletStoreContext?.cart.filter(item => item.amount > 0) || [];
   const amountInUSD: number = cartItems?.reduce((acc, item: Item) => acc + (item.price * Number(item.amount)), 0) || 0;
+  const amountInUSDC: number = amountInUSD * 1000000 || 0;
 
-  const storePaymentAddress = walletStoreContext?.ethAddress || "0x0000000000000000000000000000000000000000";
+  const merchantAddress = walletStoreContext?.ethAddress || "0x0000000000000000000000000000000000000000";
 
+  const [isOrderPersisted, setIsOrderPersisted] = useState(false);
   const [amountInEth, setAmountInEth] = useState<number>(0);
   const [amountInWei, setAmountInWei] = useState<number>(0);
+  const [contractParams, setContractParams] = useState<string[]>([]);
 
-  const [hashedCart, setHashedCart] = useState({});
-  const [cart, setCart] = useState({});
+  const [hashedCart, setHashedCart] = useState("");
+  let qrCodeURL: string = "";
 
+  const convertUSDtoPaymentCurrency = async (amountInUSD: number) => {
+    setAmountInEth(await CryptoConverter.convertUSDtoETH(amountInUSD));
+    setAmountInWei(await CryptoConverter.convertETHtoWei(amountInEth));
+  }
+
+  const isValidQRCode = (uri: string) => {
+    return uri && uri.length > 0 && !uri.includes('undefined');
+  }
 
   useEffect(() => {
+    qrCodeURL = "";
+    console.log("[INFO] hashedCart: ", hashedCart);
     const fetchPaymentParamsData = async () => {
       if (walletStoreContext?.cart) {
         const saleJSON = encode(JSON.stringify(walletStoreContext?.cart));
         let hashedSaleJSON = sha256Hasher(saleJSON);
-
-        setCart(saleJSON);
         setHashedCart(hashedSaleJSON);
-
-        setAmountInEth(await CryptoConverter.convertUSDtoETH(amountInUSD));
-        setAmountInWei(await CryptoConverter.convertETHtoWei(amountInEth));
       }
+      if (paymentCurrency === "USDC") {
+        setContractParams(buildPaymentContractParams(merchantAddress, paymentCurrency, amountInUSDC.toString(), `0x${hashedCart}`))
+      } else {
+        await convertUSDtoPaymentCurrency(amountInUSD);
+        setContractParams(buildPaymentContractParams(merchantAddress, paymentCurrency, amountInWei.toString(), `0x${hashedCart}`))
+      }
+      console.log("[INFO] paymentCurrency: ", paymentCurrency)
+      console.log("[INFO] contractParams: ", contractParams);
     }
 
     fetchPaymentParamsData();
 
-  }, [hashedCart, amountInEth, amountInWei])
+  }, [hashedCart, amountInUSDC, amountInWei, paymentCurrency]);
 
-  const params = buildPaymentContractParams(storePaymentAddress, amountInWei.toString(), `0x${hashedCart}`);
-  console.log("[INFO] Payment contract params", params);
 
-  const contract = useContractRead({
-    address: PaymentFactoryContractAddress,
+  const contractData = useContractRead({
+    address: PaymentFactoryMainnetContractAddress,
     abi: paymentFactoryABI.abi,
     functionName: PaymentFactoryFunctionName,
-    args: params
+    args: contractParams
   });
 
-  let qrCodeURL;
+  if (paymentCurrency === PaymentFactoryDefaultCurrency) {
+    qrCodeURL = buildPaymentURI(contractData.data as string, paymentCurrency, amountInUSDC.toString());
+  } else {
+    qrCodeURL = buildPaymentURI(contractData.data as string, paymentCurrency, amountInWei.toString());
+  }
+  console.log("buildPaymentURI: ", qrCodeURL);
 
-  try {
-    if (contract.data && amountInWei > 0) {
-
-      console.log("[INFO] Contract", contract);
-      qrCodeURL = `ethereum:${contract.data}?value=${amountInWei}`;
+  if (contractData.data && !isOrderPersisted) {
+    try {
+      console.log("contractParams: ", contractParams);
+      console.log("[INFO] Payment address", contractData.data);
 
       const orderData = {
         store: walletStoreContext?.storeId,
         amountInUSD: amountInUSD,
         amountInEth: amountInEth,
         amountInWei: amountInWei,
-        paymentFactoryAddress: PaymentFactoryContractAddress,
-        paymentAddress: contract.data,
-        hashedCart: hashedCart,
+        amountInUSDC: amountInUSDC,
+        paymentFactoryAddress: PaymentFactoryMainnetContractAddress,
+        paymentAddress: contractData,
+        paymentCurrency: paymentCurrency,
+        paymentReceipt: hashedCart,
+        paymentProof: PaymentFactoryDefaultProofAddress,
         items: cartItems.map(item => item.id)
       }
       post('/order', orderData);
+      setIsOrderPersisted(true);
+    } catch (e) {
+      console.log("[ERROR] Could not save transaction!", e);
     }
-  } catch (e) {
-    console.log("[ERROR] Could not save transaction!")
   }
 
   return (
@@ -96,9 +116,9 @@ export default function PaymentScan() {
           gap={20}
           mb={100}
         >
-          {!walletStoreContext?.cart && <p>Cart is empty! Start a new sale.</p>}
-          {!qrCodeURL && walletStoreContext?.cart && <p>Generating QR code for payment..</p>}
-          {qrCodeURL && walletStoreContext?.cart &&
+          {cartItems.length === 0 && <p className={classes.error}>Cart is empty! Start a new sale.</p>}
+          {!isValidQRCode(qrCodeURL) && walletStoreContext?.cart && <p className={classes.error}>Generating QR code for payment..</p>}
+          {isValidQRCode(qrCodeURL) &&
             <>
               <Text>
                 To begin checkout, open the camera on your mobile device and scan the QR code below.
@@ -120,7 +140,7 @@ export default function PaymentScan() {
               </Flex >
               <Paper shadow="xs" p="xl">
                 <Text fz={'sm'}>
-                  <b>Payment address:</b> {contract?.data as string}
+                  <b>Payment address:</b> {contractData.data as string}
                 </Text>
                 <Table mt={30} mb={30}>
                   <Table.Thead>
@@ -134,20 +154,30 @@ export default function PaymentScan() {
                       <Table.Td></Table.Td>
                       <Table.Td>{amountInUSD.toLocaleString('en-US', { style: 'currency', currency: 'USD' })} USD</Table.Td>
                     </Table.Tr>
-                    <Table.Tr>
-                      <Table.Td></Table.Td>
-                      <Table.Td>{amountInEth} ETH</Table.Td>
-                    </Table.Tr>
-                    <Table.Tr>
-                      <Table.Td></Table.Td>
-                      <Table.Td>{amountInWei} WEI</Table.Td>
-                    </Table.Tr>
+                    {paymentCurrency === "USDC" &&
+                      <Table.Tr>
+                        <Table.Td></Table.Td>
+                        <Table.Td>{amountInUSD.toLocaleString('en-US', { style: 'currency', currency: 'USD' })} USDC</Table.Td>
+                      </Table.Tr>
+                    }
+                    {paymentCurrency !== "USDC" &&
+                      <>
+                        <Table.Tr>
+                          <Table.Td></Table.Td>
+                          <Table.Td>{amountInEth} ETH</Table.Td>
+                        </Table.Tr>
+                        <Table.Tr>
+                          <Table.Td></Table.Td>
+                          <Table.Td>{amountInWei} WEI</Table.Td>
+                        </Table.Tr>
+                      </>
+                    }
                   </Table.Tbody>
                 </Table>
                 <Button color="dark" w={"100%"} size="lg">
                   <Link style={{ textDecoration: 'none', color: '#fff' }}
                     href={{
-                      pathname: `/newsale/payment-confirmation/${contract.data}`,
+                      pathname: `/newsale/payment-confirmation/${contractData.data}`,
                     }}
                   >
                     Go to payment confirmation

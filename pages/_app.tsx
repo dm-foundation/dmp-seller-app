@@ -8,12 +8,12 @@ import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet';
 import { InjectedConnector } from 'wagmi/connectors/injected';
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
-import { sepolia } from '@wagmi/core/chains';
+import { mainnet } from '@wagmi/core/chains';
 import { ContextProvider } from '@/providers/context.provider';
 import '@mantine/core/styles.css';
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [sepolia],
+  [mainnet],
   [publicProvider()]
 );
 
