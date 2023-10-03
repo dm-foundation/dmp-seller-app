@@ -2,7 +2,14 @@ import { AppContext } from '@/context';
 import classes from '@/pages/App.module.css';
 import { ItemProps } from '@/pages/transactions';
 import { ActionIcon, Container, Flex, Group, Stack, Text } from '@mantine/core';
-import { IconArrowBadgeRightFilled, IconCircle, IconCoin, IconInfoHexagonFilled, IconMessageCircleExclamation, IconReceipt } from '@tabler/icons-react';
+import {
+  IconArrowBadgeRightFilled,
+  IconCircle,
+  IconCoin,
+  IconInfoHexagonFilled,
+  IconMessageCircleExclamation,
+  IconReceipt,
+} from '@tabler/icons-react';
 import Link from 'next/link';
 import { useContext } from 'react';
 
@@ -19,15 +26,15 @@ export default function TransactionItem({
   priceUSD,
   transactionTimestamp,
   orders,
-  id
+  id,
 }: TransactionItemProps) {
+  console.log('🚀 ~ file: transaction-item.tsx:24 ~ orders:', orders);
   const { updateCtxOrder } = useContext(AppContext);
-
 
   const findTransactionDetailsById = (id: number | undefined) => {
     const order = orders.find((order: any) => order.id === id);
     updateCtxOrder(order);
-  }
+  };
 
   return (
     <Container w={'100%'} pl={0} pr={0}>
@@ -43,7 +50,7 @@ export default function TransactionItem({
                 })}
             </Text>
             <Text c="dimmed" fz="12px">
-              {/* {orders?.items?.map((item: ItemProps) => item.name).join(', ')} */}
+              {/* {orders ? orders?.items?.length > 0 ? orders?.items?.map((item: ItemProps) => console.log("ITEM AQUI: ", item)) : console.log("não existe item") :  console.log("não existe order") } */}
               Poster (2x), LoTR Poster (1x)
             </Text>
           </Flex>
@@ -57,9 +64,14 @@ export default function TransactionItem({
               })}
             </Text>
           </Stack>
-          < Link href={`/transactions/transaction-detail`} onClick={() => findTransactionDetailsById(id)}>
-            <IconArrowBadgeRightFilled style={{ width: '24px', height: '24px', marginTop: '5px', color: '#666' }} />
-          </ Link>
+          <Link
+            href={`/transactions/transaction-detail`}
+            onClick={() => findTransactionDetailsById(id)}
+          >
+            <IconArrowBadgeRightFilled
+              style={{ width: '24px', height: '24px', marginTop: '5px', color: '#666' }}
+            />
+          </Link>
         </Group>
       </Group>
     </Container>

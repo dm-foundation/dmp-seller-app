@@ -18,11 +18,10 @@ interface ItemProps {
   id: number;
   name: string;
   sku: string;
-  price: number;
-  units: number;
+  unitPrice: number;
+  quantity: number;
   thumbnail: string;
   storeId: number;
-  amount: number;
   created_at: Date;
 }
 
@@ -33,11 +32,13 @@ interface OrderProps {
   amountInUSD: number;
   amountInEth: number;
   amountInWei: number;
+  amountInUSDC: number;
   items: ItemProps[];
+  paymentProof: string;
   paymentFactoryAddress: string;
   paymentAddress: string;
   paymentTransactionHash: string;
-  hashedCart: string;
+  paymentReceipt: string;
   created_at: Date;
 }
 
@@ -47,12 +48,19 @@ interface TransactionDetailsProps {
 
 export default function TransactionDetails({ orders }: any) {
 
+  function formatDecimalNumber(number: number | string, decimalPlaces: number) {
+    const roundedNumber = Number(number).toFixed(decimalPlaces);
+    const trimmedNumber = parseFloat(roundedNumber);
+    return trimmedNumber.toString();
+  }
+
   const rows = orders?.items.map((item: any) => (
     <Table.Tr key={item.id}>
-      <Table.Td>{item.units}</Table.Td>
+      <Table.Td>{item.quantity}</Table.Td>
       <Table.Td>{item.sku}</Table.Td>
       <Table.Td>{item.name}</Table.Td>
-      <Table.Td>{item.price.toFixed(2)}</Table.Td>
+      <Table.Td>{Number(item.unitPrice).toFixed(2)}</Table.Td>
+      <Table.Td>{Number(item.unitPrice * item.quantity).toFixed(2)}</Table.Td>
     </Table.Tr>
   ));
 
@@ -85,6 +93,7 @@ export default function TransactionDetails({ orders }: any) {
             <Table.Th>QTY</Table.Th>
             <Table.Th>CODE</Table.Th>
             <Table.Th>DESCRIPTION</Table.Th>
+            <Table.Th>UNIT PRICE</Table.Th>
             <Table.Th>PRICE</Table.Th>
           </Table.Tr>
         </Table.Thead>
@@ -113,9 +122,9 @@ export default function TransactionDetails({ orders }: any) {
                   direction="column"
                   wrap="wrap"
                 >
-                  <Text size="sm" fw={600}>{orders?.amountInUSD} USD</Text>
-                  <Text size="sm" fw={600}>{orders?.amountInEth} ETH</Text>
-                  <Text size="sm" fw={600}>{orders?.amountInWei} WEI</Text>
+                  <Text size="sm" fw={600}>{Number(orders?.amountInUSD).toFixed(2)} USD</Text>
+                  <Text size="sm" fw={600}>{formatDecimalNumber(orders?.amountInEth, 8)} ETH</Text>
+                  <Text size="sm" fw={600}>{formatDecimalNumber(orders?.amountInWei, 8)} WEI</Text>
                 </Flex>
               </Table.Th>
             </Table.Tr>

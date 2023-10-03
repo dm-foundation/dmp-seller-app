@@ -8,11 +8,10 @@ export type ItemProps = {
   id: number;
   name: string;
   sku: string;
-  price: number;
-  units: number;
+  unitPrice: number;
+  quantity: number;
   thumbnail: string;
   storeId: number;
-  amount: number;
   created_at: Date;
 };
 
@@ -23,11 +22,13 @@ export type TransactionProps = {
   amountInUSD: number;
   amountInEth: number;
   amountInWei: number;
+  amountInUSDC: number;
   items: ItemProps[];
+  paymentProof: string;
   paymentFactoryAddress: string;
   paymentAddress: string;
   paymentTransactionHash: string;
-  hashedCart: string;
+  paymentReceipt: string;
   created_at: Date;
 };
 

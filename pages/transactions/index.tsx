@@ -10,8 +10,8 @@ export type ItemProps = {
   id: number;
   name: string;
   sku: string;
-  price: number;
-  units: number;
+  unitPrice: number;
+  quantity: number;
   thumbnail: string;
   storeId: number;
   created_at: Date;
