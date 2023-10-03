@@ -87,18 +87,23 @@ export default function PaymentScan() {
       console.log("[INFO] Payment address", contractData.data);
 
       const orderData = {
-        store: walletStoreContext?.storeId,
+        storeId: walletStoreContext?.storeId,
         amountInUSD: amountInUSD,
         amountInEth: amountInEth,
         amountInWei: amountInWei,
         amountInUSDC: amountInUSDC,
         paymentFactoryAddress: PaymentFactoryMainnetContractAddress,
-        paymentAddress: contractData,
+        paymentAddress: contractData.data,
         paymentCurrency: paymentCurrency,
         paymentReceipt: hashedCart,
         paymentProof: PaymentFactoryDefaultProofAddress,
-        items: cartItems.map(item => item.id)
+        items: cartItems.map(item => ({
+          'itemId': item.id,
+          'quantity': item.units,
+          'unitPrice': item.price
+        }))
       }
+      console.log(orderData);
       post('/order', orderData);
       setIsOrderPersisted(true);
     } catch (e) {
