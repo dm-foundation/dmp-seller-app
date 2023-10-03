@@ -43,16 +43,13 @@ export default function Transactions() {
       try {
         setLoading(true);
         const storeOrderItemData = await get(`/store/${walletStoreContext?.storeId}/store-orders-items`);
-        console.log("orders", orders);
         setOrders(storeOrderItemData);
         setLoading(false);
       } catch (error) {
         console.log("Error fetching API data from store", `/store/${walletStoreContext?.storeId}/store-orders-items`, error)
       }
     };
-
     setTimeout(() => fetchStoreTransactions(), 500)
-
   }, []);
 
   return (
@@ -71,7 +68,7 @@ export default function Transactions() {
             sellerName={order.customer_email}
             priceUSD={order.amountInUSD}
             transactionTimestamp={new Date(order.created_at)}
-            orders={orders}
+            order={order}
             id={order.id}
           />
         ))}

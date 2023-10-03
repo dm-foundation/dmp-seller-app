@@ -1,7 +1,7 @@
 "use client";
 
 import { AppContext } from '@/context';
-import { PaymentFactoryDefaultCurrency, PaymentFactoryDefaultProofAddress, PaymentFactoryFunctionName, PaymentFactoryMainnetContractAddress, buildPaymentContractParams, buildPaymentURI } from '@/lib/contract';
+import { PaymentFactoryDefaultCurrency, PaymentFactoryDefaultProofAddress, PaymentFactoryReadContractGetPaymentAddress, PaymentFactoryMainnetContractAddress, buildPaymentContractParams, buildPaymentURI } from '@/lib/contract';
 import CryptoConverter from '@/lib/currency';
 import { sha256Hasher } from '@/lib/hashing';
 import classes from '@/pages/App.module.css';
@@ -70,7 +70,7 @@ export default function PaymentScan() {
   const contractData = useContractRead({
     address: PaymentFactoryMainnetContractAddress,
     abi: paymentFactoryABI.abi,
-    functionName: PaymentFactoryFunctionName,
+    functionName: PaymentFactoryReadContractGetPaymentAddress,
     args: contractParams
   });
 
@@ -99,7 +99,7 @@ export default function PaymentScan() {
         paymentProof: PaymentFactoryDefaultProofAddress,
         items: cartItems.map(item => ({
           'itemId': item.id,
-          'quantity': item.units,
+          'quantity': item.amount,
           'unitPrice': item.price
         }))
       }

@@ -34,24 +34,26 @@ export type TransactionProps = {
 
 export default function TransactionDetail() {
   const { orderContext } = useContext(AppContext);
-  const [orders, setOrders] = useState<any>([]);
+  const [order, setOrder] = useState<any>([]);
 
   const [loading, isLoading] = useState(false);
 
   useEffect(() => {
-    const loadingTransactions = async () => {
-      setOrders(orderContext)
+    const loadOrder = async () => {
+      setOrder(orderContext)
       isLoading(true)
     }
 
-    if (!loading) loadingTransactions()
+    if (!loading) loadOrder()
   }, [])
+
+  console.log(orderContext);
 
   return (
     <Layout title="Transaction Details">
       <Flex direction="column" justify="center" align="center" mb={100}>
         {!loading && <Loader size={30} />}
-        <TransactionDetails orders={orders} />
+        <TransactionDetails key={order.id} order={order} />
       </Flex>
     </Layout>
   );

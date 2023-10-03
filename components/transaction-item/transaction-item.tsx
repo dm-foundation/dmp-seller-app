@@ -17,7 +17,7 @@ interface TransactionItemProps {
   sellerName: string;
   priceUSD: number;
   transactionTimestamp: Date;
-  orders?: any;
+  order?: any;
   id?: number;
 }
 
@@ -25,14 +25,12 @@ export default function TransactionItem({
   sellerName,
   priceUSD,
   transactionTimestamp,
-  orders,
+  order,
   id,
 }: TransactionItemProps) {
-  console.log('🚀 ~ file: transaction-item.tsx:24 ~ orders:', orders);
   const { updateCtxOrder } = useContext(AppContext);
 
   const findTransactionDetailsById = (id: number | undefined) => {
-    const order = orders.find((order: any) => order.id === id);
     updateCtxOrder(order);
   };
 
@@ -50,8 +48,8 @@ export default function TransactionItem({
                 })}
             </Text>
             <Text c="dimmed" fz="12px">
-              {/* {orders ? orders?.items?.length > 0 ? orders?.items?.map((item: ItemProps) => console.log("ITEM AQUI: ", item)) : console.log("não existe item") :  console.log("não existe order") } */}
-              Poster (2x), LoTR Poster (1x)
+              {order?.items?.map((item: ItemProps) => `${item.name} (${item.quantity}x) `).join(", ")}
+              {/* Poster (2x), LoTR Poster (1x) */}
             </Text>
           </Flex>
         </Group>

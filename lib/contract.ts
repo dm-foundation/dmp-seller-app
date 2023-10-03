@@ -11,7 +11,10 @@ const CURRENCY_ADDRESS_DICT: { [key: string]: string } = {
 }
 
 export function buildPaymentConfirmationURL(paymentAddress: string) {
-    return `${process.env.NEXT_ETHERSCAN_API_URL}?module=account&action=txlist&address=${paymentAddress}&sort=asc&apikey=${process.env.NEXT_ETHERSCAN_API_KEY}`
+    // const URL = `http://api.etherscan.io/api?module=account&action=txlist&address=${paymentAddress}&sort=asc&apikey=BPPR4YEESP9GSPKCE2EEKRMMVFPZAIGI4J`
+    const URL = `http://api.etherscan.io/api?module=account&action=tokentx&address=${paymentAddress}&apikey=GZBX3RXRV8424I5F92UJEYBZ64VT46YDQI`
+    console.log("URL", URL);
+    return URL;
 }
 
 
@@ -33,7 +36,7 @@ export function buildPaymentContractParams(storePaymentAddress: string, currency
         hashedData
     ]
 }
-export const PaymentFactoryDefaultProofAddress: string = "0x0000000000000000000000000000000000000000" // Blank proof
+export const PaymentFactoryDefaultProofAddress: string = "0x682dae06A708185F55E365eD939C74A8d36ce5A1"
 export const PaymentFactorySepoliaContractAddress: `0x${string}` = "0xe7eD90d1EF91C23EE8531567419CC5554a4303b6";
 export const PaymentFactoryMainnetContractAddress: `0x${string}` = "0x200ee24fd0d1a88e3b83de1da10b413963e1b2ea";
-export const PaymentFactoryFunctionName: string = "getPaymentAddress";
+export const PaymentFactoryReadContractGetPaymentAddress: string = "getPaymentAddress";

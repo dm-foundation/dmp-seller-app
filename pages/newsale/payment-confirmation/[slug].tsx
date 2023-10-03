@@ -18,18 +18,18 @@ export default function Page() {
   useEffect(() => {
     const fetchTransactionConfirmation = async () => {
       const paymentConfirmationURL = buildPaymentConfirmationURL(router.query.slug as string);
-
+      console.log("router.query.slug: ", router.query.slug);
       console.log("paymentConfirmationURL: ", paymentConfirmationURL);
       const paymentTransactionData = await axios.get(paymentConfirmationURL, {
         withCredentials: false,
         headers: {
           'Content-Type': 'application/json; charset=utf-8',
-          'Access-Control-Allow-Origin': '*',
-          'X-Frame-Options': 'SAMEORIGIN',
+          // 'Access-Control-Allow-Origin': '*',
+          // 'X-Frame-Options': 'SAMEORIGIN',
         },
       });
 
-      console.log("paymentTransactionData.data: ", paymentTransactionData.data);
+      console.log("paymentTransactionData: ", paymentTransactionData);
       setTransactionConfirmation(paymentTransactionData.data);
     }
 
@@ -69,7 +69,7 @@ export default function Page() {
               <Text mb={20} >
                 Your transaction has been confirmed.
               </Text>
-              <Link className={classes.link_transaction_confirmation} href={`https://sepolia.etherscan.io/tx/${transactionConfirmation.result[0].hash}`} >
+              <Link className={classes.link_transaction_confirmation} href={`https://etherscan.io/tx/${transactionConfirmation.result[0].hash}`} >
                 View on Block Explorer
               </Link>
             </>
