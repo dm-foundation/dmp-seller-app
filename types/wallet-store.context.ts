@@ -6,4 +6,5 @@ export type WalletStoreContext = {
   name: string;
   email: string;
   cart: Item[];
+  paymentCurrency: string;
 };

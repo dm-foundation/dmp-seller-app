@@ -64,6 +64,7 @@ export default function Transactions() {
             <p className={classes.error}>Loading past transactions data...</p>
           </>
         }
+        {!loading && orders.length == 0 && <p className={classes.error}>No past transactions found.</p>}
         {!loading && orders.map((order) => (
           <TransactionItem
             key={order.id}

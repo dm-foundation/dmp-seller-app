@@ -40,7 +40,7 @@ export default function NewSale() {
         const storeData = await get(`/store/${walletAddressData?.storeId}`);
         const walletStoreObj = { ...storeData, ...walletAddressData };
         updateContext(walletStoreObj);
-        console.log("walletStoreContext: ", walletStoreContext);
+        console.log("Store: ", walletStoreContext);
 
         const storeItemsData: Item[] = await get(`/store/${walletAddressData?.storeId}/items`);
         setSaleItems(storeItemsData);
