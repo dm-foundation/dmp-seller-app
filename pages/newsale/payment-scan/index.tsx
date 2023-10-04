@@ -44,7 +44,6 @@ export default function PaymentScan() {
   }
 
   useEffect(() => {
-    qrCodeURL = "";
     console.log("[INFO] hashedCart: ", hashedCart);
     const fetchPaymentParamsData = async () => {
       if (walletStoreContext?.cart) {
@@ -64,8 +63,8 @@ export default function PaymentScan() {
 
     fetchPaymentParamsData();
 
-  }, [hashedCart, amountInUSDC, amountInWei, paymentCurrency]);
-
+  }, [hashedCart, amountInUSDC, amountInWei, paymentCurrency, qrCodeURL]);
+  qrCodeURL = "";
 
   const contractData = useContractRead({
     address: PaymentFactoryMainnetContractAddress,
@@ -74,14 +73,9 @@ export default function PaymentScan() {
     args: contractParams
   });
 
-  if (paymentCurrency === PaymentFactoryDefaultCurrency) {
-    qrCodeURL = buildPaymentURI(contractData.data as string, paymentCurrency, amountInUSDC.toString());
-  } else {
-    qrCodeURL = buildPaymentURI(contractData.data as string, paymentCurrency, amountInWei.toString());
-  }
   console.log("buildPaymentURI: ", qrCodeURL);
-
   if (contractData.data && !isOrderPersisted) {
+
     try {
       console.log("contractParams: ", contractParams);
       console.log("[INFO] Payment address", contractData.data);
@@ -109,6 +103,12 @@ export default function PaymentScan() {
     } catch (e) {
       console.log("[ERROR] Could not save transaction!", e);
     }
+  }
+
+  if (paymentCurrency === PaymentFactoryDefaultCurrency) {
+    qrCodeURL = buildPaymentURI(contractData.data as string, paymentCurrency, amountInUSDC.toString());
+  } else {
+    qrCodeURL = buildPaymentURI(contractData.data as string, paymentCurrency, amountInWei.toString());
   }
 
   return (
@@ -147,7 +147,15 @@ export default function PaymentScan() {
                 <Text fz={'sm'}>
                   <b>Payment address:</b> {contractData.data as string}
                 </Text>
-                <Table mt={30} mb={30}>
+                <Text fz={'xs'}><b>Contract parameters:</b></Text>
+                <>
+                  {
+                    contractParams.map((p) => {
+                      return <Text fz={'xs'}>{p}</Text>
+                    })
+                  }
+                </>
+                <Table mt={30} mb={30} fz={12}>
                   <Table.Thead>
                     <Table.Tr>
                       <Table.Th><b>Total Payment Amount:</b></Table.Th>

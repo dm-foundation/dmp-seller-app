@@ -11,9 +11,8 @@ const CURRENCY_ADDRESS_DICT: { [key: string]: string } = {
 }
 
 export function buildPaymentConfirmationURL(paymentAddress: string) {
-    // const URL = `http://api.etherscan.io/api?module=account&action=txlist&address=${paymentAddress}&sort=asc&apikey=BPPR4YEESP9GSPKCE2EEKRMMVFPZAIGI4J`
     const URL = `http://api.etherscan.io/api?module=account&action=tokentx&address=${paymentAddress}&apikey=GZBX3RXRV8424I5F92UJEYBZ64VT46YDQI`
-    console.log("URL", URL);
+    console.log("buildPaymentConfirmationURL", URL);
     return URL;
 }
 

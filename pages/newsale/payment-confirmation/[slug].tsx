@@ -2,7 +2,7 @@
 
 import { buildPaymentConfirmationURL } from '@/lib/contract';
 import classes from '@/pages/App.module.css';
-import { Avatar, Flex, Loader, Text } from '@mantine/core';
+import { Image, Flex, Loader, Text } from '@mantine/core';
 import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -14,6 +14,7 @@ export default function Page() {
   const [transactionConfirmation, setTransactionConfirmation] = useState<any>({});
   const [transactionStatus, setTansactionStatus] = useState("PENDING");
   const router = useRouter();
+  let checkPaymentInterval: any;
 
   useEffect(() => {
     const fetchTransactionConfirmation = async () => {
@@ -31,11 +32,16 @@ export default function Page() {
 
       console.log("paymentTransactionData: ", paymentTransactionData);
       setTransactionConfirmation(paymentTransactionData.data);
+      setTansactionStatus("COMPLETE");
+      clearInterval(checkPaymentInterval);
     }
 
-    setInterval(() => {
-      fetchTransactionConfirmation();
-    }, 7000)
+    if (transactionStatus !== "COMPLETE") {
+      checkPaymentInterval = setInterval(() => {
+        fetchTransactionConfirmation();
+      }, 7000)
+    }
+
   }, [router.query.slug])
 
   return (
@@ -62,7 +68,12 @@ export default function Page() {
           {
             transactionConfirmation?.status === '1' &&
             <>
-              <Avatar variant="light" radius="xs" size="lg" src="../green-checkmark-icon.png" />
+              <Image
+                radius="md"
+                h={200}
+                w="auto"
+                fit="contain"
+                src="../../green-checkmark-icon.png" />
               <h2>
                 Transaction complete
               </h2>
