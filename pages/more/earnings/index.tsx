@@ -32,7 +32,10 @@ export default function Transactions() {
         align="center"
         mb={50}
       >
-        <Image width={'100%'} height={140} fit="contain"
+        <Text>
+          Earnings report is not available (not implemented yet).
+        </Text>
+        {/* <Image width={'100%'} height={140} fit="contain"
           src="../columnchart.png">
         </Image>
         <Text c="dimmed" fz='md' fw={600}>Total Earnings</Text>
@@ -41,7 +44,7 @@ export default function Transactions() {
 
 
         <EarningsItem item_count={mockData.item1.item_count} item_total_price={mockData.item1.item_total_price} {...mockData} />
-        <EarningsItem item_count={mockData.item2.item_count} item_total_price={mockData.item2.item_total_price} {...mockData} />
+        <EarningsItem item_count={mockData.item2.item_count} item_total_price={mockData.item2.item_total_price} {...mockData} /> */}
       </Flex>
     </Layout>
   );
