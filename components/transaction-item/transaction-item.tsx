@@ -47,15 +47,14 @@ export default function TransactionItem({
                   currency: 'USD',
                 })}
             </Text>
-            <Text c="dimmed" fz="12px">
-              {order?.items?.map((item: ItemProps) => `${item.name} (${item.quantity}x) `).join(", ")}
-              {/* Poster (2x), LoTR Poster (1x) */}
+            <Text c="dimmed" fz="10px">
+              {order?.items?.map((item: ItemProps) => `${item.name} (${item.quantity}x) `).join(", ").substr(0, 20)}..
             </Text>
           </Flex>
         </Group>
-        <Group gap={'sm'}>
+        <Group mt={-5} gap={'sm'}>
           <Stack>
-            <Text>
+            <Text fz="14px">
               {transactionTimestamp.toLocaleTimeString('en-US', {
                 hour: '2-digit',
                 minute: '2-digit',

@@ -81,14 +81,14 @@ export default function TransactionDetails({ order: order }: any) {
         </Group>
       </Group>
 
-      <Table horizontalSpacing="xl">
+      <Table>
         <Table.Thead>
           <Table.Tr>
             <Table.Th>#SKU</Table.Th>
-            <Table.Th>DESCRIPTION</Table.Th>
+            <Table.Th>NAME</Table.Th>
             <Table.Th>QTY</Table.Th>
-            <Table.Th>ITEM PRICE</Table.Th>
-            <Table.Th>ITEM(S) SUBTOTAL</Table.Th>
+            <Table.Th>PRICE</Table.Th>
+            <Table.Th>SUBTOTAL</Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>{rows}</Table.Tbody>
