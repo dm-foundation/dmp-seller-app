@@ -36,22 +36,22 @@ export default function SaleItem(props: SaleItemProps) {
       mb={10}
       style={props.cursorPointer ? { cursor: "pointer" } : undefined}
     >
-      <Group justify={'space-between'} gap='xs'>
-        <Group gap="xs">
+      <Group justify={'space-between'}>
+        <Group gap="sm" w={'25%'} justify="flex-start" align="flex-start" mb={10}>
           <Avatar variant="light" radius="xs" size="lg" src={props.thumbnail} />
-          <Flex justify="flex-start" align="flex-start" direction="column" wrap="wrap">
-            <Text className={classes.itemTitle}>
-              {props.name.substring(0, 8)}
-              {props.name.length > 8 ? '..' : '  '}
+          <Flex justify="flex-start" align="flex-start" direction="column" wrap="wrap" mt={5}>
+            <Text fz={'md'} className={classes.itemTitle}>
+              {props.name.substring(0, 30)}
+              {props.name.length > 30 ? '..' : ''}
             </Text>
-            <Text size={'sm'} c="dimmed">
+            <Text size={'xs'} c="dimmed">
               {props.stock} in stock
             </Text>
           </Flex>
         </Group>
         {!props.isInCart ? (
           <Group w={'25%'}>
-            <Flex justify="flex-end" align="flex-end" direction="column" wrap="wrap" mt={-15}>
+            <Flex justify="flex-end" align="flex-end" direction="column" wrap="wrap" mt={-25}>
               {props.exclude_select_units ? (
                 <></>
               ) : (
