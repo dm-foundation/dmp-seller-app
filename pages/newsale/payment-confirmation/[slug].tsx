@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Layout from '../../../components/layout';
+import { patch } from '@/api/api';
 
 export default function Page() {
 
@@ -33,6 +34,10 @@ export default function Page() {
       console.log("paymentTransactionData: ", paymentTransactionData);
       setTransactionConfirmation(paymentTransactionData.data);
       setTansactionStatus("COMPLETE");
+
+      if (transactionStatus === "COMPLETE") {
+        // patch(`/order/${24}/status`, { status: "complete" });
+      }
       clearInterval(checkPaymentInterval);
     }
 
