@@ -1,8 +1,6 @@
-import CryptoConverter from '@/lib/currency';
-import { Avatar, Container, Flex, Group, Popover, Select, Text } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
-import { useEffect, useState } from 'react';
 import classes from '@/pages/App.module.css';
+import { Avatar, Container, Flex, Grid, Group, Select, Text } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
 
 interface SaleItemProps {
   id: number;
@@ -36,9 +34,11 @@ export default function SaleItem(props: SaleItemProps) {
       mb={10}
       style={props.cursorPointer ? { cursor: "pointer" } : undefined}
     >
-      <Group justify={'space-between'}>
-        <Group gap="sm" w={'25%'} justify="flex-start" align="flex-start" mb={10}>
+      <Grid gutter="md">
+        <Grid.Col span="content">
           <Avatar variant="light" radius="xs" size="lg" src={props.thumbnail} />
+        </Grid.Col>
+        <Grid.Col span={6}>
           <Flex justify="flex-start" align="flex-start" direction="column" wrap="wrap" mt={5}>
             <Text fz={'md'} className={classes.itemTitle}>
               {props.name.substring(0, 30)}
@@ -48,10 +48,10 @@ export default function SaleItem(props: SaleItemProps) {
               {props.stock} in stock
             </Text>
           </Flex>
-        </Group>
-        {!props.isInCart ? (
-          <Group w={'25%'}>
-            <Flex justify="flex-end" align="flex-end" direction="column" wrap="wrap" mt={-25}>
+        </Grid.Col>
+        <Grid.Col span="content">
+          {!props.isInCart ? (
+            <Flex justify="flex-end" align="flex-end" direction="column" wrap="wrap" mt={5} w={'30%'}>
               {props.exclude_select_units ? (
                 <></>
               ) : (
@@ -69,9 +69,7 @@ export default function SaleItem(props: SaleItemProps) {
                 />
               )}
             </Flex>
-          </Group>
-        ) : (
-          <Group>
+          ) : (
             <Flex justify="flex-end" align="flex-end" direction="column" wrap="wrap" mt={10}>
               <Text className={classes.itemTitle}>{props.amount} units</Text>
               <Text fz="xs" c="dimmed">
@@ -82,29 +80,22 @@ export default function SaleItem(props: SaleItemProps) {
                 each
               </Text>
             </Flex>
-          </Group>
-        )}
-        <Flex
-          w={'13%'}
-          justify="flex-end"
-          align="flex-end"
-          direction="row"
-          wrap="wrap"
-          mt={-5}
-        >
+          )}
+        </Grid.Col>
+        <Grid.Col span="content">
           <Text
             onMouseEnter={open}
             onMouseLeave={close}
             className={classes.itemTitle}
-            mt={-20}
+            mt={10}
             size="md"
           >
             {!props.isInCart
               ? props.priceUSD.toLocaleString('en-US', { style: 'currency', currency: 'USD' })
               : (props.priceUSD * Number(props.amount)).toLocaleString('en-US', { style: 'currency', currency: 'USD' })}
           </Text>
-        </Flex>
-      </Group>
+        </Grid.Col>
+      </Grid>
     </Container >
   );
 }
