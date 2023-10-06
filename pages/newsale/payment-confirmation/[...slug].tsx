@@ -79,7 +79,7 @@ export default function Page() {
                 h={200}
                 w="auto"
                 fit="contain"
-                src="../../green-checkmark-icon.png" />
+                src="../../../green-checkmark-icon.png" />
               <h2>
                 Transaction complete
               </h2>
