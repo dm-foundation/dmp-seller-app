@@ -10,9 +10,13 @@ const CURRENCY_ADDRESS_DICT: { [key: string]: string } = {
     'ETH': ETH_CURRENCY_ADDRESS
 }
 
-export function buildPaymentConfirmationURL(paymentAddress: string) {
-    const URL = `${process.env.NEXT_PUBLIC_ETHERSCAN_API_URL}?module=account&action=txlist&address=${paymentAddress}&apikey=${process.env.NEXT_PUBLIC_ETHERSCAN_API_KEY}`
-    console.log("buildPaymentConfirmationURL", URL);
+export function buildPaymentConfirmationURL(queryPath: string) {
+    if (!queryPath) { return "" }
+    console.log("queryPath", queryPath);
+    const currencyName = queryPath[1];
+    let actionParameter = currencyName === PaymentFactoryDefaultCurrency ? "tokentx" : "txlist";
+    const URL = `${process.env.NEXT_PUBLIC_ETHERSCAN_API_URL}?module=account&action=${actionParameter}&address=${queryPath[0]}&apikey=${process.env.NEXT_PUBLIC_ETHERSCAN_API_KEY}`
+    console.log("buildPaymentConfirmationURL", actionParameter, currencyName, URL);
     return URL;
 }
 

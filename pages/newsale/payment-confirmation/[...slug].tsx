@@ -20,7 +20,8 @@ export default function Page() {
   useEffect(() => {
     const fetchTransactionConfirmation = async () => {
       const paymentConfirmationURL = buildPaymentConfirmationURL(router.query.slug as string);
-      console.log("router.query.slug: ", router.query.slug);
+      if (!paymentConfirmationURL) { return; }
+
       console.log("paymentConfirmationURL: ", paymentConfirmationURL);
       const paymentTransactionData = await axios.get(paymentConfirmationURL, {
         withCredentials: false,

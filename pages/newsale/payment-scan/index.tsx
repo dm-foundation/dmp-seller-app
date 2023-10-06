@@ -190,7 +190,7 @@ export default function PaymentScan() {
                 <Button color="dark" w={"100%"} size="lg">
                   <Link style={{ textDecoration: 'none', color: '#fff' }}
                     href={{
-                      pathname: `/newsale/payment-confirmation/${contractData.data}`,
+                      pathname: `/newsale/payment-confirmation/${contractData.data}/${paymentCurrency}`,
                     }}
                   >
                     Go to payment confirmation
