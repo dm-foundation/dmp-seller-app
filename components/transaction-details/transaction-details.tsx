@@ -7,6 +7,7 @@ import {
   Table,
   Text
 } from '@mantine/core';
+import Link from 'next/link';
 
 interface ItemProps {
   id: number;
@@ -75,8 +76,9 @@ export default function TransactionDetails({ order: order }: any) {
                 minute: '2-digit',
               })}
             </Text>
-            {!order?.paymentTransactionHash && <Text size="sm" color="orange">Transaction hash: pending</Text>}
-            {order?.paymentTransactionHash && <Text size="sm">Transaction hash: {order?.paymentTransactionHash}</Text>}
+            <Link href={`https://etherscan.io/address/${order.paymentAddress}`} target="_blank" style={{ textDecoration: 'none', fontSize: '0.8rem' }}>
+              View transaction hash on BlockExplorer
+            </Link>
           </Flex>
         </Group>
       </Group>
