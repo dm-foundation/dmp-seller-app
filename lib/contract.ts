@@ -12,10 +12,9 @@ const CURRENCY_ADDRESS_DICT: { [key: string]: string } = {
 
 export function buildPaymentConfirmationURL(queryPath: string) {
     if (!queryPath) { return "" }
-    console.log("queryPath", queryPath);
     const currencyName = queryPath[1];
     let actionParameter = currencyName === PaymentFactoryDefaultCurrency ? "tokentx" : "txlist";
-    const URL = `${process.env.NEXT_PUBLIC_ETHERSCAN_API_URL}?module=account&action=${actionParameter}&address=${queryPath[0]}&apikey=${process.env.NEXT_PUBLIC_ETHERSCAN_API_KEY}`
+    const URL = `${process.env.NEXT_PUBLIC_ETHERSCAN_SEPOLIA_API_URL}?module=account&action=${actionParameter}&address=${queryPath[0]}&apikey=${process.env.NEXT_PUBLIC_ETHERSCAN_API_KEY}`
     console.log("buildPaymentConfirmationURL", actionParameter, currencyName, URL);
     return URL;
 }
@@ -33,7 +32,7 @@ export function buildPaymentContractParams(storePaymentAddress: string, currency
 
     return [
         storePaymentAddress,
-        PaymentFactoryDefaultProofAddress,
+        PaymentFactorySepoliaContractAddress,
         amount,
         currencyAddress,
         hashedData

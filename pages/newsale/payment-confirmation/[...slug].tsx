@@ -8,9 +8,9 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Layout from '../../../components/layout';
-import { patch } from '@/api/api';
+import { get, patch } from '@/api/api';
 
-type orderResponse = {
+type OrderResponse = {
   amountInEth: number;
   amountInUSD: number;
   amountInUSDC: number;
@@ -18,7 +18,7 @@ type orderResponse = {
   created_at: string;
   customer_email: string | null;
   id: number;
-  orderItems: orderItem[];
+  orderItems: OrderItem[];
   paymentAddress: string;
   paymentCurrency: string;
   paymentFactoryAddress: string;
@@ -31,7 +31,7 @@ type orderResponse = {
 };
 
 
-type orderItem = {
+type OrderItem = {
   id: number;
   itemId: number;
   orderId: number;
@@ -41,58 +41,81 @@ type orderItem = {
 };
 
 export default function Page() {
-  const [transactionConfirmation, setTransactionConfirmation] = useState<any>({});
-  const [transactionStatus, setTansactionStatus] = useState('PENDING');
+  const [etherscanConfirmation, setEtherscanConfirmation] = useState<any>({});
+  const [orderConfirmation, setOrderConfirmation] = useState(false);
   const router = useRouter();
   let checkPaymentInterval: any;
 
   useEffect(() => {
-    const fetchTransactionConfirmation = async () => {
+
+    const updateOrderItemStockNumber = async (OrderResponse: OrderResponse, txHash: string) => {
+      patch(`/order/${OrderResponse.id}/status`, { status: 'complete', paymentTransactionHash: txHash }).then(() => {
+        OrderResponse.orderItems.map((orderItem: OrderItem) => {
+          console.log("Updating order item stock quantity: ", orderItem.itemId, orderItem.quantity);
+          patch(`/item/${orderItem.itemId}/subtract-unit-item`, { id: orderItem.itemId, quantity: orderItem.quantity });
+        });
+      }).catch((err) => {
+        console.log(err);
+      });
+    }
+
+    const fetchOrderConfirmationOnEtherscan = async () => {
       const paymentConfirmationURL = buildPaymentConfirmationURL(router.query.slug as string);
-      console.log('router.query.slug: ', router.query.slug);
       console.log('paymentConfirmationURL: ', paymentConfirmationURL);
       const paymentTransactionData = await axios.get(paymentConfirmationURL, {
         withCredentials: false,
         headers: {
           'Content-Type': 'application/json; charset=utf-8',
-          // 'Access-Control-Allow-Origin': '*',
-          // 'X-Frame-Options': 'SAMEORIGIN',
         },
       });
-
-      console.log('paymentTransactionData: ', paymentTransactionData);
-      setTransactionConfirmation(paymentTransactionData.data);
-      setTansactionStatus('COMPLETE');
-
-      if (transactionStatus === 'COMPLETE') {
-        const orderResponseString = localStorage.getItem('orderResponse');
-        const orderResponse: orderResponse = JSON.parse(orderResponseString || '{}');
-
-        patch(`/order/${orderResponse.id}/status`, { status: 'complete' }).then(() => {
-          orderResponse.orderItems.map((orderItem: orderItem) => {
-            patch(`/item/${orderItem.id}/subtract-unit-item`, orderItem.quantity);
-          });
-        }).catch((err) => {
-          console.log(err);
-        });
-
-
-      }
-      clearInterval(checkPaymentInterval);
-    };
-
-    if (transactionStatus !== 'COMPLETE') {
-      checkPaymentInterval = setInterval(() => {
-        fetchTransactionConfirmation();
-      }, 7000);
+      setEtherscanConfirmation(paymentTransactionData.data);
+      return paymentTransactionData.data;
     }
+
+    const processOrderConfirmation = async () => {
+      try {
+        const orderResponseString = localStorage.getItem('orderResponse');
+        const orderResponse: OrderResponse = JSON.parse(orderResponseString || '{}');
+        if (!orderResponse) {
+          console.log("Order lost in localStorage!");
+          return;
+        }
+
+        const orderDB = await get(`/order/${orderResponse.id}`);
+        console.log("etherscanConfirmation", etherscanConfirmation);
+        console.log("orderDB: ", orderDB);
+        if (orderDB?.status === 'pending') {
+          const etherscanResult = await fetchOrderConfirmationOnEtherscan();
+          console.log("Order has not been confirmed in the database yet")
+          if (etherscanResult?.status == 1) {
+            console.log("Order has been confirmed on Etherscan!", etherscanConfirmation)
+            updateOrderItemStockNumber(orderResponse, etherscanResult.result[0].hash);
+            // localStorage.removeItem('orderResponse');
+          } else {
+            console.log("Order is still pending on Etherscan!", etherscanConfirmation)
+          }
+        } else {
+          console.log("Order has already been confirmed in the database!")
+          setEtherscanConfirmation({ result: [{ hash: orderDB.paymentTransactionHash }] });
+          setOrderConfirmation(true);
+          clearInterval(checkPaymentInterval);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+    checkPaymentInterval = setInterval(() => {
+      processOrderConfirmation();
+    }, 7000, 1000);
+
   }, [router.query.slug]);
 
   return (
     <>
       <Layout title="Transaction">
         <Flex direction="column" justify="center" align="center">
-          {transactionConfirmation?.status !== '1' && (
+          {!orderConfirmation && (
             <>
               <Loader color="black" />
               <h2>Pending transaction..</h2>
@@ -100,20 +123,20 @@ export default function Page() {
             </>
           )}
 
-          {transactionConfirmation?.status === '1' && (
+          {orderConfirmation && (
             <>
               <Image
                 radius="md"
                 h={200}
                 w="auto"
                 fit="contain"
-                src="../../green-checkmark-icon.png"
+                src="../../../green-checkmark-icon.png"
               />
               <h2>Transaction complete</h2>
               <Text mb={20}>Your transaction has been confirmed.</Text>
               <Link
                 className={classes.link_transaction_confirmation}
-                href={`https://etherscan.io/tx/${transactionConfirmation.result[0].hash}`}
+                href={`https://sepolia.etherscan.io/tx/${etherscanConfirmation?.result[0]?.hash}`}
               >
                 View on Block Explorer
               </Link>

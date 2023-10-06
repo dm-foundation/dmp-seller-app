@@ -121,11 +121,12 @@ export default function PaymentScan() {
       console.log(orderData);
       post('/order', orderData)
         .then((order) => {
+          console.log('order.then: ', order);
           if (order) {
             localStorage.setItem('orderResponse', JSON.stringify(order));
             setIsOrderPersisted(true);
           } else {
-            console.log('[ERROR] Could not save transaction!');
+            console.log('[ERROR] Could not save order in localStorage!', JSON.stringify(order));
           }
         })
         .catch((error) => {
