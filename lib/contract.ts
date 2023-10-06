@@ -11,7 +11,7 @@ const CURRENCY_ADDRESS_DICT: { [key: string]: string } = {
 }
 
 export function buildPaymentConfirmationURL(paymentAddress: string) {
-    const URL = `${process.env.NEXT_PUBLIC_ETHERSCAN_API_URL}?module=account&action=tokentx&address=${paymentAddress}&apikey=${process.env.NEXT_PUBLIC_ETHERSCAN_API_KEY}`
+    const URL = `${process.env.NEXT_PUBLIC_ETHERSCAN_API_URL}?module=account&action=txlist&address=${paymentAddress}&apikey=${process.env.NEXT_PUBLIC_ETHERSCAN_API_KEY}`
     console.log("buildPaymentConfirmationURL", URL);
     return URL;
 }
